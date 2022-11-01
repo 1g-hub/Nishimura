@@ -1,0 +1,22 @@
+\begin{thebibliography}{1}
+
+\bibitem{MCSAIモデル}
+三宅陽一郎.
+\newblock ディジタルゲームにおけるメタai-キャラクターai-スペーシャルai
+  動的連携モデル.
+\newblock 人工知能学会全国大会論文集, Vol. JSAI2020, pp. 1P4GS701--1P4GS701,
+  2020.
+
+\bibitem{FPS}
+亜成宋, 陽一郎三宅.
+\newblock メタai を用いたfps ゲーム難易度の自動チューニング.
+\newblock ゲームプログラミングワークショップ2021論文集, Vol. 2021, pp. 49--56,
+  11 2021.
+
+\bibitem{サンプルコード}
+Siliconifier.
+\newblock Python-unity-socket-communication, 2019.06.
+\newblock
+  \url{https://github.com/Siliconifier/Python-Unity-Socket-Communication}.
+
+\end{thebibliography}
