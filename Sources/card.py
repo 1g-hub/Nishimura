@@ -7,8 +7,8 @@ class Card:
     def __init__(self,player):
         #is_played 場にでているかどうか
         self.is_played = False
-        #is_used ターン中に動いたかどうか
-        self.is_used = False
+        #is_used ターン中に動いたかどうか(プレイしたターンに動かないように初期値はTRUE)
+        self.is_used = True
         #playerへの参照
         self.player = player
         #name 名前
@@ -37,7 +37,7 @@ class Card:
     #discord 場から消える時に呼ばれる関数
     def discard(self):
         self.is_played = False
-        print(self.name + "は破壊された...")
+        #print(self.name + "は破壊された...")
         return False
 
 ##########################################################################
@@ -60,7 +60,7 @@ class Unit(Card):
         
     #strオーバーライド
     def __str__(self):
-        s = "{"+ self.name + ": " + str(self.atk) + "," + str(self.hp) + "}"
+        s = "{"+ self.name + ": " + str(self.attack) + "," + str(self.hp) + "}"
         return s
     
     #ダメージ受けた時呼ばれる関数
@@ -70,10 +70,9 @@ class Unit(Card):
         self.hp -= cnt
         #死んでるか確認
         if self.hp <= 0:
-            print(self + "は破壊された")
+            print(self.player.name + "の" + self + "は破壊された")
             try:
-
-                self.player.inplay.remove(self)
+                self.player.is_played.remove(self)
             except:
                 pass
             #墓地に追加
