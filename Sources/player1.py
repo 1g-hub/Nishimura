@@ -1,5 +1,6 @@
 import random
 import card
+import numpy as np
 
 class Player1:
     #コンストラクタ
@@ -29,13 +30,15 @@ class Player1:
             #デッキからカード一枚とって手札に加える
             draw_card = self.deck.pop()
             self.hand.append(draw_card)
-            print(self.name + "は" + draw_card + "をドローした")
+            #print(self.name + "は" + draw_card + "をドローした")
 
     #ダメージ受けた時
     def damage(self,cnt):
         #cardと同じ
         self.hp -= cnt
-        print(self.name + "health: " + str(self.hp)  +"/"+ str(self.mhp))
+        if self.hp < 0:
+            self.hp = 0
+        print(self.name + "health: " + str(self.hp)  +"/"+ str(self.maxhp))
         if self.hp <= 0:
             print("GAMEEND")
 
@@ -59,13 +62,13 @@ class Player1:
     #場にカード出す
     def playcard(self):
         #盤面表示
-        self.enemy.printisplayed()
-        self.printisplayed()
-        self.printhand()
+        #self.enemy.printisplayed()
+        #self.printisplayed()
+        #self.printhand()
         #ここではランダムに
         random.shuffle(self.hand)
         play_card = self.hand.pop()
-        print(self.name + "は" + play_card + "を場に出した")
+        #print(self.name + "は" + play_card + "を場に出した")
         #自分の盤面カードリストに追加
         self.is_played.append(play_card)
         #カードをactivateさせる
@@ -108,7 +111,10 @@ class Player1:
             return False
         #カードあったらランダムに一枚選ぶ
         else:
-            target = random.choice(self.enemy.is_played)
+            enemy_attack = []
+            for i in self.enemy.is_played:
+                enemy_attack.append(i.attack)
+            target = self.enemy.is_played[np.argmax(enemy_attack)]
             return target
             
 

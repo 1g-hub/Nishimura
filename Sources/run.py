@@ -10,14 +10,16 @@ def initdecks(player):
     #デッキのシャッフル
     player.shuffle()
     #対戦相手にも同じこと
-    player.enemy.deck = deck.generateDeck(player.enemy)
+    player.enemy.deck = deck.generateDeckEnemy(player.enemy)
     player.enemy.shuffle()
 
 #ゲーム開始時のドロー
 def inithands(player):
-    #どっちも2枚ドロー
+    #どっちも3枚ドロー
     player.draw()
     player.draw()
+    player.draw()
+    player.enemy.draw()
     player.enemy.draw()
     player.enemy.draw()
 
@@ -33,9 +35,9 @@ def doTurn(player):
     print ("")
     print ("--")
     #敵のカードドロー
-    player.enemy.draw()
+    #player.enemy.draw()
     #敵のカードプレイ
-    log = player.enemy.playcard()
+    log = ""
     log += player.enemy.usecard()
     #敵のresetuse
     resetuse(player.enemy)
@@ -47,8 +49,8 @@ def doTurn(player):
     print ("")
     print ("--")
     #自分も同じことする
-    player.draw()
-    log = player.playcard()
+    #player.draw()
+    log = ""
     log += player.usecard()
     resetuse(player)
 
@@ -59,8 +61,25 @@ def play():
 
     inithands(player)
 
+    #3枚ずつ場に出しとく
+    player.playcard()
+    player.playcard()
+    player.playcard()
+    player.enemy.playcard()
+    player.enemy.playcard()
+    player.enemy.playcard()
+
+    resetuse(player)
+    resetuse(player.enemy)
+
     while True:
-        doTurn(player)
+        #player1の場を表示
+        player.enemy.printisplayed()
+
+        #player2の場を表示
+        player.printisplayed()
+
+        doTurn(player)  
 
         #勝利条件
         if player.hp <= 0:
@@ -69,9 +88,8 @@ def play():
         elif player.enemy.hp <= 0:
             print(player.name + "Win!!")
             sys.exit(player.name + "Win!!")
-        elif len(player.deck) <= 0 and len(player.enemy.deck) <= 0:
-            print("引き分け")
-            sys.exit("引き分け")
+        elif len(player.is_played) == 0 and len(player.enemy.is_played) == 0:
+            sys.exit("DROW")
 
 
 if __name__ == '__main__':

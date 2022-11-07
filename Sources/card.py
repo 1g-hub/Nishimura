@@ -69,7 +69,9 @@ class Unit(Card):
         #ダメージ受けたのでhpからcnt引く
         self.hp -= cnt
         #死んでるか確認
-        if self.hp <= 0:
+        if self.hp < 0:
+            self.hp = 0
+        if self.hp == 0:
             print(self.player.name + "の" + self + "は破壊された")
             try:
                 self.player.is_played.remove(self)
@@ -90,6 +92,12 @@ class Unit(Card):
         if not self.u(self,target):
             print(self + "attacks" + target)
             target.damage(self.attack)
+            if target.hp < 0:
+                target.hp = 0
+            #攻撃相手からもダメージ食らう
+            self.damage(target.attack)
+            if self.hp < 0:
+                self.hp = 0
         return self.u(self,target)
     
     #discardのオーバーライド
