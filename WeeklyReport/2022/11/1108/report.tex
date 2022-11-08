@@ -125,8 +125,7 @@ OpenAI Gym では,エージェントの行動を離散値で与えることが�
   \quad reward \text{ = }
   \left\{
     \begin{aligned}
-        1 \quad &(f(\mathrm{盤面}) > 0) \\
-        0 \quad &(f(\mathrm{盤面}) = 0) \\
+        1 \quad &(f(\mathrm{盤面}) \geqq 0) \\
         -1 \quad &(f(\mathrm{盤面}) < 0)
     \end{aligned}
     \right.
@@ -155,7 +154,7 @@ keras , keras-rl を用いて,ネット上のサンプルコード\cite{DQNcode}
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=145mm]{assets/graph.eps}
+  \includegraphics[width=155mm]{assets/graph.eps}
   \caption{ 1 エピソードごとのステップ数,報酬}
   \label{fig:graph}
 \end{figure}
@@ -173,7 +172,7 @@ keras , keras-rl を用いて,ネット上のサンプルコード\cite{DQNcode}
 これはステップの試行回数の少なさ,報酬の定義の仕方に問題があると考えられる.
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=110mm]{assets/Log.eps}
+  \includegraphics[width=105mm]{assets/Log.eps}
   \caption{検証過程における最後のエピソードのログ}
   \label{fig:Log}
 \end{figure}
