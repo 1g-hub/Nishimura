@@ -8,10 +8,10 @@ def initdecks(player):
     #デッキ生成
     player.deck = deck.generateDeck(player)
     #デッキのシャッフル
-    player.shuffle()
+    #player.shuffle()
     #対戦相手にも同じこと
     player.enemy.deck = deck.generateDeckEnemy(player.enemy)
-    player.enemy.shuffle()
+    #player.enemy.shuffle()
 
 #ゲーム開始時のドロー
 def inithands(player):

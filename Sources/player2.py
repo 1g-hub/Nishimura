@@ -66,7 +66,8 @@ class Player2:
         #self.printisplayed()
         #self.printhand()
         #ここではランダムに
-        random.shuffle(self.hand)
+        #random.shuffle(self.hand)
+        #出す順番固定
         play_card = self.hand.pop()
         #print(self.name + "は" + play_card + "を場に出した")
         #自分の盤面カードリストに追加

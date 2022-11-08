@@ -12,14 +12,28 @@ from keras.models import Sequential,Model
 from keras.utils import plot_model
 import numpy as np
 import sys
+import rl.callbacks
+import matplotlib.pyplot as plt
+ 
+# ログを記録するためのクラスの定義
+class EpisodeLogger(rl.callbacks.Callback):
+    def __init__(self):
+        self.observations = {}
+        self.rewards = {}
+        self.actions = {}
 
-from rl.callbacks import (
-    TrainEpisodeLogger,
-    TrainIntervalLogger,
-    FileLogger
-)
+    def on_episode_begin(self, episode, logs):
+        self.observations[episode] = []
+        self.rewards[episode] = []
+        self.actions[episode] = []
 
+    def on_step_end(self, step, logs):
+        episode = logs['episode']
+        self.observations[episode].append(logs['observation'])
+        self.rewards[episode].append(logs['reward'])
+        self.actions[episode].append(logs['action'])
 
+episode_logger = EpisodeLogger()
 # 環境の生成
 env = CardGameEnv()
 action_history = []
@@ -33,8 +47,9 @@ print(env.observation_space)
 #    observation_arr.append(i)
 #print(observation_arr)
 
-'''
+
 #環境デバック用テストコード(CPUでも動く)
+'''
 for _ in range(200):
     action = env.action_space.sample()
     action_history.append(action)
@@ -48,7 +63,6 @@ for _ in range(200):
 print(reward_history)
 '''
 
-
 # モデルの定義
 
 model = Sequential()
@@ -61,6 +75,8 @@ model.add(Dense(16))
 model.add(Activation('relu'))
 model.add(Dense(nb_actions))
 model.add(Activation('linear'))
+plot_model(model, to_file='model.png')
+
 
 # エージェントの設定
 memory = SequentialMemory(limit=1000000, window_length=1)
@@ -69,9 +85,21 @@ dqn = DQNAgent(model=model, nb_actions=nb_actions, memory=memory, nb_steps_warmu
 dqn.compile(Adam(lr=1e-3), metrics=['mae'])
 
 # 学習
-dqn.fit(env, nb_steps=200000, visualize=False, verbose=1)
+history = dqn.fit(env, nb_steps=10000, visualize=False, verbose=1)
 
 # 評価
-dqn.test(env, nb_episodes=3, visualize=False,nb_max_episode_steps=1000)
+dqn.test(env, nb_episodes=10, visualize=False,nb_max_episode_steps=1000)
+
+plt.subplot(2,1,1)
+plt.plot(history.history["nb_episode_steps"])
+plt.ylabel("step")
+
+plt.subplot(2,1,2)
+plt.plot(history.history["episode_reward"])
+plt.xlabel("episode")
+plt.ylabel("reward")
+
+plt.savefig("sin.png", format="png", dpi=300)
 
 sys.exit("学習おわ")
+

@@ -1,3 +1,13 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{1}
+
+\bibitem{reward}
+Cygames~Engineers' Blog.
+\newblock ゲームai 実践編 －shadowverseに見るtcg ai開発の事例(1)－, 2016.07.27.
+\newblock \url{https://tech.cygames.co.jp/archives/2853/}.
+
+\bibitem{DQNcode}
+田中遥輝.
+\newblock Keras-rlでゲームをプレイする強化学習aiを作る！, 2022.03.21.
+\newblock \url{https://qiita.com/TanakaSU/items/3221d7fe641aa7fd9006}.
 
 \end{thebibliography}

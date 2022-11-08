@@ -14,6 +14,7 @@ class CardGameEnv:
         #手札1が敵カード123攻撃・・・1,2,3
         #手札2・・・4~7
         #手札3・・・8~11
+        #ターンエンド・・・12
         self.action_space = spaces.Discrete(12)
         """
         self.observation_space = spaces.Dict({
@@ -66,7 +67,6 @@ class CardGameEnv:
 
 
         self.curr_episode = -1
-        self.action_episode_memory=[]
 
         self.reset()
 
@@ -94,6 +94,7 @@ class CardGameEnv:
         self.setup_game()
 
         player = self.player
+        self.action_episode_memory=[]
         
         #初期状態
         '''
@@ -165,9 +166,10 @@ class CardGameEnv:
     
     def step(self,action):
         done = False
-
+        reward = 0.01
         player = self.player
-
+        
+        
         #actionによって処理書く(ここ変えないとまずい)
         if action == 0:
             #自分カード0が敵本体攻撃
@@ -291,17 +293,20 @@ class CardGameEnv:
                     print("味方のカード3はすでに行動済みです")
             else:
                 print("敵カードがありません")
+
         else:
             print(action)
             print("未定義のActionです")
             print(self.get_state())
         
-        #記録
-        self.curr_step += 1
-        self.action_episode_memory.append(action)
+        if not action in self.action_episode_memory:
+            reward = 0
+        if action in self.action_episode_memory:
+            reward = -1
+        
         
         #自分のターンが終了したら
-        if player.is_played[0].is_used and player.is_played[1].is_used and player.is_played[2].is_used:
+        if self.getused():
             #敵をランダムに行動させる
             log = ""
             log += player.enemy.usecard()
@@ -310,23 +315,40 @@ class CardGameEnv:
             #doneをTrueにする
             done = True
             #表示
-            print("reward")
-            print(reward)
-            print("self.curr_step")
-            print(self.curr_step)
+            #print("reward")
+            #print(reward)
+            #print("self.curr_step")
+            #print(self.curr_step)
             #print("self.action_episode_memory")
             #print(self.action_episode_memory)
-        else:
-            reward = 0
         
+        #if not action in self.action_episode_memory:
+        #    reward = 0
+        #if action in self.action_episode_memory:
+        #    reward = -1
         observation = self.get_state()
+
+        #記録
+        self.curr_step += 1
+        self.action_episode_memory.append(action)
+        print("action")
+        print(self.action_episode_memory)
         print("state")
         print(observation)
+        
 
         return observation,reward,done,{}
 
         
-
+    def getused(self):
+        flag = True
+        if len(self.player.is_played):
+            for i in self.player.is_played:
+                if i.is_used == False:
+                    flag = False
+            return flag
+        else:
+            return True
     
     #状態を返す
     def get_state(self):
@@ -407,16 +429,17 @@ class CardGameEnv:
     def calculate_reward(self):
         player = self.player
         #敵削った体力
-        reward = (player.enemy.maxhp - player.enemy.hp)
+        reward = (player.enemy.maxhp - player.enemy.hp)*2.0
         #print("reward")
         #print(reward)
+        reward = 0
         #味方カードの評価値
         if len(player.is_played) > 0:
             for i in player.is_played:
                 #print("attack,hp")
                 #print(i.attack)
                 #print(i.hp)
-                reward += i.attack + i.hp
+                reward += (i.attack + i.hp)*1.5
                 #print(reward)
         #敵カードの評価
         if len(player.enemy.is_played) > 0:
@@ -424,7 +447,7 @@ class CardGameEnv:
                 #print("attack,hp")
                 #print(i.attack)
                 #print(i.hp)
-                tmp = 2.5*(i.attack + i.hp)
+                tmp = (i.attack + i.hp)
                 #print("tmp")
                 #print(tmp)
                 reward = reward - tmp
@@ -434,16 +457,19 @@ class CardGameEnv:
         #自分削られた体力
         reward -= (player.maxhp - player.hp)*5
 
-        #print("reward")
-        #print(reward)
+        print("reward")
+        print(reward)
 
         #報酬のCliping
         if reward > 0:
-            reward = 1
+           reward = 1
         elif reward < 0:
-            reward = -1
+           reward = -1
         else:
-            reward = 0
+           reward = 1
+        
+        print("reward")
+        print(reward)
         
         return reward
          
