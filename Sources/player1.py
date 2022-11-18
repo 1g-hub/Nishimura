@@ -6,8 +6,8 @@ class Player1:
     #コンストラクタ
     def __init__(self,enemy,name="player1"):
         #体力と最大体力と名前
-        self.hp = 20
-        self.maxhp = 20
+        self.hp = 8
+        self.maxhp = 8
         self.name = name
         #デッキ,手札,自分の盤面,墓地を配列で管理
         self.deck = []
@@ -91,8 +91,10 @@ class Player1:
                     target = self.selecttarget()
                     #ターゲットが無ければ顔殴る
                     if target == False:
-                        print(self.name + "は" + self.enemy.name + "を攻撃した")
+                        print(self.name + "は" + use_card + "で" +  self.enemy.name + "を攻撃した")
                         self.enemy.damage(use_card.attack)
+                        use_card.is_used = True
+
                     else:
                         print("")
                         print(self.name +"の攻撃")
@@ -106,18 +108,18 @@ class Player1:
     
     #相手のターゲットを選ぶ
     def selecttarget(self):
-        #相手の盤面にカードがなかったらFalse
-        if len(self.enemy.is_played) <= 0:
+        r = random.random()
+        if r > 0.5:
+            #顔面殴る
             return False
-        #カードあったらランダムに一枚選ぶ
-        else:
-            enemy_attack = []
-            for i in self.enemy.is_played:
-                enemy_attack.append(i.attack)
-            target = self.enemy.is_played[np.argmax(enemy_attack)]
-            return target
-            
-
+        else :
+            #相手の盤面にカードがなかったらFalse
+            if len(self.enemy.is_played) <= 0:
+                return False
+            #カードあったらランダムに一枚選ぶ
+            else:
+                target = random.choice(self.enemy.is_played)
+                return target
     
     
         

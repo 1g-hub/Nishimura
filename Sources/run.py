@@ -15,13 +15,16 @@ def initdecks(player):
 
 #ゲーム開始時のドロー
 def inithands(player):
-    #どっちも3枚ドロー
+    #味方3枚敵5枚ドロー
     player.draw()
     player.draw()
     player.draw()
     player.enemy.draw()
     player.enemy.draw()
     player.enemy.draw()
+    player.enemy.draw()
+    player.enemy.draw()
+
 
 #カードのis_used状態をリセット（ターン処理で呼ばれる)
 def resetuse(player):

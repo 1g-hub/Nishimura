@@ -19,6 +19,9 @@ def generateDeckEnemy(player):
     deck.append(card.Unit("Unit1",player,3,3))
     deck.append(card.Unit("Unit2",player,1,5))
     deck.append(card.Unit("Unit3",player,4,2))
+    deck.append(card.Unit("Unit4",player,3,2))
+    deck.append(card.Unit("Unit5",player,3,3))
+    
 
 
 

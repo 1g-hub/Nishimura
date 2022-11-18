@@ -73,9 +73,7 @@ class Unit(Card):
             self.hp = 0
         if self.hp == 0:
             print(self.player.name + "の" + self + "は破壊された")
-            self.attack = 0
-            '''
-            とりあえず墓地に送りたくない
+            #elf.attack = 0
             try:
                 self.player.is_played.remove(self)
             except:
@@ -84,7 +82,6 @@ class Unit(Card):
             self.player.discard.append(self)
             #カード破壊
             self.discard()
-            '''
     
     #activateのオーバーライド
     def activate(self):
@@ -95,13 +92,15 @@ class Unit(Card):
     def use(self,target):
         if not self.u(self,target):
             print(self + "attacks" + target)
+            #is_used有効化
+            self.is_used = True
             target.damage(self.attack)
             if target.hp < 0:
                 target.hp = 0
             #攻撃相手からもダメージ食らう
-            #self.damage(target.attack)
-            #if self.hp < 0:
-            #    self.hp = 0
+            self.damage(target.attack)
+            if self.hp < 0:
+                self.hp = 0
         return self.u(self,target)
     
     #discardのオーバーライド

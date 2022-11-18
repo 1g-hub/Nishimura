@@ -6,8 +6,8 @@ class Player2:
     #コンストラクタ
     def __init__(self,name="player2"):
         #体力と最大体力と名前
-        self.hp = 20
-        self.maxhp = 20
+        self.hp = 8
+        self.maxhp = 8
         self.name = name
         #デッキ,手札,自分の盤面,墓地を配列で管理
         self.deck = []
@@ -107,10 +107,15 @@ class Player2:
     
     #相手のターゲットを選ぶ
     def selecttarget(self):
-        #相手の盤面にカードがなかったらFalse
-        if len(self.enemy.is_played) <= 0:
+        r = random.random()
+        if r > 0.5:
+            #顔面殴る
             return False
-        #カードあったらランダムに一枚選ぶ
-        else:
-            target = random.choice(self.enemy.is_played)
-            return target
+        else :
+            #相手の盤面にカードがなかったらFalse
+            if len(self.enemy.is_played) <= 0:
+                return False
+            #カードあったらランダムに一枚選ぶ
+            else:
+                target = random.choice(self.enemy.is_played)
+                return target
