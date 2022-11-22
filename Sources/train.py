@@ -16,23 +16,24 @@ import rl.callbacks
 import matplotlib.pyplot as plt
 
 
-# ログを記録するためのクラスの定義
+# call back も設定できる
 class EpisodeLogger(rl.callbacks.Callback):
     def __init__(self):
         self.observations = {}
         self.rewards = {}
         self.actions = {}
-
+ 
     def on_episode_begin(self, episode, logs):
         self.observations[episode] = []
         self.rewards[episode] = []
         self.actions[episode] = []
-
+ 
     def on_step_end(self, step, logs):
         episode = logs['episode']
         self.observations[episode].append(logs['observation'])
         self.rewards[episode].append(logs['reward'])
         self.actions[episode].append(logs['action'])
+
 
 episode_logger = EpisodeLogger()
 # 環境の生成
@@ -40,6 +41,7 @@ env = CardGameEnv()
 action_history = []
 reward_history = []
 nb_actions = env.action_space.n
+step_count = 500000
 #print(nb_actions)
 print(env.observation)
 #observation_value_list = list(env.observation_space.values())
@@ -51,7 +53,7 @@ print(env.observation)
 
 #環境デバック用テストコード(CPUでも動く)
 '''
-for _ in range(200):
+for _ in range(10000):
     env.player.printisplayed()
     env.player.enemy.printisplayed()
     action = env.action_space.sample()
@@ -63,7 +65,9 @@ for _ in range(200):
     print(env.observation)
     reward_history.append(re)
     if done:
-        action_history = []
+        print("GAME END")
+        print(reward_history)
+        sys.exit("GAME END")
         env.reset()
 print(reward_history)
 
@@ -90,13 +94,13 @@ dqn = DQNAgent(model=model, nb_actions=nb_actions, memory=memory, nb_steps_warmu
 dqn.compile(Adam(lr=1e-3), metrics=['mae'])
 
 # 学習
-history = dqn.fit(env, nb_steps=50000, visualize=False, verbose=1)
+history = dqn.fit(env, nb_steps=step_count, visualize=False, verbose=1)
 
 # 評価
-dqn.test(env, nb_episodes=10, visualize=False,nb_max_episode_steps=1000)
+dqn.test(env, nb_episodes=10000, visualize=False,nb_max_episode_steps=60, callbacks = [episode_logger])
 
 #モデルの保存
-model.save('50000stepFirst.h5')
+model.save(str(step_count)+'stepFirst.h5')
 
 plt.subplot(2,1,1)
 plt.plot(history.history["nb_episode_steps"])
@@ -111,4 +115,24 @@ plt.ylabel("reward")
 
 plt.savefig("sin.png", format="png", dpi=300)
 
+win_sum = 0
+draw_sum = 0
+loss_sum = 0
+
+for obs in episode_logger.rewards.values():
+    if obs[-1] == 10.0:
+        win_sum += 1
+    else:
+        loss_sum += 1
+
+print("win_sum")
+print(win_sum)
+print("draw_sum")
+print(draw_sum)
+print("loss_sum")
+print(loss_sum)
+
+
+print("win rate")
+print(win_sum / 10000.0)
 sys.exit("学習おわり")

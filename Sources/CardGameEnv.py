@@ -10,21 +10,45 @@ import numpy as np
 class CardGameEnv:
     def __init__(self):
         self.curr_step = -1
-        #手札1が敵本体攻撃・・・0
-        #手札1が敵カード12345攻撃・・・1,2,3,4,5
-        #手札2・・・6~10
-        #手札3・・・12~17
-        self.action_space = spaces.Discrete(18)
+        self.previous_action = 100
+        #手札を自盤面に出す・・・0~8
+        #手札1が敵カード12345攻撃・・・9~13
+        #手札2・・・14~18
+        #手札3・・・19~23
+        #手札4・・・24~28
+        #手札5・・・29~33
+        #ターンエンド・・・34
+        self.action_space = spaces.Discrete(35)
         """
         self.observation_space = spaces.Dict({
-            "MyHP": spaces.Discrete(21),#0~20
-            "EnemyHP": spaces.Discrete(21),
+            "MyHand1Attack" :
+            "MyHand1HP" : 
+            "MyHand2Attack" :
+            "MyHand2HP" :
+            "MyHand3Attack" :
+            "MyHand3HP" : 
+            "MyHand4Attack" :
+            "MyHand4HP" : 
+            "MyHand5Attack" :
+            "MyHand5HP" : 
+            "MyHand6Attack" :
+            "MyHand6HP" :
+            "MyHand7Attack" :
+            "MyHand7HP" : 
+            "MyHand8Attack" :
+            "MyHand8HP" : 
+            "MyHand9Attack" :
+            "MyHand9HP" :  
             "MyCard1Attack": spaces.Discrete(5),#0~4
             "MyCard1HP" : spaces.Discrete(5),
             "MyCard2Attack": spaces.Discrete(5),
             "MyCard2HP" : spaces.Discrete(5),
             "MyCard3Attack": spaces.Discrete(5),
             "MyCard3HP" : spaces.Discrete(5),
+            "MyCard4Attack": spaces.Discrete(5),
+            "MyCard4HP" : spaces.Discrete(5),
+            "MyCard5Attack": spaces.Discrete(5),
+            "MyCard5HP" : spaces.Discrete(5),
             "EnemyCard1Attack" : spaces.Discrete(5),
             "EnemyCard1HP" : spaces.Discrete(5),
             "EnemyCard2Attack" : spaces.Discrete(5),
@@ -38,19 +62,29 @@ class CardGameEnv:
             "MyCard1CanAttack": spaces.Discrete(2),#True or False
             "MyCard2CanAttack": spaces.Discrete(2),
             "MyCard3CanAttack": spaces.Discrete(2),
+            "MyCard4CanAttack": spaces.Discrete(2),
+            "MyCard5CanAttack": spaces.Discrete(2),
         })
         
         #dict型むりそう；；
 
         """
         #これで行けなかったら終わり
-        LOW = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
-        HIGH = np.array([20,20,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,1,1,1])
+        LOW = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,#手札1~9のカードのAttackとHP
+                        0,0,0,0,0,0,0,0,0,0,#自盤面1~5のAtackとHP
+                        0,0,0,0,0,0,0,0,0,0,#敵盤面1~5のAtackとHP
+                        0,0,0,0,0#自盤面1~5のcanAttack
+                        ])
+        HIGH = np.array([20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,#手札1~9のカードのAttackとHP
+                        20,20,20,20,20,20,20,20,20,20,#自盤面1~5のAtackとHP
+                        20,20,20,20,20,20,20,20,20,20,#敵盤面1~5のAtackとHP
+                        1,1,1,1,1#自盤面1~5のcanAttack
+                        ])
         self.observation_space = spaces.Box(low=LOW,high=HIGH)
 
 
         self.curr_episode = -1
-
+        self.already_selected_actions=[]
         self.reset()
 
     def setup_game(self):
@@ -61,14 +95,12 @@ class CardGameEnv:
         run.inithands(self.player)
 
         #3枚ずつ場に出しとく
-        self.player.playcard()
-        self.player.playcard()
-        self.player.playcard()
-        self.player.enemy.playcard()
-        self.player.enemy.playcard()
-        self.player.enemy.playcard()
-        self.player.enemy.playcard()
-        self.player.enemy.playcard()
+        #self.player.playcard()
+        #self.player.playcard()
+        #self.player.playcard()
+        #self.player.enemy.playcard()
+        #self.player.enemy.playcard()
+        #self.player.enemy.playcard()
 
 
         run.resetuse(self.player)
@@ -81,18 +113,39 @@ class CardGameEnv:
 
         player = self.player
         self.action_episode_memory=[]
+        self.previous_action = 100
         
         #初期状態
         '''
         s = {
-            "MyHP": player.maxhp,
-            "EnemyHP": player.enemy.maxhp,
+            "MyHand1Attack" : player.hand[0].attack if 0 < len(player.hand) else 0,
+            "MyHand1HP" : player.hand[0].hp if 0 < len(player.hand) else 0,
+            "MyHand2Attack" : player.hand[1].attack if 1 < len(player.hand) else 0,
+            "MyHand2HP" : player.hand[1].hp if 1 < len(player.hand) else 0,
+            "MyHand3Attack" : player.hand[2].attack if 2 < len(player.hand) else 0,
+            "MyHand3HP" : player.hand[2].hp if 2 < len(player.hand) else 0,
+            "MyHand4Attack" : player.hand[3].attack if 3 < len(player.hand) else 0,
+            "MyHand4HP" : player.hand[3].hp if 3 < len(player.hand) else 0,
+            "MyHand5Attack" : player.hand[4].attack if 4 < len(player.hand) else 0,
+            "MyHand5HP" : player.hand[4].hp if 4 < len(player.hand) else 0,
+            "MyHand6Attack" : player.hand[5].attack if 5 < len(player.hand) else 0,
+            "MyHand6HP" : player.hand[5].hp if 5 < len(player.hand) else 0,
+            "MyHand7Attack" : player.hand[6].attack if 6 < len(player.hand) else 0,
+            "MyHand7HP" : player.hand[6].hp if 6 < len(player.hand) else 0,
+            "MyHand8Attack" : player.hand[7].attack if 7 < len(player.hand) else 0,
+            "MyHand8HP" : player.hand[7].hp if 7 < len(player.hand) else 0,
+            "MyHand9Attack" : player.hand[8].attack if 8 < len(player.hand) else 0,
+            "MyHand9HP" : player.hand[8].hp if 8 < len(player.hand) else 0,
             "MyCard1Attack": player.is_played[0].attack if 0 < len(player.is_played) else 0,
             "MyCard1HP" : player.is_played[0].hp if 0 < len(player.is_played) else 0,
             "MyCard2Attack": player.is_played[1].attack if 1 < len(player.is_played) else 0,
             "MyCard2HP" : player.is_played[1].hp if 1 < len(player.is_played) else 0,
             "MyCard3Attack": player.is_played[2].attack if 2 < len(player.is_played) else 0,
             "MyCard3HP" : player.is_played[2].hp if 2 < len(player.is_played) else 0,
+            "MyCard4Attack": player.is_played[3].attack if 3 < len(player.is_played) else 0,
+            "MyCard4HP" : player.is_played[3].hp if 3 < len(player.is_played) else 0,
+            "MyCard5Attack": player.is_played[4].attack if 4 < len(player.is_played) else 0,
+            "MyCard5HP" : player.is_played[4].hp if 4 < len(player.is_played) else 0,
             "EnemyCard1Attack" : player.enemy.is_played[0].attack if 0 < len(player.enemy.is_played) else 0,
             "EnemyCard1HP" : player.enemy.is_played[0].hp if 0 < len(player.enemy.is_played) else 0,
             "EnemyCard2Attack" : player.enemy.is_played[1].attack if 1 < len(player.enemy.is_played) else 0,
@@ -106,18 +159,41 @@ class CardGameEnv:
             "MyCard1CanAttack": 1 if 0 < len(player.is_played) and not player.is_played[0].is_used else 0,
             "MyCard2CanAttack": 1 if 1 < len(player.is_played) and not player.is_played[1].is_used else 0,
             "MyCard3CanAttack": 1 if 2 < len(player.is_played) and not player.is_played[2].is_used else 0,
+            "MyCard4CanAttack": 1 if 3 < len(player.is_played) and not player.is_played[3].is_used else 0,
+            "MyCard5CanAttack": 1 if 4 < len(player.is_played) and not player.is_played[4].is_used else 0,
+            
         }
         
         '''
         s = [
-            player.maxhp,
-            player.enemy.maxhp,
+            player.hand[0].attack if 0 < len(player.hand) else 0,
+            player.hand[0].hp if 0 < len(player.hand) else 0,
+            player.hand[1].attack if 1 < len(player.hand) else 0,
+            player.hand[1].hp if 1 < len(player.hand) else 0,
+            player.hand[2].attack if 2 < len(player.hand) else 0,
+            player.hand[2].hp if 2 < len(player.hand) else 0,
+            player.hand[3].attack if 3 < len(player.hand) else 0,
+            player.hand[3].hp if 3 < len(player.hand) else 0,
+            player.hand[4].attack if 4 < len(player.hand) else 0,
+            player.hand[4].hp if 4 < len(player.hand) else 0,
+            player.hand[5].attack if 5 < len(player.hand) else 0,
+            player.hand[5].hp if 5 < len(player.hand) else 0,
+            player.hand[6].attack if 6 < len(player.hand) else 0,
+            player.hand[6].hp if 6 < len(player.hand) else 0,
+            player.hand[7].attack if 7 < len(player.hand) else 0,
+            player.hand[7].hp if 7 < len(player.hand) else 0,
+            player.hand[8].attack if 8 < len(player.hand) else 0,
+            player.hand[8].hp if 8 < len(player.hand) else 0,
             player.is_played[0].attack if 0 < len(player.is_played) else 0,
             player.is_played[0].hp if 0 < len(player.is_played) else 0,
             player.is_played[1].attack if 1 < len(player.is_played) else 0,
             player.is_played[1].hp if 1 < len(player.is_played) else 0,
             player.is_played[2].attack if 2 < len(player.is_played) else 0,
             player.is_played[2].hp if 2 < len(player.is_played) else 0,
+            player.is_played[3].attack if 3 < len(player.is_played) else 0,
+            player.is_played[3].hp if 3 < len(player.is_played) else 0,
+            player.is_played[4].attack if 4 < len(player.is_played) else 0,
+            player.is_played[4].hp if 4 < len(player.is_played) else 0,
             player.enemy.is_played[0].attack if 0 < len(player.enemy.is_played) else 0,
             player.enemy.is_played[0].hp if 0 < len(player.enemy.is_played) else 0,
             player.enemy.is_played[1].attack if 1 < len(player.enemy.is_played) else 0,
@@ -131,6 +207,8 @@ class CardGameEnv:
             1 if 0 < len(player.is_played) and not player.is_played[0].is_used else 0,
             1 if 1 < len(player.is_played) and not player.is_played[1].is_used else 0,
             1 if 2 < len(player.is_played) and not player.is_played[2].is_used else 0,
+            1 if 3 < len(player.is_played) and not player.is_played[3].is_used else 0,
+            1 if 4 < len(player.is_played) and not player.is_played[4].is_used else 0,
         ]
         self.observation = s
 
@@ -141,21 +219,24 @@ class CardGameEnv:
         return s
     
     def step(self,action):
+        self.play_card = False
+        self.use_card = False
+        self.turn_end = False
         done = False
-        reward = 0.01
+        self.reward = 0.0
         player = self.player
+        
 
         #OTK可能であるのに逃したら-30
         attack_sum = 0
         for i in player.is_played:
             if i.is_used == False:
                 attack_sum += i.attack
-        print("attacknum")
-        print(attack_sum)
+        #print("attacknum")
+        #print(attack_sum)
         
-        self.action_episode_memory.append(action)
-        print("action")
-        print(self.action_episode_memory)
+        #print("action")
+        #print(self.action_episode_memory)
 
         #reward設定用is_playedの個数の和
         is_used_sum = 0
@@ -164,233 +245,13 @@ class CardGameEnv:
                 is_used_sum += 1
 
         #reward設定用事前のenemyHP
-        before_enemyHP = player.enemy.hp
-        
-        #actionによって処理書く(ここ変えないとまずい)
-        if action == 0:
-            if len(player.is_played) > 0:
-                #自分カード0が敵本体攻撃
-                if player.is_played[0].is_used == False:
-                    player.enemy.damage(player.is_played[0].attack)
-                    player.is_played[0].is_used = True
-                else:
-                    pass
-                    #print("味方のカード1はすでに行動済みです")
-            else:
-                pass
-                #print("敵カードがありません or 味方カードがありません")
+        #before_enemyHP = player.enemy.hp
 
-        elif action == 1:
-            if len(player.enemy.is_played) > 0 and len(player.is_played) > 0:
-                #自分カード0が敵0攻撃
-                if player.is_played[0].is_used == False:
-                    player.is_played[0].use(player.enemy.is_played[0])
-                else:
-                    pass
-                    #print("味方のカード1はすでに行動済みです")
-            else:
-                pass
-                #print("敵カードがありません or 味方カードがありません")
-
-        elif action == 2:
-            if len(player.enemy.is_played) > 1 and len(player.is_played) > 0:
-                #自分0が敵1攻撃
-                if player.is_played[0].is_used == False:
-                    player.is_played[0].use(player.enemy.is_played[1])
-                else:
-                    pass
-                    #print("味方のカード1はすでに行動済みです")
-            else:
-                pass
-                #print("敵カードがありません or 味方カードがありません")
-
-        elif action == 3:
-            if len(player.enemy.is_played) > 2 and len(player.is_played) > 0:
-                #自分0が敵2攻撃
-                if player.is_played[0].is_used == False:
-                    player.is_played[0].use(player.enemy.is_played[2])
-                else:
-                    pass
-                    #print("味方のカード1はすでに行動済みです")
-            else:
-                pass
-                #print("敵カードがありません or 味方カードがありません")
-
-        elif action == 4:
-            if len(player.enemy.is_played) > 3 and len(player.is_played) > 0:
-                #自分0が敵3攻撃
-                if player.is_played[0].is_used == False:
-                    player.is_played[0].use(player.enemy.is_played[3])
-                else:
-                    pass
-                    #print("味方のカード1はすでに行動済みです")
-            else:
-                pass
-                #print("敵カードがありません or 味方カードがありません")
-
-        elif action == 5:
-            if len(player.enemy.is_played) > 4 and len(player.is_played) > 0:
-                #自分0が敵4攻撃
-                if player.is_played[0].is_used == False:
-                    player.is_played[0].use(player.enemy.is_played[4])
-                else:
-                    pass
-                    #print("味方のカード1はすでに行動済みです")
-            else:
-                pass
-                #print("敵カードがありません or 味方カードがありません")
-
-        elif action == 6:
-            if len(player.is_played) > 1:
-                #自分1が敵本体攻撃
-                if player.is_played[1].is_used == False:
-                    player.enemy.damage(player.is_played[1].attack)
-                    player.is_played[1].is_used = True
-                else:
-                    pass
-                    #print("味方のカード2はすでに行動済みです")
-            else:
-                pass
-                #print("味方カードがありません")
-
-        elif action == 7:
-            if len(player.enemy.is_played) > 0 and len(player.is_played) > 1:
-                #自分1が敵0攻撃
-                if player.is_played[1].is_used == False:
-                    player.is_played[1].use(player.enemy.is_played[0])
-                else:
-                    pass
-                    #print("味方のカード2はすでに行動済みです")
-            else:
-                pass
-                #print("敵カードがありません or 味方カードがありません")
-
-        elif action == 8:
-            if len(player.enemy.is_played) > 1 and len(player.is_played) > 1:
-                #自分1が敵1攻撃
-                if player.is_played[1].is_used == False:
-                    player.is_played[1].use(player.enemy.is_played[1])
-                else:
-                    pass
-                    #print("味方のカード2はすでに行動済みです")
-            else:
-                pass
-                #print("敵カードがありません or 味方カードがありません")
-
-        elif action == 9:
-            if len(player.enemy.is_played) > 2 and len(player.is_played) > 1:
-                #自分1が敵2攻撃
-                if player.is_played[1].is_used == False:
-                    player.is_played[1].use(player.enemy.is_played[2])
-                else:
-                    pass
-                    #print("味方のカード2はすでに行動済みです")
-            else:
-                pass
-                #print("敵カードがありません or 味方カードがありません")
-        
-        elif action == 10:
-            if len(player.enemy.is_played) > 3 and len(player.is_played) > 1:
-                #自分1が敵3攻撃
-                if player.is_played[1].is_used == False:
-                    player.is_played[1].use(player.enemy.is_played[3])
-                else:
-                    pass
-                    #print("味方のカード2はすでに行動済みです")
-            else:
-                pass
-                #print("敵カードがありません or 味方カードがありません")
-        
-        elif action == 11:
-            if len(player.enemy.is_played) > 4 and len(player.is_played) > 1:
-                #自分1が敵4攻撃
-                if player.is_played[1].is_used == False:
-                    player.is_played[1].use(player.enemy.is_played[4])
-                else:
-                    pass
-                    #print("味方のカード2はすでに行動済みです")
-            else:
-                pass
-                #print("敵カードがありません or 味方カードがありません")
-
-        elif action == 12:
-            if len(player.is_played) > 2:
-                #自分2が敵本体を攻撃
-                if player.is_played[2].is_used == False:
-                    player.enemy.damage(player.is_played[2].attack)
-                    player.is_played[2].is_used = True
-                else:
-                    pass
-                    #print("味方のカード3はすでに行動済みです")
-            else:
-                pass
-                #print("味方カードがありません")
-
-        elif action == 13:
-            if len(player.enemy.is_played) > 0 and len(player.is_played) > 2:
-                #自分2が敵0攻撃
-                if player.is_played[2].is_used == False:
-                    player.is_played[2].use(player.enemy.is_played[0])
-                else:
-                    pass
-                    #print("味方のカード3はすでに行動済みです")
-            else:
-                pass
-                #print("敵カードがありません or 味方カードがありません")
-
-        elif action == 14:
-            if len(player.enemy.is_played) > 1 and len(player.is_played) > 2:
-                #自分2が敵1攻撃
-                if player.is_played[2].is_used == False:
-                    player.is_played[2].use(player.enemy.is_played[1])
-                else:
-                    pass
-                    #print("味方のカード3はすでに行動済みです")
-            else:
-                pass
-                #print("敵カードがありません or 味方カードがありません")
-
-
-        elif action == 15:
-            if len(player.enemy.is_played) > 2 and len(player.is_played) > 2:
-                #自分2が敵2攻撃
-                if player.is_played[2].is_used == False:
-                    player.is_played[2].use(player.enemy.is_played[2])
-                else:
-                    pass
-                    #print("味方のカード3はすでに行動済みです")
-            else:
-                pass
-                #print("敵カードがありません or 味方カードがありません")
-
-        elif action == 16:
-            if len(player.enemy.is_played) > 3 and len(player.is_played) > 2:
-                #自分2が敵3攻撃
-                if player.is_played[2].is_used == False:
-                    player.is_played[2].use(player.enemy.is_played[3])
-                else:
-                    pass
-                    #print("味方のカード3はすでに行動済みです")
-            else:
-                pass
-                #print("敵カードがありません or 味方カードがありません")
-        
-        elif action == 17:
-            if len(player.enemy.is_played) > 4 and len(player.is_played) > 2:
-                #自分2が敵4攻撃
-                if player.is_played[2].is_used == False:
-                    player.is_played[2].use(player.enemy.is_played[4])
-                else:
-                    pass
-                    #print("味方のカード3はすでに行動済みです")
-            else:
-                pass
-                #print("敵カードがありません or 味方カードがありません")
-
-        else:
-            print(action)
-            print("未定義のActionです")                                        
-            print(self.get_state())                                  
+        #行動を行う
+        self.take_action(action)
+                                        
+        #print("action")
+        #print(self.action_episode_memory)
 
         after_is_used_sum = 0
         for i in player.is_played:
@@ -401,73 +262,23 @@ class CardGameEnv:
         #print(is_used_sum)
         #print("after_used_sum")
         #print(after_is_used_sum)
-
-            
-
-        #使われたカードもう一回使うとペナルティ（無駄な行動なので)
-        if after_is_used_sum >= is_used_sum:
-            reward = -3.0 
-        #OTK可能で敵に攻撃してないなら-
-        elif attack_sum >= before_enemyHP and before_enemyHP == player.enemy.hp:
-            reward = -50.0
-        else :
-            #print("reward計算")
-            #報酬を渡す(TODO盤面評価関数作る)
-            reward = 0.0
         
-        if player.hp <= 0:
-            print(player.name +"の体力が0になりました GG!!")
-            #doneをTrueにする
-            done = True
-            #報酬渡す
-            reward = -50
-        elif player.enemy.hp <= 0:
-            print(player.enemy.name +"の体力が0になりました GG!!")
-            #doneをTrueにする
-            done = True
-            #報酬渡す
-            reward = 50
-        
-        #自分のターンが終了or どちらかの体力が0になったら
-        if self.getused():
-            if player.enemy.hp <= 0:
-                print(player.enemy.name +"の体力が0になりました GG!!")
-                #doneをTrueにする
-                done = True
-                #報酬渡す
-                reward = 50
-            else:
-                #敵をランダムに行動させる
-                log = ""
-                log += player.enemy.usecard()
-                #doneをTrueにする
-                done = True
-                #報酬を渡す(TODO盤面評価関数作る)
-            
-                if player.hp <= 0:
-                    print(player.name +"の体力が0になりました GG!!")
-                    #doneをTrueにする
-                    done = True
-                    #報酬渡す
-                    reward = -50
-                else:
-                    if attack_sum >= player.enemy.hp:
-                        reward = -30
-                    else:
-                        #盤面評価計算して渡す
-                        reward = self.calculate_reward()
-
+        print("previous_action, now_action")
+        print(self.previous_action, self.now_action)
+        reward = self.get_reward()
+        done = self.get_done()
         self.observation = self.get_state()
 
         #記録
         self.curr_step += 1
         print("state")
         print(self.observation)
+        self.previous_action = self.now_action
         
 
         return self.observation,reward,done,{}
 
-        
+    # now getused means turnend , and should fix it by using flag  
     def getused(self):
         flag = True
         if len(self.player.is_played):
@@ -477,41 +288,114 @@ class CardGameEnv:
             return flag
         else:
             return True
-    
+    #報酬を返す
+    def get_reward(self):
+
+        player = self.player
+        reward = self.reward
+
+        if self.turn_end == True:
+
+            if self.previous_action == 34 and self.now_action == 34:
+                reward = -30
+            else:
+                #print("Turn end reward ")
+                if len(player.is_played) > len(player.enemy.is_played):
+                    reward = 1.0
+                    #print("First Player WIN")
+                elif len(player.is_played) < len(player.enemy.is_played):
+                    reward = -1.0
+                    #print("Second Player WIN")
+                else:
+                    first_sum = 0
+                    second_sum = 0
+                    for i in player.is_played:
+                        first_sum += i.attack
+                        first_sum += i.hp
+                    for i in player.enemy.is_played:
+                        second_sum += i.attack
+                        second_sum += i.hp
+                    if first_sum >= second_sum:
+                        reward = 1.0
+                        #print("First Player WIN")
+                    else:
+                        reward = -1.0
+                        #print("Second Player WIN")
+
+        #finish条件
+        if len(player.hand) == 0 and len(player.enemy.hand) == 0 and self.turn_end == True:
+            
+            if self.previous_action == 34 and self.now_action == 34:
+                reward = -30
+            else:
+                #done = True
+                if len(player.is_played) > len(player.enemy.is_played):
+                    reward = 10.0
+                    print("First Player WIN")
+                elif len(player.is_played) < len(player.enemy.is_played):
+                    reward = -10.0
+                    print("Second Player WIN")
+                else:
+                    first_sum = 0
+                    second_sum = 0
+                    for i in player.is_played:
+                        first_sum += i.attack
+                        first_sum += i.hp
+                    for i in player.enemy.is_played:
+                        second_sum += i.attack
+                        second_sum += i.hp
+                    if first_sum >= second_sum:
+                        reward = 10.0
+                        print("First Player WIN")
+                    else:
+                        reward = -10.0
+                        print("Second Player WIN")
+
+        
+        self.reward = reward
+        return reward
+        
+    def get_done(self):
+        player = self.player
+        #finish条件
+        if len(player.hand) == 0 and len(player.enemy.hand) == 0 and self.turn_end == True:
+            return True
+        return False
+
     #状態を返す
     def get_state(self):
 
         player = self.player
-        '''
-        s = dict(
-            MyHP = player.hp,
-            EnemyHP = player.enemy.hp,
-            MyCard1Attack = player.is_played[0].attack if 0 < len(player.is_played) else 0,
-            MyCard1HP = player.is_played[0].hp if 0 < len(player.is_played) else 0,
-            MyCard2Attack = player.is_played[1].attack if 1 < len(player.is_played) else 0,
-            MyCard2HP = player.is_played[1].hp if 1 < len(player.is_played) else 0,
-            MyCard3Attack = player.is_played[2].attack if 2 < len(player.is_played) else 0,
-            MyCard3HP = player.is_played[2].hp if 2 < len(player.is_played) else 0,
-            EnemyCard1Attack = player.enemy.is_played[0].attack if 0 < len(player.enemy.is_played) else 0,
-            EnemyCard1HP = player.enemy.is_played[0].hp if 0 < len(player.enemy.is_played) else 0,
-            EnemyCard2Attack = player.enemy.is_played[1].attack if 1 < len(player.enemy.is_played) else 0,
-            EnemyCard2HP = player.enemy.is_played[1].hp if 1 < len(player.enemy.is_played) else 0,
-            EnemyCard3Attack = player.enemy.is_played[2].attack if 2 < len(player.enemy.is_played) else 0,
-            EnemyCard3HP = player.enemy.is_played[2].hp if 2 < len(player.enemy.is_played) else 0,
-            MyCard1CanAttack = 1 if 0 < len(player.is_played) and not player.is_played[0].is_used else 0,
-            MyCard2CanAttack = 1 if 1 < len(player.is_played) and not player.is_played[1].is_used else 0,
-            MyCard3CanAttack = 1 if 2 < len(player.is_played) and not player.is_played[2].is_used else 0,
-        )
-        '''
+
         s = [
-            player.hp,
-            player.enemy.hp,
+            player.hand[0].attack if 0 < len(player.hand) else 0,
+            player.hand[0].hp if 0 < len(player.hand) else 0,
+            player.hand[1].attack if 1 < len(player.hand) else 0,
+            player.hand[1].hp if 1 < len(player.hand) else 0,
+            player.hand[2].attack if 2 < len(player.hand) else 0,
+            player.hand[2].hp if 2 < len(player.hand) else 0,
+            player.hand[3].attack if 3 < len(player.hand) else 0,
+            player.hand[3].hp if 3 < len(player.hand) else 0,
+            player.hand[4].attack if 4 < len(player.hand) else 0,
+            player.hand[4].hp if 4 < len(player.hand) else 0,
+            player.hand[5].attack if 5 < len(player.hand) else 0,
+            player.hand[5].hp if 5 < len(player.hand) else 0,
+            player.hand[6].attack if 6 < len(player.hand) else 0,
+            player.hand[6].hp if 6 < len(player.hand) else 0,
+            player.hand[7].attack if 7 < len(player.hand) else 0,
+            player.hand[7].hp if 7 < len(player.hand) else 0,
+            player.hand[8].attack if 8 < len(player.hand) else 0,
+            player.hand[8].hp if 8 < len(player.hand) else 0,
             player.is_played[0].attack if 0 < len(player.is_played) else 0,
             player.is_played[0].hp if 0 < len(player.is_played) else 0,
             player.is_played[1].attack if 1 < len(player.is_played) else 0,
             player.is_played[1].hp if 1 < len(player.is_played) else 0,
             player.is_played[2].attack if 2 < len(player.is_played) else 0,
             player.is_played[2].hp if 2 < len(player.is_played) else 0,
+            player.is_played[3].attack if 3 < len(player.is_played) else 0,
+            player.is_played[3].hp if 3 < len(player.is_played) else 0,
+            player.is_played[4].attack if 4 < len(player.is_played) else 0,
+            player.is_played[4].hp if 4 < len(player.is_played) else 0,
             player.enemy.is_played[0].attack if 0 < len(player.enemy.is_played) else 0,
             player.enemy.is_played[0].hp if 0 < len(player.enemy.is_played) else 0,
             player.enemy.is_played[1].attack if 1 < len(player.enemy.is_played) else 0,
@@ -525,6 +409,8 @@ class CardGameEnv:
             1 if 0 < len(player.is_played) and not player.is_played[0].is_used else 0,
             1 if 1 < len(player.is_played) and not player.is_played[1].is_used else 0,
             1 if 2 < len(player.is_played) and not player.is_played[2].is_used else 0,
+            1 if 3 < len(player.is_played) and not player.is_played[3].is_used else 0,
+            1 if 4 < len(player.is_played) and not player.is_played[4].is_used else 0,
         ]
         return s
     
@@ -605,5 +491,192 @@ class CardGameEnv:
 
     def state_to_env(self):
         state = self.observation
+
+    def do_action(self,action):
+        player = self.player
+        #action 0~8 は　自手札0~8を盤面に出す操作
+        if action >= 0 and action <= 8:
+            self.play_card = True
+            #
+            draw_card_num = action
+            #盤面表示
+            #player.enemy.printisplayed()
+            #player.printisplayed()
+            #player.printhand()
+            #action番目のカードをDraw
+            if action+1 > len(player.hand):
+                print("出せる手札がありません")
+            else:
+                play_card = player.hand.pop(draw_card_num)
+                #自分の盤面カードリストに追加
+                player.is_played.append(play_card)
+                #print(player.name + "は" + play_card + "を場に出した")
+                #盤面の枚数制限超えてたら最後に追加したカード削除
+                if len(player.is_played) > player.is_played_maxnum:
+                    eliminated_card = player.is_played.pop(-1)
+                    player.discard.append(eliminated_card)
+                #カードをactivateさせる
+                play_card.activate()
         
+        #action 9~13は自カード1の攻撃
+        elif action >= 9 and action <= 13:
+            self.play_card = True
+            action -= 9
+            enemy_num = action
+            if len(player.enemy.is_played) > enemy_num and len(player.is_played) > 0:
+                #自分カード0が敵0攻撃
+                if player.is_played[0].is_used == False:
+                    player.is_played[0].use(player.enemy.is_played[enemy_num])
+                else:
+                    pass
+                    #print("味方のカード1はすでに行動済みです")
+            else:
+                pass
         
+        #action 14~18 は自カード2の攻撃
+        elif action >= 14 and action <= 18:
+            self.play_card = True
+            action -= 14
+            enemy_num = action
+            if len(player.enemy.is_played) > enemy_num and len(player.is_played) > 1:
+                #自分カード1が敵0攻撃
+                if player.is_played[1].is_used == False:
+                    player.is_played[1].use(player.enemy.is_played[enemy_num])
+                else:
+                    pass
+                    #print("味方のカード1はすでに行動済みです")
+            else:
+                pass
+        
+        #action 19~23 は自カード3の攻撃
+        elif action >= 19 and action <= 23:
+            self.play_card = True
+            action -= 19
+            enemy_num = action
+            if len(player.enemy.is_played) > enemy_num and len(player.is_played) > 2:
+                #自分カード2が敵0攻撃
+                if player.is_played[2].is_used == False:
+                    player.is_played[2].use(player.enemy.is_played[enemy_num])
+                else:
+                    pass
+                    #print("味方のカード1はすでに行動済みです")
+            else:
+                pass
+        
+        #action 24~28 は自カード4の攻撃
+        elif action >= 24 and action <= 28:
+            self.play_card = True
+            action -= 24
+            enemy_num = action
+            if len(player.enemy.is_played) > enemy_num and len(player.is_played) > 3:
+                #自分カード3が敵0攻撃
+                if player.is_played[3].is_used == False:
+                    player.is_played[3].use(player.enemy.is_played[enemy_num])
+                else:
+                    pass
+                    #print("味方のカード1はすでに行動済みです")
+            else:
+                pass
+
+        #action 29~33 は自カード5の攻撃
+        elif action >= 29 and action <= 33:
+            self.play_card = True
+            action -= 29
+            enemy_num = action
+            if len(player.enemy.is_played) > enemy_num and len(player.is_played) > 4:
+                #自分カード4が敵0攻撃
+                if player.is_played[4].is_used == False:
+                    player.is_played[4].use(player.enemy.is_played[enemy_num])
+                else:
+                    pass
+                    #print("味方のカード1はすでに行動済みです")
+            else:
+                pass
+        
+        elif action == 34:
+            self.turn_end = True
+
+        else:
+            print(action)
+            print("未定義のActionです")                                        
+            print(self.get_state())  
+
+    def get_valid_moves(self):
+        player = self.player
+        valid_moves = []
+        #手札play
+        for i in range(len(player.hand)):
+            valid_moves.append(i)
+
+        #盤面1
+        if len(player.is_played) > 0 and player.is_played[0].is_used == False:
+            for i in range(len(player.enemy.is_played)):
+                valid_moves.append(i+9)
+        
+        #盤面2
+        if len(player.is_played) > 1 and player.is_played[1].is_used == False:
+            for i in range(len(player.enemy.is_played)):
+                valid_moves.append(i+14)
+        
+        #盤面3
+        if len(player.is_played) > 2 and player.is_played[2].is_used == False:
+            for i in range(len(player.enemy.is_played)):
+                valid_moves.append(i+19)
+        
+        #盤面4
+        if len(player.is_played) > 3 and player.is_played[3].is_used == False:
+            for i in range(len(player.enemy.is_played)):
+                valid_moves.append(i+24)
+
+        #盤面5
+        if len(player.is_played) > 4 and player.is_played[4].is_used == False:
+            for i in range(len(player.enemy.is_played)):
+                valid_moves.append(i+29)
+        
+        valid_moves.append(34)
+
+        return valid_moves
+
+    def take_action(self,action):
+        player = self.player
+        valid_actions = self.get_valid_moves()
+        #print("valid_moves")
+        #print(valid_actions)
+        cnt=0
+        #print("already_selected_actions")
+        #print(self.already_selected_actions)
+        #for a in self.already_selected_actions:
+        #    valid_actions.remove(a)
+        while len(valid_actions)<self.action_space.n: 
+            valid_actions.append(valid_actions[cnt])
+            cnt=cnt+1
+        self.action_episode_memory.append(valid_actions[action])
+        self.now_action = valid_actions[action]
+        print("action")
+        print(self.action_episode_memory)
+        #print("selected_action")
+        #print(valid_actions[action])
+        #if turn end ...
+        if valid_actions[action] == 34:
+            #print("-------------------------------------------------------------------------------------------------")
+            #print("Second Player Turn")
+            #敵をランダムに行動させる
+            player.enemy.draw()
+            #player.enemy.draw()
+            log = player.enemy.playcard()
+            #log = player.enemy.playcard()
+            log += player.enemy.usecard()
+            #カードリセット
+            run.resetuse(player)
+            run.resetuse(player.enemy)
+            #print("-------------------------------------------------------------------------------------------------")
+            #print("First Player Turn")
+            #プレイヤー一枚ドロー
+            player.draw()
+            #reset alreadyselectedactions
+            self.already_selected_actions = []
+            #true turn_end
+            self.turn_end = True
+        else:
+            self.do_action(valid_actions[action])
+            self.already_selected_actions.append(valid_actions[action])

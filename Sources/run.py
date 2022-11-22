@@ -8,22 +8,22 @@ def initdecks(player):
     #デッキ生成
     player.deck = deck.generateDeck(player)
     #デッキのシャッフル
-    #player.shuffle()
+    player.shuffle()
     #対戦相手にも同じこと
     player.enemy.deck = deck.generateDeckEnemy(player.enemy)
-    #player.enemy.shuffle()
+    player.enemy.shuffle()
 
 #ゲーム開始時のドロー
 def inithands(player):
-    #味方3枚敵5枚ドロー
+    #敵味方3枚ずつドロー
     player.draw()
     player.draw()
     player.draw()
     player.enemy.draw()
     player.enemy.draw()
     player.enemy.draw()
-    player.enemy.draw()
-    player.enemy.draw()
+    #player.enemy.draw()
+    #player.enemy.draw()
 
 
 #カードのis_used状態をリセット（ターン処理で呼ばれる)
@@ -38,9 +38,9 @@ def doTurn(player):
     print ("")
     print ("--")
     #敵のカードドロー
-    #player.enemy.draw()
+    player.enemy.draw()
     #敵のカードプレイ
-    log = ""
+    log = player.enemy.playcard()
     log += player.enemy.usecard()
     #敵のresetuse
     resetuse(player.enemy)
@@ -52,8 +52,8 @@ def doTurn(player):
     print ("")
     print ("--")
     #自分も同じことする
-    #player.draw()
-    log = ""
+    player.draw()
+    log = player.playcard()
     log += player.usecard()
     resetuse(player)
 

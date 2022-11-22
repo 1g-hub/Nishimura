@@ -1,0 +1,8 @@
+win_sum
+5211
+draw_sum
+1178
+loss_sum
+3611
+win rate
+0.6389

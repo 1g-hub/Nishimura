@@ -72,7 +72,7 @@ class Unit(Card):
         if self.hp < 0:
             self.hp = 0
         if self.hp == 0:
-            print(self.player.name + "の" + self + "は破壊された")
+            #print(self.player.name + "の" + self + "は破壊された")
             #elf.attack = 0
             try:
                 self.player.is_played.remove(self)
@@ -85,13 +85,13 @@ class Unit(Card):
     
     #activateのオーバーライド
     def activate(self):
-        print("")
+        #print("")
         self.act(self)
     
     #useのオーバーライド
     def use(self,target):
         if not self.u(self,target):
-            print(self + "attacks" + target)
+            #print(self + "attacks" + target)
             #is_used有効化
             self.is_used = True
             target.damage(self.attack)
