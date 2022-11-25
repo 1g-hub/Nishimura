@@ -41,7 +41,7 @@ env = CardGameEnv()
 action_history = []
 reward_history = []
 nb_actions = env.action_space.n
-step_count = 500000
+step_count = 100000
 #print(nb_actions)
 print(env.observation)
 #observation_value_list = list(env.observation_space.values())
@@ -76,11 +76,11 @@ print(reward_history)
 
 model = Sequential()
 model.add(Flatten(input_shape=(1,) + env.observation_space.shape))
-model.add(Dense(16))
+model.add(Dense(64))
 model.add(Activation('relu'))
-model.add(Dense(16))
+model.add(Dense(64))
 model.add(Activation('relu'))
-model.add(Dense(16))
+model.add(Dense(64))
 model.add(Activation('relu'))
 model.add(Dense(nb_actions))
 model.add(Activation('linear'))
@@ -97,7 +97,7 @@ dqn.compile(Adam(lr=1e-3), metrics=['mae'])
 history = dqn.fit(env, nb_steps=step_count, visualize=False, verbose=1)
 
 # 評価
-dqn.test(env, nb_episodes=10000, visualize=False,nb_max_episode_steps=60, callbacks = [episode_logger])
+dqn.test(env, nb_episodes=10, visualize=False,nb_max_episode_steps=100, callbacks = [episode_logger])
 
 #モデルの保存
 model.save(str(step_count)+'stepFirst.h5')
@@ -110,29 +110,27 @@ plt.ylabel("step")
 plt.subplot(2,1,2)
 plt.plot(history.history["episode_reward"])
 plt.xlabel("episode")
-plt.yscale("log")
+
 plt.ylabel("reward")
 
 plt.savefig("sin.png", format="png", dpi=300)
 
 win_sum = 0
-draw_sum = 0
 loss_sum = 0
 
 for obs in episode_logger.rewards.values():
-    if obs[-1] == 10.0:
+    if obs[-1] > 0.0:
         win_sum += 1
     else:
         loss_sum += 1
 
 print("win_sum")
 print(win_sum)
-print("draw_sum")
-print(draw_sum)
+
 print("loss_sum")
 print(loss_sum)
 
 
 print("win rate")
-print(win_sum / 10000.0)
+print(win_sum / 10.0)
 sys.exit("学習おわり")

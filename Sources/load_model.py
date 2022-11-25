@@ -40,7 +40,7 @@ episode_logger = EpisodeLogger()
 env = CardGameEnv()
 
 #モデルを読み込み
-model = load_model('500000stepFirst.h5')
+model = load_model('100000stepFirst.h5')
 
 # エージェントの設定
 memory = SequentialMemory(limit=1000000, window_length=1)
@@ -52,23 +52,21 @@ winratelist = []
 for _ in range(5):
 
     # 評価
-    dqn.test(env, nb_episodes=10000, visualize=False,nb_max_episode_steps=60, callbacks = [episode_logger])
+    dqn.test(env, nb_episodes=10000, visualize=False,nb_max_episode_steps=100, callbacks = [episode_logger])
 
 
     win_sum = 0
-    draw_sum = 0
     loss_sum = 0
 
     for obs in episode_logger.rewards.values():
-        if obs[-1] == 10.0:
+        print(obs)
+        if obs[-1] > 0.0:
             win_sum += 1
         else:
             loss_sum += 1
 
     print("win_sum")
     print(win_sum)
-    print("draw_sum")
-    print(draw_sum)
     print("loss_sum")
     print(loss_sum)
 
