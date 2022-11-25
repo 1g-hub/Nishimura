@@ -257,8 +257,8 @@ class CardGameEnv:
         
         #print("previous_action, now_action")
         #print(self.previous_action, self.now_action)
-        reward = self.get_reward()
         done = self.get_done()
+        reward = self.get_reward()
         self.observation = self.get_state()
 
         #記録
@@ -286,18 +286,31 @@ class CardGameEnv:
         reward = self.reward
 
         #finish条件
-        if len(player.hand) == 0 and len(player.enemy.hand) == 0 and len(player.deck) == 0 and len(player.enemy.deck) == 0:
-            #done = True
-                reward =  (len(player.is_played) - len(player.enemy.is_played)) * 50.0
+        if self.get_done():
+            if len(player.is_played) == 0:
+                reward = -30.0
+            elif len(player.enemy.is_played) == 0:
+                reward = 30.0
+        else:
+            reward = 0.0
         
         self.reward = reward
         return reward
-        
+
+    #finish条件 
     def get_done(self):
         player = self.player
-        #finish条件
-        if len(player.hand) == 0 and len(player.enemy.hand) == 0 and len(player.deck) == 0 and len(player.enemy.deck) == 0:
-            return True
+
+        if len(player.is_played) == 0:
+            if len(player.hand) == 0 and len(player.deck) == 0:
+                return True
+            else:
+                return False
+        elif len(player.enemy.is_played) == 0:
+            if len(player.enemy.hand) == 0 and len(player.enemy.deck) == 0:
+                return True
+            else:
+                return False
         return False
 
     #状態を返す
@@ -364,24 +377,6 @@ class CardGameEnv:
         # 環境を可視化する
         # human の場合はコンソールに出力．ansi の場合は StringIO を返す
         pass
-
-    '''
-    #終了条件判定
-    def is_done(self):
-        
-        player = self.player
-
-        #プレイヤーの手札で１つでもuseしてないカードがあればplayer_flag = False
-        player_flag = True
-        for i in player.is_played:
-            if i.is_used == False:
-                player_flag = False
-        
-        if player_flag:
-            return True
-        else:
-            return False
-    '''
 
     def state_to_env(self):
         state = self.observation
