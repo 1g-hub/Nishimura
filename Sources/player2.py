@@ -4,7 +4,7 @@ import card
 
 class Player2:
     #コンストラクタ
-    def __init__(self,name="First Player"):
+    def __init__(self,name="Learning Player"):
         #体力と最大体力と名前
         #self.hp = 8
         #self.maxhp = 8
@@ -78,7 +78,7 @@ class Player2:
         #出す順番固定
         if len(self.hand) <= 0:
             return ""
-        play_card = self.hand.pop()
+        play_card = self.hand.pop(0)
         #自分の盤面カードリストに追加
         self.is_played.append(play_card)
         #print(self.name + "は" + play_card + "を場に出した")
@@ -94,7 +94,8 @@ class Player2:
     def usecard(self):
         #自分の盤面に手札がなかったら
         if len(self.is_played) == 0:
-            print(self.name + "は盤面にカードがありません")
+            pass
+            #print(self.name + "は盤面にカードがありません")
         else:
             #盤面分カードをループ
             for use_card in self.is_played:

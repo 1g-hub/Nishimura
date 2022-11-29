@@ -11,6 +11,8 @@ class CardGameEnv:
     def __init__(self):
         self.curr_step = -1
         self.previous_action = 100
+        #first or second
+        self.isfirstAttack = False
         #手札を自盤面に出す・・・0~8
         #手札1が敵カード12345攻撃or何もしない・・・9~14
         #手札2・・・15~20
@@ -88,6 +90,7 @@ class CardGameEnv:
 
     def setup_game(self):
         self.player = player2.Player2()
+        player = self.player
 
         run.initdecks(self.player)
 
@@ -100,6 +103,16 @@ class CardGameEnv:
         #self.player.enemy.playcard()
         #self.player.enemy.playcard()
         #self.player.enemy.playcard()
+
+        if not self.isfirstAttack:
+            #敵1turn
+            #敵をランダムに行動させる
+            #player.enemy.draw()
+            #player.enemy.draw()
+            log = player.enemy.playcard()
+            log += player.enemy.usecard()
+            player.draw()
+
 
 
         run.resetuse(self.player)
@@ -225,8 +238,6 @@ class CardGameEnv:
         self.reward = 0.0
         player = self.player
         
-
-        #OTK可能であるのに逃したら-30
         attack_sum = 0
         for i in player.is_played:
             if i.is_used == False:
@@ -285,14 +296,20 @@ class CardGameEnv:
         player = self.player
         reward = self.reward
 
+        #turn end
+        #if self.get_sum_of_isused() == 0:
+        #    if len(player.is_played) >= len(player.enemy.is_played):
+        #        reward = 5.0
+        #    else:
+        #        reward = -5.0
+
+
         #finish条件
         if self.get_done():
             if len(player.is_played) == 0:
                 reward = -30.0
             elif len(player.enemy.is_played) == 0:
                 reward = 30.0
-        else:
-            reward = 0.0
         
         self.reward = reward
         return reward
@@ -549,6 +566,10 @@ class CardGameEnv:
     def take_action(self,action):
         player = self.player
         valid_actions = self.get_valid_moves()
+        if len(valid_actions) == 0:
+            #print(self.observation)
+            print("cant execute")
+            pass
         #print("valid_moves")
         #print(valid_actions)
         cnt=0
@@ -571,6 +592,7 @@ class CardGameEnv:
         if self.get_sum_of_isused() == 0:
             #敵をランダムに行動させる
             player.enemy.draw()
+            #print("enemy draw")
             #player.enemy.draw()
             log = player.enemy.playcard()
             #log = player.enemy.playcard()
@@ -582,5 +604,6 @@ class CardGameEnv:
             #print("First Player Turn")
             #プレイヤー一枚ドロー
             player.draw()
+            #print("player draw")
             #reset alreadyselectedactions
             self.already_selected_actions = []

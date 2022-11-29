@@ -40,7 +40,7 @@ episode_logger = EpisodeLogger()
 env = CardGameEnv()
 
 #モデルを読み込み
-model = load_model('100000stepFirst.h5')
+model = load_model('200000stepDDQNFirst.h5')
 
 # エージェントの設定
 memory = SequentialMemory(limit=1000000, window_length=1)

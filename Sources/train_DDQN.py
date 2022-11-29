@@ -53,16 +53,14 @@ print(env.observation)
 
 #環境デバック用テストコード(CPUでも動く)
 '''
-for _ in range(1000):
-    env.player.printhand()
-    env.player.enemy.printhand()
+for _ in range(10000):
     env.player.printisplayed()
     env.player.enemy.printisplayed()
     action = env.action_space.sample()
-    #action_history.append(action)
-    obs, re, done, info = env.step(action)
+    action_history.append(action)
     #print("action.history: ")
     #print(action_history)
+    obs, re, done, info = env.step(action)
     print("observation")
     print(env.observation)
     reward_history.append(re)
@@ -92,8 +90,8 @@ model.add(Activation('linear'))
 # エージェントの設定
 memory = SequentialMemory(limit=1000000, window_length=1)
 policy = EpsGreedyQPolicy(eps=0.1)
-dqn = DQNAgent(model=model, nb_actions=nb_actions, memory=memory, nb_steps_warmup=10,target_model_update=1e-2, policy=policy)
-dqn.compile(Adam(lr=1e-2), metrics=['mae'])
+dqn = DQNAgent(model=model, nb_actions=nb_actions, memory=memory, nb_steps_warmup=10,target_model_update=1e-2, policy=policy, enable_double_dqn=True)
+dqn.compile(Adam(lr=1e-3), metrics=['mae'])
 
 # 学習
 history = dqn.fit(env, nb_steps=step_count, visualize=False, verbose=1)
@@ -102,7 +100,7 @@ history = dqn.fit(env, nb_steps=step_count, visualize=False, verbose=1)
 dqn.test(env, nb_episodes=10000, visualize=False,nb_max_episode_steps=100, callbacks = [episode_logger])
 
 #モデルの保存
-model.save(str(step_count)+'stepFirst.h5')
+model.save(str(step_count)+'stepDDQNFirst.h5')
 
 plt.subplot(2,1,1)
 plt.plot(history.history["nb_episode_steps"])
@@ -115,7 +113,7 @@ plt.xlabel("episode")
 
 plt.ylabel("reward")
 
-plt.savefig("sin.png", format="png", dpi=300)
+plt.savefig(str(step_count) + "DDQN.png", format="png", dpi=300)
 
 win_sum = 0
 loss_sum = 0

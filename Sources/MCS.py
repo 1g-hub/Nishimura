@@ -1,83 +1,92 @@
+import math
 import gym
+from ELAgent import ELAgent
 import numpy as np
-import random
+from CardGameEnv import CardGameEnv
 
+class MonteCarloAgent(ELAgent):
 
-class MCS():
-    def __init__(self, env):
+    def __init__(self, epsilon=0.1):
+        super().__init__(epsilon)
 
-        self.nb_action = env.action_space.n # アクション数
-        self.max_turn = 20  # 最大ターン数
+    def learn(self, env, episode_count=1000, gamma=0.9,traning_rate = 0.5,
+              render=False, report_interval=50):
+        self.init_log()
+        actions = list(range(env.action_space.n))
+        self.Q[""] = [np.random.uniform(low=-1, high=1) for _ in range(env.action_space.n)]
 
-        self.epsilon = 0.1
-        self.simulation_times = 20
-
-        self.actions = [i for i in range(self.nb_action)]
-
-    # state から実環境へのアクションを返す
-    def sample_action(self, env, state, actionlist, training=False):
-        
-        # Q値を計算する
-        q_vals = self.compute_q_vals(env, state, actionlist)
-
-        if training:
-            # トレーニング中はε-greedy
-            if np.random.random() < self.epsilon:
-                # epsilonより低いならランダムに移動
-                return np.random.randint(self.nb_action)
+        for e in range(episode_count):
+            s = env.reset()
+            done = False
+            # エピソードの終了まで実行する
+            experience = []
+            while not done:
+                # 文字列化して一意にする。
+                s = "_".join([str(o) for o in s])
+                # Qテーブルになければ追加(無限に増えます)
+                if s not in self.Q:
+                    # Q値の初期化
+                    self.Q[s] = [ np.random.uniform(low=-1, high=1) for _ in range(env.action_space.n) ]
+                a = self.policy(s, actions)
+                n_state, reward, done, info = env.step(a)
+                experience.append({"state": s, "action": a, "reward": reward})
+                s = n_state
             else:
-                # Q値が最大のアクションを実行
-                select_actions = []
-                for i, v in enumerate(q_vals):
-                    if v == max(q_vals):
-                        select_actions.append(i)
-                return random.sample(select_actions, 1)[0]
-        else:
-            return np.argmax(q_vals)
+                self.log(reward)
+
+            #print(experience)
+            # 各状態・各行動を評価する。
+            for i, x in enumerate(experience):
+                s, a = x["state"], x["action"]
+            
+                # Calculate discounted future reward of s.
+                # 状態ｓ
+                G ,t = 0 , 0
+                for j in range(i, len(experience)):
+                    G += math.pow(gamma,t) * experience[j]["reward"]
+
+                self.Q[s][a] += traning_rate * (G - self.Q[s][a])
+
+            if e != 0 and e % report_interval == 0:
+                self.show_reward_log(episode=e)
+
+    def test(self, env, episode_count = 10000):
+        win_count = 0
+        loss_count = 0
+        for e in range(episode_count):
+            s = env.reset()
+            done = False
+            final_reward = 0
+            while not done:
+                # 文字列化して一意にする。
+                s = "_".join([str(o) for o in s])
+                # Qテーブルになければ追加(無限に増えます)
+                if s not in self.Q:
+                    # Q値の初期化
+                    self.Q[s] = [ np.random.uniform(low=-1, high=1) for _ in range(env.action_space.n) ]
+                a = np.argmax(self.Q[s])
+                n_state, reward, done, info = env.step(a)
+                s = n_state
+                final_reward = reward
+            #print(reward)
+            if reward > 0.0:
+                win_count += 1
+            else:
+                loss_count += 1
+        print("win_count")
+        print(win_count)
+        print("loss_count")
+        print(loss_count)
+        print("win rate")
+        print(win_count / episode_count)
 
 
-    #Q値を計算する
-    def compute_q_vals(self, env, init_state,actionlist):
-        q_vals = []
-        default_state = init_state
-        previous_action_list = actionlist
-        print(default_state)
-        # 全アクション
-        for action in self.actions:
-            total_reward = 0
-            #print("Q値計算の時のstate")
-            #print(env.observation)
-            env.observation = default_state
+def train():
+    agent = MonteCarloAgent(epsilon=0.1)
+    env = CardGameEnv()
+    agent.learn(env, episode_count=1000000)
+    agent.show_reward_log()
+    agent.test(env, episode_count = 10000)
 
-            # シミュレーション
-            for _ in range(self.simulation_times):
-                
-                simu_action_list = []
-                simu_action_list.append(action)
-                obs, re, don, info = env.step(action)
-                done = don
-                step = 0
-                
-                # 1episode
-                while not done and step < self.max_turn:
-                    step += 1
-
-                    # π(ランダム)
-                    action = np.random.randint(self.nb_action)
-                    simu_action_list.append(action)
-
-                    obs, re, don, info = env.step(action)
-
-                    total_reward += re
-                    done = don
-                    state = env.observation
-                
-            # Kエピソードの平均報酬、これが行動価値になる
-            reward = total_reward / self.simulation_times
-            q_vals.append(reward)
-            #print("q_vals")
-            #print(q_vals)
-            env.observation = default_state
-            print(env.observation)
-
-        return q_vals
+if __name__ == "__main__":
+    train()
