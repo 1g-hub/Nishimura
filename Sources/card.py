@@ -13,6 +13,8 @@ class Card:
         self.player = player
         #name 名前
         self.name = "name"
+        #issee 手札カードaction管理用 ターン中確認したかどうか
+        self.is_see = False
 
     #strのオーバーライド
     def __str__(self):

@@ -12,14 +12,15 @@ class CardGameEnv:
         self.curr_step = -1
         self.previous_action = 100
         #first or second
-        self.isfirstAttack = False
+        self.isfirstAttack = True
         #手札を自盤面に出す・・・0~8
-        #手札1が敵カード12345攻撃or何もしない・・・9~14
-        #手札2・・・15~20
-        #手札3・・・21~26
-        #手札4・・・27~32
-        #手札5・・・33~38
-        self.action_space = spaces.Discrete(39)
+        #手札を地盤面に出さない・・・9~17
+        #手札1が敵カード12345攻撃or何もしない・・・18~23
+        #手札2・・・24~29
+        #手札3・・・30~35
+        #手札4・・・36~41
+        #手札5・・・42~47
+        self.action_space = spaces.Discrete(48)
         """
         self.observation_space = spaces.Dict({
             "MyHand1Attack" :
@@ -74,18 +75,21 @@ class CardGameEnv:
         LOW = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,#手札1~9のカードのAttackとHP
                         0,0,0,0,0,0,0,0,0,0,#自盤面1~5のAtackとHP
                         0,0,0,0,0,0,0,0,0,0,#敵盤面1~5のAtackとHP
-                        0,0,0,0,0#自盤面1~5のcanAttack
+                        0,0,0,0,0,#自盤面1~5のcanAttack
+                        0,0#decknum
                         ])
         HIGH = np.array([20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,#手札1~9のカードのAttackとHP
                         20,20,20,20,20,20,20,20,20,20,#自盤面1~5のAtackとHP
                         20,20,20,20,20,20,20,20,20,20,#敵盤面1~5のAtackとHP
-                        1,1,1,1,1#自盤面1~5のcanAttack
+                        1,1,1,1,1,#自盤面1~5のcanAttack
+                        15,15#decknum
                         ])
         self.observation_space = spaces.Box(low=LOW,high=HIGH)
 
 
         self.curr_episode = -1
         self.already_selected_actions=[]
+        self.isGameEnd = False
         self.reset()
 
     def setup_game(self):
@@ -115,14 +119,16 @@ class CardGameEnv:
 
 
 
-        run.resetuse(self.player)
-        run.resetuse(self.player.enemy)
+        self.reset_use(self.player)
+        self.reset_use(self.player.enemy)
+        self.reset_see(self.player)
+        self.reset_see(self.player.enemy)
 
 
     def reset(self):
         
         self.setup_game()
-
+        self.isGameEnd = False
         player = self.player
         self.action_episode_memory=[]
         self.previous_action = 100
@@ -173,7 +179,8 @@ class CardGameEnv:
             "MyCard3CanAttack": 1 if 2 < len(player.is_played) and not player.is_played[2].is_used else 0,
             "MyCard4CanAttack": 1 if 3 < len(player.is_played) and not player.is_played[3].is_used else 0,
             "MyCard5CanAttack": 1 if 4 < len(player.is_played) and not player.is_played[4].is_used else 0,
-            
+            "MyDeckNum": len(player.deck),
+            "EnemyDeckNum" : len(player.enemy.deck)
         }
         
         '''
@@ -221,6 +228,8 @@ class CardGameEnv:
             1 if 2 < len(player.is_played) and not player.is_played[2].is_used else 0,
             1 if 3 < len(player.is_played) and not player.is_played[3].is_used else 0,
             1 if 4 < len(player.is_played) and not player.is_played[4].is_used else 0,
+            len(player.deck),
+            len(player.enemy.deck)
         ]
         self.observation = s
 
@@ -231,9 +240,6 @@ class CardGameEnv:
         return s
     
     def step(self,action):
-        self.play_card = False
-        self.use_card = False
-        self.turn_end = False
         done = False
         self.reward = 0.0
         player = self.player
@@ -281,14 +287,33 @@ class CardGameEnv:
 
         return self.observation,reward,done,{}
 
-    # 場に出ているis_usedの数を数える 0であればターンエンド
+    # 場に出ているis_usedの数を数える
     def get_sum_of_isused(self):
         sum = 0
-        if len(self.player.is_played):
+        if len(self.player.is_played) > 0:
             for i in self.player.is_played:
                 if i.is_used == False:
                     sum += 1
         return sum
+
+    # 手札のis_seeの数を数える
+    def get_sum_of_issee(self):
+        sum = 0
+        if len(self.player.hand) > 0: 
+            for i in self.player.hand:
+                if i.is_see == False:
+                    sum += 1
+        return sum
+
+    #カードのis_used状態をリセット（ターン処理で呼ばれる)
+    def reset_use(self,player):
+        for played_card in player.is_played:
+                played_card.is_used = False
+    
+    #カードのis_see状態をリセット(ターン処理で呼ばれる)
+    def reset_see(self,player):
+        for see_card in player.hand:
+            see_card.is_see = False
     
     #報酬を返す
     def get_reward(self):
@@ -304,12 +329,12 @@ class CardGameEnv:
         #        reward = -5.0
 
 
-        #finish条件
+        #finishした時に報酬渡す
         if self.get_done():
-            if len(player.is_played) == 0:
-                reward = -30.0
-            elif len(player.enemy.is_played) == 0:
-                reward = 30.0
+            if len(player.is_played) > len(player.enemy.is_played):
+                reward = 1.0
+            else:
+                reward = -1.0
         
         self.reward = reward
         return reward
@@ -317,18 +342,10 @@ class CardGameEnv:
     #finish条件 
     def get_done(self):
         player = self.player
-
-        if len(player.is_played) == 0:
-            if len(player.hand) == 0 and len(player.deck) == 0:
-                return True
-            else:
-                return False
-        elif len(player.enemy.is_played) == 0:
-            if len(player.enemy.hand) == 0 and len(player.enemy.deck) == 0:
-                return True
-            else:
-                return False
-        return False
+        if self.isGameEnd == True:
+            return True
+        else:
+            return False
 
     #状態を返す
     def get_state(self):
@@ -379,6 +396,8 @@ class CardGameEnv:
             1 if 2 < len(player.is_played) and not player.is_played[2].is_used else 0,
             1 if 3 < len(player.is_played) and not player.is_played[3].is_used else 0,
             1 if 4 < len(player.is_played) and not player.is_played[4].is_used else 0,
+            len(player.deck),
+            len(player.enemy.deck)
         ]
         return s
     
@@ -402,8 +421,6 @@ class CardGameEnv:
         player = self.player
         #action 0~8 は　自手札0~8を盤面に出す操作
         if action >= 0 and action <= 8:
-            self.play_card = True
-            #
             draw_card_num = action
             #盤面表示
             #player.enemy.printisplayed()
@@ -411,8 +428,10 @@ class CardGameEnv:
             #player.printhand()
             #action番目のカードをDraw
             if action+1 > len(player.hand):
-                print("出せる手札がありません")
+                pass
+                #print("出せる手札がありません")
             else:
+                player.hand[draw_card_num].is_see = True
                 play_card = player.hand.pop(draw_card_num)
                 #自分の盤面カードリストに追加
                 player.is_played.append(play_card)
@@ -424,11 +443,21 @@ class CardGameEnv:
                 #カードをactivateさせる
                 play_card.activate()
         
-        #action 9~14は自カード1の攻撃
-        elif action >= 9 and action <= 14:
-            if action != 14: 
-                self.play_card = True
-                action -= 9
+        #action 9~17は自手札0~8を盤面に出さない
+        elif action >= 9 and action <= 17:
+            #rint("カード出しません")
+            draw_card_num = action - 9
+            #print(player.hand[draw_card_num])
+            #print(player.hand[draw_card_num].is_see)
+            player.hand[draw_card_num].is_see = True
+            #print(player.hand[draw_card_num])
+            #print(player.hand[draw_card_num].is_see)
+    
+        
+        #action 18~23は自カード1の攻撃
+        elif action >= 18 and action <= 23:
+            if action != 23: 
+                action -= 18
                 enemy_num = action
                 if len(player.enemy.is_played) > enemy_num and len(player.is_played) > 0:
                     #自分カード0が敵0攻撃
@@ -440,14 +469,13 @@ class CardGameEnv:
                 else:
                     pass
             else:
-                #action = 14なので何もしない
+                #action = 23なので何もしない
                 player.is_played[0].is_used = True
         
-        #action 15~20 は自カード2の攻撃
-        elif action >= 15 and action <= 20:
-            if action != 20:
-                self.play_card = True
-                action -= 15
+        #action 24~29 は自カード2の攻撃
+        elif action >= 24 and action <= 29:
+            if action != 29:
+                action -= 24
                 enemy_num = action
                 if len(player.enemy.is_played) > enemy_num and len(player.is_played) > 1:
                     #自分カード1が敵0攻撃
@@ -459,14 +487,13 @@ class CardGameEnv:
                 else:
                     pass
             else:
-                #action = 20なのでなにもしない
+                #action = 29なのでなにもしない
                 player.is_played[1].is_used = True
             
-        #action 21~26 は自カード3の攻撃
-        elif action >= 21 and action <= 26:
-            if action != 26:       
-                self.play_card = True
-                action -= 21
+        #action 30~35 は自カード3の攻撃
+        elif action >= 30 and action <= 35:
+            if action != 35:       
+                action -= 30
                 enemy_num = action
                 if len(player.enemy.is_played) > enemy_num and len(player.is_played) > 2:
                     #自分カード2が敵0攻撃
@@ -478,14 +505,13 @@ class CardGameEnv:
                 else:
                     pass
             else:
-                #action = 26
+                #action = 35
                 player.is_played[2].is_used = True
         
-        #action 27~32 は自カード4の攻撃
-        elif action >= 27 and action <= 32:
-            if action != 32:
-                self.play_card = True
-                action -= 27
+        #action 36~41 は自カード4の攻撃
+        elif action >= 36 and action <= 41:
+            if action != 41:
+                action -= 36
                 enemy_num = action
                 if len(player.enemy.is_played) > enemy_num and len(player.is_played) > 3:
                     #自分カード3が敵0攻撃
@@ -497,14 +523,13 @@ class CardGameEnv:
                 else:
                     pass
             else:
-                #action=32だから何もしない
+                #action=41だから何もしない
                 player.is_played[3].is_used = True
 
-        #action 33~38 は自カード5の攻撃
-        elif action >= 33 and action <= 38:
-            if action != 38:
-                self.play_card = True
-                action -= 33
+        #action 42~47 は自カード5の攻撃
+        elif action >= 42 and action <= 47:
+            if action != 47:
+                action -= 42
                 enemy_num = action
                 if len(player.enemy.is_played) > enemy_num and len(player.is_played) > 4:
                     #自分カード4が敵0攻撃
@@ -516,7 +541,7 @@ class CardGameEnv:
                 else:
                     pass
             else:
-                #action=38だから何もしない
+                #action=47だから何もしない
                 player.is_played[4].is_used = True
 
         else:
@@ -524,43 +549,47 @@ class CardGameEnv:
             print("未定義のActionです")                                        
             print(self.get_state())  
 
+    #盤面から使える行動を選んでvalid_movesに追加、それをreturn 
     def get_valid_moves(self):
         player = self.player
         valid_moves = []
         #手札play
         for i in range(len(player.hand)):
-            valid_moves.append(i)
+            if player.hand[i].is_see == False:
+                valid_moves.append(i)
+                valid_moves.append(i+9)
 
         #盤面1
         if len(player.is_played) > 0 and player.is_played[0].is_used == False:
-            valid_moves.append(14)
+            valid_moves.append(23)
             for i in range(len(player.enemy.is_played)):
-                valid_moves.append(i+9)
+                valid_moves.append(i+18)
         
         #盤面2
         if len(player.is_played) > 1 and player.is_played[1].is_used == False:
-            valid_moves.append(20)
+            valid_moves.append(29)
             for i in range(len(player.enemy.is_played)):
-                valid_moves.append(i+15)
+                valid_moves.append(i+24)
         
         #盤面3
         if len(player.is_played) > 2 and player.is_played[2].is_used == False:
-            valid_moves.append(26)
+            valid_moves.append(35)
             for i in range(len(player.enemy.is_played)):
-                valid_moves.append(i+21)
+                valid_moves.append(i+30)
         
         #盤面4
         if len(player.is_played) > 3 and player.is_played[3].is_used == False:
-            valid_moves.append(32)
+            valid_moves.append(41)
             for i in range(len(player.enemy.is_played)):
-                valid_moves.append(i+27)
+                valid_moves.append(i+36)
 
         #盤面5
         if len(player.is_played) > 4 and player.is_played[4].is_used == False:
-            valid_moves.append(38)
+            valid_moves.append(47)
             for i in range(len(player.enemy.is_played)):
-                valid_moves.append(i+33)
-
+                valid_moves.append(i+42)
+        #print("valid_moves")
+        #print(valid_moves)
         return valid_moves
 
     def take_action(self,action):
@@ -589,21 +618,32 @@ class CardGameEnv:
         self.do_action(valid_actions[action])
         self.already_selected_actions.append(valid_actions[action])
 
-        if self.get_sum_of_isused() == 0:
+        if self.get_sum_of_isused() == 0 and self.get_sum_of_issee() == 0:
+            #print("-------------------------------------------------------------------------------------------------")
+            #print("Enemy Player Turn")
             #敵をランダムに行動させる
             player.enemy.draw()
-            #print("enemy draw")
-            #player.enemy.draw()
-            log = player.enemy.playcard()
-            #log = player.enemy.playcard()
-            log += player.enemy.usecard()
+            if player.enemy.is_deckend:
+                #print(player.enemy.name + "のデッキ切れです")
+                self.isGameEnd = True
+            else:
+                #print("enemy draw")
+                #player.enemy.draw()
+                log = player.enemy.playcard()
+                #log = player.enemy.playcard()
+                log += player.enemy.usecard()
             #カードリセット
-            run.resetuse(player)
-            run.resetuse(player.enemy)
+            self.reset_use(self.player)
+            self.reset_use(self.player.enemy)
+            self.reset_see(self.player)
+            self.reset_see(self.player.enemy)
             #print("-------------------------------------------------------------------------------------------------")
             #print("First Player Turn")
             #プレイヤー一枚ドロー
             player.draw()
+            if player.is_deckend:
+                #print(player.name + "のデッキ切れです")
+                self.isGameEnd = True
             #print("player draw")
             #reset alreadyselectedactions
             self.already_selected_actions = []

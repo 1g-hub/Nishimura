@@ -41,7 +41,7 @@ env = CardGameEnv()
 action_history = []
 reward_history = []
 nb_actions = env.action_space.n
-step_count = 200000
+step_count = 10000
 #print(nb_actions)
 print(env.observation)
 #observation_value_list = list(env.observation_space.values())
@@ -52,7 +52,7 @@ print(env.observation)
 
 
 #環境デバック用テストコード(CPUでも動く)
-'''
+
 for _ in range(1000):
     env.player.printhand()
     env.player.enemy.printhand()
@@ -92,30 +92,44 @@ model.add(Activation('linear'))
 # エージェントの設定
 memory = SequentialMemory(limit=1000000, window_length=1)
 policy = EpsGreedyQPolicy(eps=0.1)
-dqn = DQNAgent(model=model, nb_actions=nb_actions, memory=memory, nb_steps_warmup=10,target_model_update=1e-2, policy=policy)
-dqn.compile(Adam(lr=1e-2), metrics=['mae'])
+dqn = DQNAgent(model=model, nb_actions=nb_actions, memory=memory, nb_steps_warmup=10,target_model_update=0.5, policy=policy)
+dqn.compile(Adam(lr=1e-3), metrics=['mae'])
 
 # 学習
 history = dqn.fit(env, nb_steps=step_count, visualize=False, verbose=1)
 
 # 評価
-dqn.test(env, nb_episodes=10000, visualize=False,nb_max_episode_steps=100, callbacks = [episode_logger])
+#dqn.test(env, nb_episodes=10000, visualize=False,nb_max_episode_steps=100, callbacks = [episode_logger])
 
 #モデルの保存
-model.save(str(step_count)+'stepFirst.h5')
+#model.save(str(step_count)+'stepFirst.h5')
 
-plt.subplot(2,1,1)
-plt.plot(history.history["nb_episode_steps"])
-plt.yscale("log")
-plt.ylabel("step")
+print("episode_number")
+print(len(history.history["episode_reward"]))
+interval = 20
+indices = list(range(0,len(history.history["episode_reward"]),interval))
+means = []
+stds = []
+for i in indices:
+    rewards = history.history["episode_reward"][i:(i + interval)]
+    means.append(np.mean(rewards))
+    stds.append(np.std(rewards))
+means = np.array(means)
+stds = np.array(stds)
 
-plt.subplot(2,1,2)
-plt.plot(history.history["episode_reward"])
-plt.xlabel("episode")
+plt.figure()
+plt.title("Reward History")
+plt.grid()
+plt.fill_between(indices, means - stds, means + stds,
+                 alpha=0.1, color="g")
+plt.plot(indices, means, "o-", color="g",
+         label="Rewards for each {} episode".format(interval))
+plt.legend(loc="best")
+plt.savefig("DQN.png", format="png", dpi=300)
 
-plt.ylabel("reward")
+print(rewards)
 
-plt.savefig("sin.png", format="png", dpi=300)
+
 
 win_sum = 0
 loss_sum = 0
@@ -136,4 +150,6 @@ print(loss_sum)
 
 print("win rate")
 print(win_sum / 10000.0)
+
+'''
 sys.exit("学習おわり")

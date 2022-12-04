@@ -19,7 +19,9 @@ class Player2:
         self.is_played_maxnum = 5
         #敵への参照取得
         self.enemy = player1.Player1(self)
-    
+        #デッキ切れに気づいたフラグ
+        self.is_deckend = False
+
         #デッキシャッフル
     def shuffle(self):
         #random.shuffleを用いて配列deckの要素をシャッフル
@@ -28,7 +30,8 @@ class Player2:
     #カードのドロー
     def draw(self):
         if len(self.deck) <= 0:
-            pass
+            #ここでデッキ切れに気づく
+            self.is_deckend = True
             #print(self.name + "のデッキにカードがありません")
         else:
             #デッキからカード一枚とって手札に加える
