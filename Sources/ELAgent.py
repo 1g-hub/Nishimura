@@ -30,7 +30,7 @@ class ELAgent():
     def log(self, reward):
         self.reward_log.append(reward)
 
-    def show_reward_log(self, interval=7000, episode=-1):
+    def show_reward_log(self, interval=100, episode=-1):
         # そのepsilonの報酬をグラフ表示
         if episode > 0:
             rewards = self.reward_log[-interval:]

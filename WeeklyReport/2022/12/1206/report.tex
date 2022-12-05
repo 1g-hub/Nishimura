@@ -1,0 +1,89 @@
+
+%\documentstyle[epsf,twocolumn]{jarticle}       %LaTeX2.09仕様
+%\documentclass[twocolumn]{jarticle}     %pLaTeX2e仕様
+\documentclass{jarticle}     %pLaTeX2e仕様
+
+%一枚組だったら[twocolumn]関係のとこ消す
+
+\setlength{\topmargin}{-45pt}
+%\setlength{\oddsidemargin}{0cm} 
+\setlength{\oddsidemargin}{-7.5mm}
+%\setlength{\evensidemargin}{0cm} 
+\setlength{\textheight}{24.1cm}
+%setlength{\textheight}{25cm} 
+\setlength{\textwidth}{17.4cm}
+%\setlength{\textwidth}{172mm} 
+\setlength{\columnsep}{11mm}
+
+\kanjiskip=.07zw plus.5pt minus.5pt
+
+\usepackage{graphicx}
+\usepackage[dvipdfmx]{color}
+\usepackage{subcaption}
+\usepackage{enumerate}
+\usepackage{comment}
+\usepackage{url}
+\usepackage{multirow}
+\usepackage{diagbox}
+
+
+\begin{document}
+  \noindent
+  \onecolumn
+  \hspace{1em}
+
+  \today
+  \hfill
+  \ \ B3 西村昭賢 
+
+  \vspace{2mm}
+  \hrule
+  \begin{center}
+  {\Large \bf 進捗報告}
+  \end{center}
+  \hrule
+  \vspace{3mm}
+
+
+\section{今週やったこと}
+\begin{quote}
+  \begin{itemize}
+   \item 学習ステップ数を増やした DQN の結果
+   \item DQN の実験の結果を踏まえた改善
+   \item 再実験
+   \item コスト, HP ,特殊効果追加した ver の環境の作成
+  \end{itemize}
+ \end{quote}
+
+
+\section{学習ステップを増やした DQN の実験結果}
+先週, DQN で 200000 ステップ(約 5000 エピソード)学習した結果先手が勝率 5 割を切るという結果となった.一方, 新たに実装したモンテカルロ探索では 1000000 エピソード学習し先手で 0.8011 という勝率を残した.\par
+この結果を受け, DQN のステップ数を増やして学習が行われるか実験を行った.パラメータは表 \ref{table:param} に示す.
+\begin{table}[h]
+  \centering
+  \caption{DQNのパラメータ}
+  \label{table:param}
+  \begin{tabular}{|c||c|}
+  \hline
+  方策                 & ε-greedy \\ \hline
+  ε                      & 0.1      \\ \hline
+  全結合層の活性化関数             & ReLU     \\ \hline
+  全結合層の次元                & 64       \\ \hline
+  最適化アルゴリズム              & Adam     \\ \hline
+  学習率                    & 1e-2     \\ \hline
+  Experience Replayのメモリ量 & 1000000  \\ \hline
+  \end{tabular}
+  \end{table}
+
+\section{???}
+
+
+\section{???}
+
+
+%index.bibはtexファイルと同階層に置く
+%ちゃんと\citeしないと表示されない(1敗)
+\bibliography{index.bib}
+\bibliographystyle{junsrt}
+
+\end{document}

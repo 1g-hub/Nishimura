@@ -12,7 +12,7 @@ class CardGameEnv:
         self.curr_step = -1
         self.previous_action = 100
         #first or second
-        self.isfirstAttack = True
+        self.isfirstAttack = False
         #手札を自盤面に出す・・・0~8
         #手札を地盤面に出さない・・・9~17
         #手札1が敵カード12345攻撃or何もしない・・・18~23

@@ -44,7 +44,7 @@ class MonteCarloAgent(ELAgent):
                 G ,t = 0 , 0
                 for j in range(i, len(experience)):
                     G += math.pow(gamma,t) * experience[j]["reward"]
-
+                    t += 1
                 self.Q[s][a] += traning_rate * (G - self.Q[s][a])
 
             if e != 0 and e % report_interval == 0:
@@ -84,7 +84,7 @@ class MonteCarloAgent(ELAgent):
 def train():
     agent = MonteCarloAgent(epsilon=0.1)
     env = CardGameEnv()
-    agent.learn(env, episode_count=700000)
+    agent.learn(env, episode_count=85000)
     agent.show_reward_log()
     agent.test(env, episode_count = 10000)
 
