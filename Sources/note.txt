@@ -183,4 +183,43 @@ loss_count
 656
 win rate
 0.9344
-root@35909
+
+状態空間に自プレイヤーと敵プレイヤーのデッキ枚数加えてみる
+
+MCS 700000 First
+
+win_count
+9435
+loss_count
+565
+win rate
+0.9435
+
+MCS 700000 Second
+
+win_count
+8589
+loss_count
+1411
+win rate
+0.8589
+
+ランダム要素を考慮すると有意に勝率が向上したとは言えないが,特に採用しないメリットもないので採用する
+
+DQN試すぞ！！
+
+
+
+DQN　second
+win_sum
+9069
+loss_sum
+931
+win rate
+0.9069
+
+memory = SequentialMemory(limit=50000, window_length=1, ignore_episode_boundaries=False)
+policy = EpsGreedyQPolicy(eps=0.1)
+dqn = DQNAgent(model=model, nb_actions=nb_actions, memory=memory, nb_steps_warmup=10000,target_model_update=0.5, policy=policy)
+dqn.compile(Adam(learning_rate=1e-3), metrics=['mae'])
+
