@@ -76,7 +76,7 @@
   全結合層の活性化関数             & ReLU     \\ \hline
   全結合層の次元                & 64       \\ \hline
   最適化アルゴリズム              & Adam     \\ \hline
-  Soft Updateの頻度               & 1e-2     \\ \hline
+  Target Network 更新重み               & 1e-2     \\ \hline
   Experience Replayのメモリ量 & 1000000  \\ \hline
   \end{tabular}
   \end{table}
@@ -273,7 +273,7 @@ DQN は keras のライブラリを使用して実装していた.そのため�
   \end{table}
 
 \subsubsection{Exprience Memoryへの書き込み開始Stepの調整}
-keras-rl には nb\_steps\_warmup というパラメータが存在し, Exprience Memory への書き込みを nb\_steps\_warmup ステップ終わってから始めることで学習が進んで無い場合の不安定な状態をExprience Memory に書き込むことを防いでいる. 標準は 1000 ステップとなっていたため 10000 ステップへと変更した.
+keras-rl には nb\_steps\_warmup というパラメータが存在し, Exprience Memory への書き込みを nb\_steps\_warmup ステップ終わってから始めることで学習が進んで無い場合の不安定な状態をExprience Memory に書き込むことを防いでいる. 標準は 1000 ステップとなっていたため 10000 ステップへと変更した.また,Exprience Memoryのメモリ量を 1000000 から 50000 に変更した.
 
 \subsubsection{Target Network の更新の重み調整}
 keras-rl は 1 ステップごとに target\_model\_update というパラメータで, \par
@@ -283,8 +283,25 @@ target\_model = target\_model\_update * target\_model + (1 - target\_model\_upda
  DQN において Q 値の更新式の $maxQ(s_{t+1},a_{t+1})$ の計算で Target Network が用いられている\cite{targetnetwork}.標準では $1e-2$ となっていたが, DQN がステップを重ねても学習が進まなかったことを考え 0.5 とした.
 
 \section{実験 3}
-DQN で 5000000 ステップ学習を行い, 学習したモデルを 10000 回検証し勝率を検証した. その後,同程度エピソード数モンテカルロ探索で学習・検証を行い勝率を比較した.なお,学習プレイヤーは後手とした.
+DQN で 5000000 ステップ学習を行い, 学習したモデルを 10000 回検証し勝率を検証した. その後,同程度エピソード数モンテカルロ探索で学習・検証を行い勝率を比較した.なお,学習プレイヤーは後手とした.DQN のパラメータを表 \ref{table:updateparam} に示す.
 結果を表 \ref{table:jikkenDQN} ,学習過程での100エピソードの報酬の平均の推移を図 \ref{fig:3DQN}, \ref{fig:3MCS} に示す.
+
+\begin{table}[H]
+  \centering
+  \caption{DQNのパラメータ}
+  \label{table:updateparam}
+  \begin{tabular}{|c||c|}
+  \hline
+  方策                 & ε-greedy \\ \hline
+  ε                      & 0.1      \\ \hline
+  全結合層の活性化関数             & ReLU     \\ \hline
+  全結合層の次元                & 64       \\ \hline
+  最適化アルゴリズム              & Adam     \\ \hline
+  Target Network 更新重み              & 0.5     \\ \hline
+  Exprience Memory への書き込み開始step & 10000 \\ \hline
+  Experience Replayのメモリ量 & 50000  \\ \hline
+  \end{tabular}
+  \end{table}
 
 \begin{table}[H]
   \centering
