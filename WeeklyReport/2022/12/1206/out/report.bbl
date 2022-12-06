@@ -1,0 +1,33 @@
+\begin{thebibliography}{1}
+
+\bibitem{DQNparam}
+goodclues.
+\newblock Pythonの強化学習ライブラリkeras-rlのパラメータ設定, 2019,08,19.
+\newblock \url{https://qiita.com/goodclues/items/9b2b618ac5ba4c3be1c5}.
+
+\bibitem{targetnetwork}
+たぬきねこ.
+\newblock 【深層強化学習】【dqn】target network, 2020.09.18.
+\newblock
+  \url{https://www.tcom242242.net/entry/ai-2/%E5%BC%B7%E5%8C%96%E5%AD%A6%E7%BF%92/target-network/}.
+
+\bibitem{ReBeL}
+Noam {Brown}, Anton {Bakhtin}, Adam {Lerer}, and Qucheng {Gong}.
+\newblock {Combining Deep Reinforcement Learning and Search for
+  Imperfect-Information Games}.
+\newblock {\em arXiv e-prints}, p. arXiv:2007.13544, July 2020.
+
+\bibitem{MuZero}
+Jim~Kynvin Adam~Cain and Aleksandrs Polozuns.
+\newblock Muzero: Mastering go, chess, shogi and atari without rules,
+  2020,12,23.
+\newblock
+  \url{https://www.deepmind.com/blog/muzero-mastering-go-chess-shogi-and-atari-without-rules}.
+
+\bibitem{DreamerV2}
+Danijar Hafner.
+\newblock Mastering atari with discrete world models, 2021,02,18.
+\newblock
+  \url{https://ai.googleblog.com/2021/02/mastering-atari-with-discrete-world.html}.
+
+\end{thebibliography}
