@@ -84,7 +84,7 @@ class MonteCarloAgent(ELAgent):
 def train():
     agent = MonteCarloAgent(epsilon=0.1)
     env = CardGameEnv()
-    agent.learn(env, episode_count=85000)
+    agent.learn(env, episode_count=1)
     agent.show_reward_log()
     agent.test(env, episode_count = 10000)
 

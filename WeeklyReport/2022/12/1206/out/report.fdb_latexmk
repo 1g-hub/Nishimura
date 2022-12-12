@@ -1,18 +1,11 @@
 # Fdb version 3
-["bibtex out/report"] 1670286498 "out/report.aux" "out/report.bbl" "out/report" 1670286509
-  "index.bib" 1670285456 1823 6f6cedb62101224036e68a4cb1c1d6a4 ""
-  "junsrt.bst" 0 -1 0 ""
-  "out/report.aux" 1670286499 5456 734c2f16a7311d21d770cad4edecc0d7 "latex"
-  (generated)
-  "out/report.bbl"
-  "out/report.blg"
-["dvipdf"] 1670286499 "out/report.dvi" "out/report.pdf" "out/report" 1670286509
-  "out/report.dvi" 1670286499 27908 287d4ba3122a1e84aa82049cafe67710 "latex"
+["dvipdf"] 0 "out/report.dvi" "out/report.pdf" "out/report" 0
+  "out/report.dvi" 0 -1 0 "latex"
   (generated)
   "out/report.pdf"
-["latex"] 1670286498 "/home/nishimura/document/Nishimura/WeeklyReport/2022/12/1206/report.tex" "out/report.dvi" "report" 1670286509
+["latex"] 1670287376 "/home/nishimura/document/Nishimura/WeeklyReport/2022/12/1206/report.tex" "out/report.dvi" "report" 1670287376
   "/etc/texmf/web2c/texmf.cnf" 1664866142 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/nishimura/document/Nishimura/WeeklyReport/2022/12/1206/report.tex" 1670286487 16936 d9741730b86258c2b6f4f136a2c747c5 ""
+  "/home/nishimura/document/Nishimura/WeeklyReport/2022/12/1206/report.tex" 1670287376 16935 063523d7475e990ee068d1ae40a95f3c ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1136768653 1536 e07581a4bb3136ece9eeb4c3ffab8233 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/ptex-fonts/standard/goth10.tfm" 1463434352 1196 5981e79c37b2cfd27b3612a6783cd4b6 ""
@@ -29,8 +22,6 @@
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm" 1136768653 1328 c834bbb027764024c09d3d2bf908b5f0 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm" 1136768653 1324 c910af8c371558dc20f2d7822f66fe64 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr12.tfm" 1136768653 1288 655e228510b4c2a1abe905c368440826 ""
-  "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmti10.tfm" 1136768653 1480 aa8e34af0eb6a2941b776984cf1dfdc4 ""
-  "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmtt10.tfm" 1136768653 768 1321e9409b4137d6fb428ac9dc956269 ""
   "/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty" 1359763108 5949 3f3fd50a8cc94c3d4cbf4fc66cd3df1c ""
   "/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty" 1359763108 13829 94730e64147574077f8ecfea9bb69af4 ""
   "/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd" 1359763108 961 6518c6525a34feb5e8250ffa91731cff ""
@@ -88,15 +79,12 @@
   "assets/10000000.eps" 1670268875 16807194 c79317cc35829145d031d9b19b31a6bf ""
   "assets/2First.eps" 1670274269 16807194 8531b48b73612d2104fac567ff7df80f ""
   "assets/2Second.eps" 1670274288 16807194 cb4395b5f43cbf42d4992f8b8982f491 ""
-  "assets/5000000DQN.eps" 1670282520 16807194 c5ef63c4a476b9e578977cd6aaff6029 ""
-  "assets/85000MCS.eps" 1670282491 16807194 bb4469e5047411802a06ef251cd04131 ""
   "assets/MCS700000First.eps" 1670272604 16807194 6aaf9c3e15812cc7c4fbba2ab0222007 ""
   "assets/MCS700000Second.eps" 1670272625 16807194 48778779b3c9d908358b651c16da5b98 ""
   "assets/idea.eps" 1670270688 2690445 d46a2ce4edaf9b6463fe0df00a499afc ""
-  "out/report.aux" 1670286499 5456 734c2f16a7311d21d770cad4edecc0d7 "latex"
-  "out/report.bbl" 1670286498 1160 f28f69f68d52172c4cd3fd5ac6c3befe "bibtex out/report"
-  "report.tex" 1670286487 16936 d9741730b86258c2b6f4f136a2c747c5 ""
+  "out/report.aux" 1670287376 8 a94a2480d3289e625eea47cd1b285758 "latex"
+  "report.tex" 1670287376 16935 063523d7475e990ee068d1ae40a95f3c ""
   (generated)
-  "out/report.aux"
   "out/report.log"
+  "out/report.aux"
   "out/report.dvi"

@@ -117,6 +117,7 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/ptex-fonts/standard/tgoth10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/ptex-fonts/standard/goth10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
 INPUT /usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
@@ -134,7 +135,6 @@ INPUT assets/10000000.eps
 OUTPUT out/report.dvi
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr12.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
-INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm
 INPUT assets/idea.eps
 INPUT assets/idea.eps
 INPUT assets/MCS700000First.eps
@@ -145,12 +145,3 @@ INPUT assets/2First.eps
 INPUT assets/2First.eps
 INPUT assets/2Second.eps
 INPUT assets/2Second.eps
-INPUT assets/5000000DQN.eps
-INPUT assets/5000000DQN.eps
-INPUT assets/85000MCS.eps
-INPUT assets/85000MCS.eps
-INPUT out/report.bbl
-INPUT out/report.bbl
-INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmtt10.tfm
-INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
-INPUT out/report.aux
