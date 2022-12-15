@@ -77,7 +77,7 @@ OpenAI Gym は非営利企業 OpenAI が提供する強化学習のシミュレ�
 なお $t$ は時間, $r$ は報酬, $\alpha$ は学習率, $\gamma$ は割引率を表す.
 
 \subsection{Deep Q Network}
-Q 学習では実装の際に Q 値のテーブルを作成する.しかし状態空間や行動空間が高次元である, あるいは状態や行動が離散値ではなく連続値で表現される場合 Q テーブルのメモリ量は爆発してしまう.この問題を解決した技術が Deep Q Network (DQN) である.
+Q 学習では実装の際に Q 値のテーブルを作成する.しかし状態空間や行動空間が高次元である, あるいは状態や行動が離散値ではなく連続値で表現される場合には Q テーブルのメモリ量は爆発してしまう.この問題を解決した技術が Deep Q Network (DQN) である.
  DQN ではニューラルネットワークを用いて, ある状態における行動ごとの Q 値を推定する.エージェントが経験した過去の体験を Replay Memory に一定期間保存しておき, 過去の経験をランダムにサンプリングして学習する Experience Replay や,行動を決定する Q 値のネットワークと Q 値の学習を行うネットワークを分けることで Q 値の過大評価を防ぐ Fixed Target Network といった工夫により安定した学習を可能としている\cite{DQN}.
 
 \subsection{モンテカルロ探索}
@@ -123,7 +123,7 @@ Q 学習では実装の際に Q 値のテーブルを作成する.しかし状�
 
 学習,勝率計算の際は学習するプレイヤーの対戦相手となるプレイヤーを用意する必要がある.
 Algorithm \ref{alg1} に今回の実験における対戦相手の行動ルーチンを示す.
-\begin{figure}[H]
+\begin{figure}[t]
   \begin{algorithm}[H]
       \caption{
         対戦相手の行動ルーチン
@@ -147,12 +147,12 @@ Algorithm \ref{alg1} に今回の実験における対戦相手の行動ルー�
 \subsection{デッキ}
 学習側,対戦相手ともに同じデッキを持つ.
 デッキの内容は表 \ref{table:deck} に示す.
-\begin{table}[H]
+\begin{table}[t]
   \centering
   \caption{デッキの内容}
   \label{table:deck}
   \vspace{-0.3cm}
-  \scalebox{0.9}[0.9]{
+  \scalebox{1.0}[1.0]{
     \begin{tabular}{|c|c|c|}
       \hline
       攻撃力 &  HP  & 枚数 \\ \hline \hline
@@ -170,7 +170,14 @@ Algorithm \ref{alg1} に今回の実験における対戦相手の行動ルー�
 (学習側盤面の枚数) $\leq$ (対戦相手盤面枚数)ならば,\par
 対戦相手の勝利とした.\par 
 
-\subsection{報酬の定義}
+
+
+\subsection{状態空間と行動空間,報酬の定義}
+強化学習では, エージェントの取りうる行動と観測できる状態の空間, 得ることができる報酬を定義する必要がある. 
+TCG ではドローやプレイ, カードの攻撃による破壊といった行動で盤面や手札の枚数が変化する場合があり, 各ステップ時点で取りうる行動の次元を計算するとステップごとに空間の次元が変わるため学習が困難である.\par
+そのため本研究では予め手札と盤面の枚数の上限をそれぞれ 9 枚, 5 枚と定め , 手札と盤面に存在するカードに自盤面 1 というように番号をつけ, カードが存在しない場合は状態を 0 とすることで状態空間と行動空間を定義した. 表 \ref{table:state} , \ref{table:action} に状態空間, 行動空間の定義を示す.
+なお,ドローやプレイといった操作でカードを追加し枚数の上限を超える場合には追加しようとしたカードを破壊する.
+また,学習側は表 \ref{table:action} に基づいて, 保有している手札と盤面のカード全てについて盤面に出すか出さないか, 攻撃するかしないかを行動し終えた段階でターン終了とする.\par
 報酬は以下のように設定した.\par
 \begin{itemize}
   \item 1 ステップ終了後 
@@ -190,20 +197,13 @@ Algorithm \ref{alg1} に今回の実験における対戦相手の行動ルー�
 \end{itemize}
 
 
-\subsection{状態空間と行動空間の定義}
-強化学習では, エージェントの取りうる行動と観測できる状態の空間を定義する必要がある. 
-TCG ではドローやプレイ, カードの攻撃による破壊といった行動で盤面や手札の枚数が変化する場合があり, 各ステップ時点で取りうる行動の次元を計算するとステップごとに空間の次元が変わるため学習が困難である.\par
-そのため本研究では予め手札と盤面の枚数の上限をそれぞれ 9 枚, 5 枚と定め , 手札と盤面に存在するカードに自盤面 1 というように番号をつけ, カードが存在しない場合は状態を 0 とすることで状態空間と行動空間を定義した. 表 \ref{table:state} , \ref{table:action} に状態空間, 行動空間の定義を示す.
-なお,ドローやプレイといった操作でカードを追加し枚数の上限を超える場合には追加しようとしたカードを破壊する. \par
-また,学習側は表 \ref{table:action} に基づいて, 保有している手札と盤面のカード全てについて盤面に出すか出さないか, 攻撃するかしないかを行動し終えた段階でターン終了とする.
 
-
-\begin{table}[H]
+\begin{table}[t]
   \centering
   \caption{定義した状態空間}
   \label{table:state}
   \vspace{-0.3cm}
-  \scalebox{0.85}[0.85]{
+  \scalebox{1.0}[1.0]{
     \begin{tabular}{|c|c|c|c|}
       \hline
       状態説明                        & 次元数        & 最小値        & 最大値         \\ \hline \hline
@@ -231,12 +231,12 @@ TCG ではドローやプレイ, カードの攻撃による破壊といった�
   }
   \end{table}
 
-  \begin{table}[H]
+  \begin{table}[t]
     \centering
     \caption{定義した行動空間}
     \vspace{-0.3cm}
     \label{table:action}
-    \scalebox{0.9}[0.9]{
+    \scalebox{1.0}[1.0]{
       \begin{tabular}{|c|c|}
         \hline
         行動説明                          & 次元数        \\ \hline \hline
@@ -253,12 +253,12 @@ TCG ではドローやプレイ, カードの攻撃による破壊といった�
   
   \subsection{DQN, MCS のパラメータ}
   表 \ref{table:dqnparam} , \ref{table:mcsparam} に実験で用いた 2 種の強化学習アルゴリズムのパラメータを示す.
-  \begin{table}[H]
+  \begin{table}[t]
     \centering
     \caption{DQNのパラメータ}
     \vspace{-0.3cm}
     \label{table:dqnparam}
-    \scalebox{0.95}[0.95]{
+    \scalebox{1.0}[1.0]{
       \begin{tabular}{|c|c|}
         \hline
         パラメータ名 & 値 \\ \hline \hline
@@ -275,12 +275,12 @@ TCG ではドローやプレイ, カードの攻撃による破壊といった�
     }
     \end{table}
   
-    \begin{table}[H]
+    \begin{table}[t]
       \centering
       \caption{MCSのパラメータ}
       \vspace{-0.3cm}
       \label{table:mcsparam}
-      \scalebox{0.95}[0.95]{
+      \scalebox{1.0}[1.0]{
         \begin{tabular}{|c|c|}
           \hline
           パラメータ名 & 値 \\ \hline \hline
@@ -295,7 +295,7 @@ TCG ではドローやプレイ, カードの攻撃による破壊といった�
 
 \section{結果}
 表 \ref{table:result} に実験結果を示す. なお,ベースラインには対戦相手と同じ戦略のプレイヤーを後攻に配置して 10000 回対戦し勝率を計算した.
-\begin{table}[H]
+\begin{table}[t]
   \centering
   \caption{実験結果}
   \vspace{-0.3cm}
@@ -314,32 +314,31 @@ TCG ではドローやプレイ, カードの攻撃による破壊といった�
 
   図 \ref{fig:MCSresult} , \ref{fig:DQNresult} に MCS と DQN を用いた時の学習中の平均獲得報酬の推移を示す.図中の緑点は 学習時の100 エピソードにおける平均獲得報酬を表し,薄緑の領域は標準偏差を表す.
   また縦軸は reward ,横軸はエピソード数を表す. 
-
-  \begin{figure}[H]
-    \centering
-    \includegraphics[width=80mm]{assets/MCS_update.eps.eps}
-    \caption{MCS における平均獲得報酬の推移}
-    \label{fig:MCSresult}
-  \end{figure}
-
-  \begin{figure}[H]
-    \centering
-    \includegraphics[width=78.5mm]{assets/DQN_update.eps}
-    \caption{DQN における平均獲得報酬の推移}
-    \label{fig:DQNresult}
-  \end{figure}
-DQN , MCS 共にベースラインと比べて遥かに高い勝率を記録している.特に, DQN は 約 9 割もの勝率を記録している.
+  DQN , MCS 共にベースラインと比べて遥かに高い勝率を記録している.特に, DQN は 約 9 割もの勝率を記録している.
 図 \ref{fig:MCSresult} から, 学習が進んでいくにつれ平均獲得報酬が増加しており構築環境において強化学習が適用できていることが分かる.
 また, 図 \ref{fig:DQNresult} に示すMCS より高い勝率を記録した DQN の推移からは, MCSに比べて短いエピソード数で学習が安定していることが分かる.
-  
+
 
 \section{まとめと今後の課題}
-今回の実験では簡易的なルールにおけるカードゲーム型対戦環境を構築した.
-また, 構築環境に強化学習を適用し, 高い勝率を記録することができた.
+今回の実験では簡易的なルールにおけるカードゲーム型対戦環境を構築し, 構築環境へ DQN や MCS といった強化学習手法を適用した. 実験により, 構築環境においてDQN ,  あるいは MCS で学習し高い勝率を記録するエージェントを作成することができ, 学習過程においても学習が進んでいくにつれてエージェントがより高い報酬を得るよう学習していることが確認できた.
 \par
 今後の課題として,研究の最終目的であるカードゲーム型対戦環境のゲームバランス調整に取り組むことが挙げられる.\par
 また, 一般的な TCG ではプレイヤー自身に HP を定義しカードがプレイヤーに攻撃できるようにする, カードにコストというパラメータを設けて盤面にプレイする際に制約を設けるといった仕様を加えることでよりゲームの戦略性を深めている. その一方で
 今回作成した環境はゲームの終了条件と勝利条件が直接関係していない, 1ターンに出そうと思えば何枚もカードをプレイできるといったようにゲームデザインが詰めきれていない. そのため, プレイヤーの HP やカードのコストといった仕様を構築環境に取り入れ, より戦略性の高いカードゲーム型対戦環境を作成することも今後の課題である.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=75mm]{assets/MCS_update.eps.eps}
+  \caption{MCS における平均獲得報酬の推移}
+  \label{fig:MCSresult}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=73.5mm]{assets/DQN_update.eps}
+  \caption{DQN における平均獲得報酬の推移}
+  \label{fig:DQNresult}
+\end{figure}
 
 
 
