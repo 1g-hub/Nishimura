@@ -15,10 +15,14 @@ def initdecks(player):
 
 #ゲーム開始時のドロー
 def inithands(player):
-    #敵味方3枚ずつドロー
+    #敵味方5枚ずつドロー
     player.draw()
     player.draw()
     player.draw()
+    player.draw()
+    player.draw()
+    player.enemy.draw()
+    player.enemy.draw()
     player.enemy.draw()
     player.enemy.draw()
     player.enemy.draw()
@@ -34,95 +38,106 @@ def resetuse(player):
         else:
             played_card.is_used = False
 
-def doTurn(player,turnsum):
+#プレイヤーのコストUpdate処理 (ターン処理で呼ばれる)
+def updatecost(player):
+    if player.turnmaxcost < player.maxcost:
+        player.turnmaxcost += 1
+    player.cost = player.turnmaxcost
+    print("updated cost")
+    print(player.name + ":" + str(player.cost))
+
+def doTurn(player,isFirst,turnnum):
     print ("")
-    print ("--")
-    player.printhand()
-    player.enemy.printhand()
-    #player1の場を表示
-    player.enemy.printisplayed()
-    #player2の場を表示
-    player.printisplayed()
+    print ("-----------------------------------------------------------------------------------------------")
+
     #敵のカードドロー
-    if turnsum != 0:
-        player.enemy.draw()
-        if player.enemy.is_deckend:
-            return True
+    if isFirst == True or turnnum != 0:
+         player.enemy.draw()
+    #敵がデッキ切れ起こしたらreturn
+    if player.enemy.is_deckend:
+        return
     #敵のカードプレイ
     log = player.enemy.playcard()
     log += player.enemy.usecard()
     #敵のresetuse
     resetuse(player.enemy)
+    #敵のupdatecost
+    updatecost(player.enemy)
     
+    #敵の番でHP切れたらretrun
+    if player.is_dead:
+        return
 
     print ("")
-    print ("--")
+    print ("-----------------------------------------------------------------------------------------------")
     #自分も同じことする
-    player.printhand()
-    player.enemy.printhand()
-    #player1の場を表示
-    player.enemy.printisplayed()
-    #player2の場を表示
-    player.printisplayed()
     player.draw()
-     #敵の番でHP切れたらretrun
+    #自分がデッキ切れ起こしたらreturn 
     if player.is_deckend:
-        return True
+        return
     log = player.playcard()
     log += player.usecard()
     resetuse(player)
-    return False
+    updatecost(player)
 
-def play():
+def play(isFirst):
     player = player2.Player2()
-    Turnsum = 0
+
     initdecks(player)
 
     inithands(player)
 
-    #3枚ずつ場に出しとく
-    #player.playcard()
-    #player.playcard()
-    #player.playcard()
-    #player.enemy.playcard()
-    #player.enemy.playcard()
-    #player.enemy.playcard()
-
     resetuse(player)
     resetuse(player.enemy)
 
+    turnnum = 0
+
     while True:
+        player.enemy.printhand()
+        player.printhand()
+        #player1の場を表示
+        player.enemy.printisplayed()
 
-        isGameEnd = doTurn(player,Turnsum)
+        #player2の場を表示
+        player.printisplayed()
+        if isFirst == True and turnnum == 0:
+            log = player.playcard()
+            log += player.usecard()
+            resetuse(player)
+            updatecost(player)
 
-        Turnsum += 1
-        print(Turnsum)
+        doTurn(player,isFirst,turnnum)  
+        turnnum += 1
 
-        if isGameEnd:
-              #勝利条件
-            if len(player.enemy.is_played) >= len(player.is_played):
-                print(player.enemy.name + "Win!!")
-                return -1
-            elif len(player.enemy.is_played) < len(player.is_played):
-                print(player.name + "Win!!")
-                return 1
-
+        #勝利条件
+        #敵の勝利条件
+        if player.is_dead == True or player.is_deckend == True:
+            print(player.enemy.name + "Win!!")
+            #sys.exit(player.enemy.name + "Win!!")
+            return -1
+        #自分の勝利条件
+        elif player.enemy.is_dead == True or player.enemy.is_deckend == True:
+            print(player.name + "Win!!")
+            #sys.exit(player.name + "Win!!")
+            return 1
 
 if __name__ == '__main__':
     print ("")
     print ("-----------------------")
-    play
+    sum = 0
     win_sum = 0
     lose_sum = 0
-
-    for _ in range(10000):
-        if play() == 1:
+    for i in range(10000):
+        if play(isFirst = True) == 1:
             win_sum += 1
         else:
             lose_sum += 1
+    print("win_sum " + str(win_sum))
+    print("lose_sum " + str(lose_sum))
+    print("win_rate " + str(win_sum / 10000))
     
-    print("win_sum:"  + str(win_sum))
-    print("lose_sum:" + str(lose_sum))
-    print("win_rate : " + str(win_sum /10000))
+    print(sum)
 
+
+    
 

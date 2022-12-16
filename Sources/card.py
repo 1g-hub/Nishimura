@@ -1,4 +1,5 @@
 import random;
+import cardeffect;
 
 #カードの基底クラス
 class Card:
@@ -28,7 +29,7 @@ class Card:
         return other + str(self)
     
     #activate 場に出た時呼ばれる関数
-    def activate(self):
+    def activate(self,player):
         self.is_played = True
         return False
     
@@ -46,23 +47,27 @@ class Card:
 
 #HPと攻撃力を持ってるカード,Cardクラスを継承している
 class Unit(Card):
-    
+
     #コンストラクタ
-    def __init__(self,name,player,attack,hp,activate=Card.activate,use=Card.use,discard=Card.discard):
+    def __init__(self,name,player,attack,hp,cost,activate=0,use=Card.use,discard=Card.discard):
         #親クラスのコンストラクタ呼び出し
         super().__init__(player)
-        #name:名前　attack:攻撃力 hp:体力
+        #name:名前　attack:攻撃力 hp:体力 cost:コスト
         self.name = name
         self.attack = attack
         self.hp = hp
+        self.cost = cost
+        #effectlist
+        self.effectlist = [Card.activate,cardeffect.SpawnUnit,cardeffect.PlayerDraw,cardeffect.CanAttack,cardeffect.EnemyDamage2,cardeffect.PlayerHeal2]
         #後述のオーバーライド用に変数化
-        self.act = activate
+        self.effectnum = activate
+        self.act = self.effectlist[self.effectnum]
         self.u = use
         self.dis = discard
         
     #strオーバーライド
     def __str__(self):
-        s = "{"+ self.name + ": " + str(self.attack) + "," + str(self.hp) + "}"
+        s = "{"+ self.name + ": " + str(self.attack) + "," + str(self.hp) + "," + str(self.cost) + "," + str(self.effectnum) + "}"
         return s
     
     #ダメージ受けた時呼ばれる関数
@@ -75,7 +80,6 @@ class Unit(Card):
             self.hp = 0
         if self.hp == 0:
             #print(self.player.name + "の" + self + "は破壊された")
-            #elf.attack = 0
             try:
                 self.player.is_played.remove(self)
             except:
@@ -86,9 +90,9 @@ class Unit(Card):
             self.discard()
     
     #activateのオーバーライド
-    def activate(self):
+    def activate(self,player):
         #print("")
-        self.act(self)
+        self.act(self,player)
     
     #useのオーバーライド
     def use(self,target):

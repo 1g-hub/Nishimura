@@ -1,7 +1,7 @@
 import gym
 from rl.agents.dqn import DQNAgent
 from rl.policy import BoltzmannQPolicy
-from rl.policy import EpsGreedyQPolicy
+from rl.policy import EpsGreedyQPolicy, LinearAnnealedPolicy
 from rl.memory import SequentialMemory
 from rl.processors import MultiInputProcessor
 from CardGameEnv import CardGameEnv
@@ -10,6 +10,7 @@ from keras.optimizers import Adam
 from keras.layers import Dense, Activation, Flatten, Input, concatenate
 from keras.models import Sequential,Model
 from keras.utils import plot_model
+from CustomEpsGreedy import CustomAnnealedPolicy
 import numpy as np
 import sys
 import rl.callbacks
@@ -41,7 +42,7 @@ env = CardGameEnv()
 action_history = []
 reward_history = []
 nb_actions = env.action_space.n
-step_count = 5000000
+step_count = 3000000
 #print(nb_actions)
 print(env.observation)
 #observation_value_list = list(env.observation_space.values())
@@ -52,7 +53,6 @@ print(env.observation)
 
 
 #環境デバック用テストコード(CPUでも動く)
-
 '''
 for _ in range(1000):
     env.player.printhand()
@@ -68,11 +68,11 @@ for _ in range(1000):
     print(env.observation)
     reward_history.append(re)
     if done:
+        #cnt += 1
         print("GAME END")
         print(reward_history)
         sys.exit("GAME END")
-        env.reset()
-print(reward_history)
+        #env.reset()
 
 '''
 # モデルの定義
@@ -91,23 +91,23 @@ model.add(Activation('linear'))
 
 
 # エージェントの設定
-memory = SequentialMemory(limit=50000, window_length=1, ignore_episode_boundaries=False)
-policy = EpsGreedyQPolicy(eps=0.1)
-dqn = DQNAgent(model=model, nb_actions=nb_actions, memory=memory, nb_steps_warmup=10000,target_model_update=0.5, policy=policy)
-dqn.compile(Adam(learning_rate=1e-3), metrics=['mae'])
+memory = SequentialMemory(limit=100000, window_length=1)
+policy = CustomAnnealedPolicy(EpsGreedyQPolicy(), attr='eps',
+                                    value_max=1.0, value_min=0.05, value_decay = step_count/50.0,value_test=.00)
+dqn = DQNAgent(model=model, nb_actions=nb_actions, memory=memory, gamma=0.99, nb_steps_warmup=10000,target_model_update=0.5, policy=policy)
+dqn.compile(Adam(lr=1e-3), metrics=['mae'])
 
 # 学習
 history = dqn.fit(env, nb_steps=step_count, visualize=False, verbose=1)
 
 # 評価
-dqn.test(env, nb_episodes=10000, visualize=False,nb_max_episode_steps=100, callbacks = [episode_logger])
+dqn.test(env, nb_episodes=10000, visualize=False,nb_max_episode_steps=500, callbacks = [episode_logger])
 
 #モデルの保存
 model.save(str(step_count)+'stepFirst.h5')
 
-print("episode_number")
-print(len(history.history["episode_reward"]))
-interval = 100
+
+interval = 500
 indices = list(range(0,len(history.history["episode_reward"]),interval))
 means = []
 stds = []
@@ -128,13 +128,15 @@ plt.plot(indices, means, "o-", color="g",
 plt.legend(loc="best")
 plt.savefig("DQN.png", format="png", dpi=300)
 
+#print(rewards)
+
 
 
 win_sum = 0
 loss_sum = 0
 
 for obs in episode_logger.rewards.values():
-    print(obs[-1])
+    #print(obs[-1])
     if obs[-1] > 0.0:
         win_sum += 1
     else:
@@ -149,5 +151,9 @@ print(loss_sum)
 
 print("win rate")
 print(win_sum / 10000.0)
+
+print("episode_number")
+print(len(history.history["episode_reward"]))
+
 
 sys.exit("学習おわり")

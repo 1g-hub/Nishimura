@@ -9,7 +9,7 @@ class MonteCarloAgent(ELAgent):
     def __init__(self, epsilon=0.1):
         super().__init__(epsilon)
 
-    def learn(self, env, episode_count=1000, gamma=0.9,traning_rate = 0.5,
+    def learn(self, env, episode_count=50000, gamma=0.9,traning_rate = 0.5,
               render=False, report_interval=50):
         self.init_log()
         actions = list(range(env.action_space.n))
@@ -21,9 +21,9 @@ class MonteCarloAgent(ELAgent):
             # エピソードの終了まで実行する
             experience = []
             while not done:
-                # 文字列化して一意にする。
+                # 文字列化
                 s = "_".join([str(o) for o in s])
-                # Qテーブルになければ追加(無限に増えます)
+                # Qテーブルになければ追加
                 if s not in self.Q:
                     # Q値の初期化
                     self.Q[s] = [ np.random.uniform(low=-1, high=1) for _ in range(env.action_space.n) ]
@@ -38,14 +38,17 @@ class MonteCarloAgent(ELAgent):
             # 各状態・各行動を評価する。
             for i, x in enumerate(experience):
                 s, a = x["state"], x["action"]
-            
+                #print(s,a)
                 # Calculate discounted future reward of s.
                 # 状態ｓ
                 G ,t = 0 , 0
                 for j in range(i, len(experience)):
                     G += math.pow(gamma,t) * experience[j]["reward"]
+                    #print(G)
                     t += 1
+                #print(G)
                 self.Q[s][a] += traning_rate * (G - self.Q[s][a])
+                #print(self.Q[s][a])
 
             if e != 0 and e % report_interval == 0:
                 self.show_reward_log(episode=e)
@@ -84,7 +87,7 @@ class MonteCarloAgent(ELAgent):
 def train():
     agent = MonteCarloAgent(epsilon=0.1)
     env = CardGameEnv()
-    agent.learn(env, episode_count=1)
+    agent.learn(env, episode_count=50000)
     agent.show_reward_log()
     agent.test(env, episode_count = 10000)
 

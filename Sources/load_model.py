@@ -40,14 +40,15 @@ episode_logger = EpisodeLogger()
 env = CardGameEnv()
 
 #モデルを読み込み
-model = load_model('200000stepDDQNFirst.h5')
+model = load_model('10000000stepFirst.h5')
 
 # エージェントの設定
-memory = SequentialMemory(limit=1000000, window_length=1)
-policy = EpsGreedyQPolicy(eps=0.1)
-dqn = DQNAgent(model=model, nb_actions=env.action_space.n, memory=memory, nb_steps_warmup=10,target_model_update=1e-2, policy=policy)
+memory = SequentialMemory(limit=50000, window_length=1)
+policy = EpsGreedyQPolicy(eps=0.0)
+dqn = DQNAgent(model=model, nb_actions=env.action_space.n, memory=memory, gamma=.99, nb_steps_warmup=10000,target_model_update=0.5, policy=policy)
 dqn.compile(Adam(lr=1e-3), metrics=['mae'])
 
+'''
 winratelist = []
 for _ in range(5):
 
@@ -76,3 +77,8 @@ for _ in range(5):
     winratelist.append(win_sum / 10000.0)
 
 print(winratelist)
+'''
+
+# 評価
+history = dqn.test(env, nb_episodes=1, visualize=False,nb_max_episode_steps=200, callbacks = [episode_logger])
+print(history.history["episode_reward"])
