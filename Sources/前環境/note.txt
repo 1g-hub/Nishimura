@@ -1,0 +1,186 @@
+11/22進捗報告 ~  変更した点
+
+11/22 13:37
+Dense 16 →　64
+step 150000
+敵のデータ全て1にしてみる
+→　なんか無限ターンエンドしてる
+結果: 敵の盤面にカードがないと無限ターンエンドするらしい
+
+報酬を単純に
+エピソード終了後 len(player.is_played) - len(player.enemy.is_played)
+にする
+
+
+11/25
+終了条件変更
+
+100000
+win_sum
+4723
+loss_sum
+5277
+win rate
+0.4723
+
+
+150000
+win_sum
+4804
+loss_sum
+5196
+win rate
+0.4804
+
+200000
+win_sum
+4875
+loss_sum
+5125
+win rate
+0.4875
+
+11/27 
+DDQN
+
+100000
+win_sum
+4249
+loss_sum
+5751
+win rate
+0.4249
+
+150000
+win_sum
+4549
+loss_sum
+5451
+win rate
+0.4549
+
+reward変更
+DQn
+100000
+win_sum
+5348
+loss_sum
+4652
+win rate
+0.5348
+
+150000
+win_sum
+5179
+loss_sum
+4821
+win rate
+0.5179
+
+200000
+win_sum
+5290
+loss_sum
+4710
+win rate
+0.529
+
+
+second player learn
+
+150000
+win_sum
+4591
+loss_sum
+5409
+win rate
+0.4591
+
+
+変更したrewardバグっとるやんけ！！！！！
+
+MCS　1000000 First
+win_count
+8011
+loss_count
+1989
+win rate
+0.8011
+
+DQN 100000step Second
+win_sum
+3631
+loss_sum
+6369
+win rate
+0.3631
+
+DQN 150000step Second
+win_sum
+5050
+loss_sum
+4950
+win rate
+0.505
+
+DQN 200000Step Second
+win_sum
+4196
+loss_sum
+5804
+win rate
+0.4196
+
+
+
+11/29 
+終了条件デッキ切れにしたら絶対先手負けるくね
+デッキを揃えて対戦
+DQNステップ数増やす
+
+win_sum
+3635
+loss_sum
+6365
+win rate
+0.3635
+
+どっかばぐってない？
+ターンエンド条件のせいで盤面にカードがない時は一枚だけプレイしてターンエンドしてしまってた
+⇒手札に関してもプレイするかしないかの選択をする
+⇒手札、盤面全てについてカードが全てチェックされたらターンエンド
+
+終了条件も変更
+どちらかのプレイヤーがデッキ切れ(デッキの枚数が0枚の時にドローしようとしたら)したらゲーム終了
+今の段階だと勝敗が絶対どっちかに偏ってしまい勝敗を観測する意味がない
+報酬も変更
+報酬を盤面の枚数の差に変更
+
+MCS　1000000 先手
+win_count
+9390
+loss_count
+610
+win rate
+0.939
+
+
+MCS 700000 second
+
+win_count
+8562
+loss_count
+1438
+win rate
+0.8562
+
+
+MCS 700000 First
+
+win_count
+9344
+loss_count
+656
+win rate
+0.9344
+root@35909
