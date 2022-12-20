@@ -1,0 +1,412 @@
+%\documentstyle[epsf,twocolumn]{jarticle}       %LaTeX2.09仕様
+%\documentclass[twocolumn]{jarticle}     %pLaTeX2e仕様
+\documentclass{jarticle}     %pLaTeX2e仕様
+
+%一枚組だったら[twocolumn]関係のとこ消す
+
+\setlength{\topmargin}{-45pt}
+%\setlength{\oddsidemargin}{0cm} 
+\setlength{\oddsidemargin}{-7.5mm}
+%\setlength{\evensidemargin}{0cm} 
+\setlength{\textheight}{24.1cm}
+%setlength{\textheight}{25cm} 
+\setlength{\textwidth}{17.4cm}
+%\setlength{\textwidth}{172mm} 
+\setlength{\columnsep}{11mm}
+
+\kanjiskip=.07zw plus.5pt minus.5pt
+
+\usepackage{graphicx}
+\usepackage[dvipdfmx]{color}
+\usepackage{subcaption}
+\usepackage{enumerate}
+\usepackage{comment}
+\usepackage{url}
+\usepackage{multirow}
+\usepackage{diagbox}
+\usepackage{amsmath,amssymb}
+\usepackage{mathtools}
+\usepackage{wrapfig}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+
+
+\begin{document}
+
+  \noindent
+  \onecolumn
+  \hspace{1em}
+
+  \today
+  \hfill
+  \ \  B3 西村昭賢 
+
+  \vspace{2mm}
+  \hrule
+  \begin{center}
+  {\Large \bf 進捗報告}
+  \end{center}
+  \hrule
+  \vspace{3mm}
+
+
+\section{今週やったこと}
+
+\begin{quote}
+  \begin{itemize}
+   \item 研究発表会の準備(スライド, 資料)
+   \par
+   資料とスライドに関して修正, アドバイス頂いた方々ありがとうございました.
+   \item 実際の TCG ルールに寄せた環境におけるルールベースで作成した敵に対するエージェントの学習実験
+  \end{itemize}
+ \end{quote}
+
+\section{先週までの進捗とステップを増やした場合の実験}
+先週は以下に示すようにプレイヤーの HP , マナコスト, カードの特殊効果など実際の TCG ルールに寄せた環境を作成し実験した.
+
+\begin{quote}
+  \begin{itemize}
+   \item プレイヤー
+   \par
+   \begin{quote}
+    \begin{itemize}
+     \item HP
+     \par
+     最大 20, 0 となればゲーム敗北
+     \item マナコスト
+     \par
+     ゲーム開始時1 , 最大 5 , ターンごとに 1 増加
+     \item ライブラリ
+     \par
+     ライブラリは30枚のカードを持つ
+    \end{itemize}
+   \end{quote}
+   \item カード
+   \begin{quote}
+    \begin{itemize}
+     \item コスト
+     \par
+     盤面にプレイする際にカードのコスト分プレイヤーのマナコスト減少
+     \item 特殊効果
+     \par
+     \begin{quote}
+      \begin{itemize}
+       \item 盤面に出したら (攻撃力 , HP) = ( 1 , 1 )のユニット追加で出す. (召喚)
+       \item 盤面に出したら自プレイヤーの HP を 2 回復　(治癒)
+       \item 盤面に出したら敵プレイヤーの HP を 2 削る　(攻撃)
+       \item 盤面に出したら自プレイヤーは 1 枚カードをドロー　(循環)
+       \item 盤面に出たターンに攻撃できる (速攻)
+      \end{itemize}
+     \end{quote}
+    \end{itemize}
+   \end{quote}
+   \item 終了条件
+   \par
+   どちらかのプレイヤーの体力が 0 以下となった ,または デッキ切れの状態でドローしようとした時
+
+  \end{itemize}
+ \end{quote}
+
+ \subsection{実験条件}
+ お互いのライブラリは等しくした.表 \ref{table:deck} にライブラリの内容を示す.
+ \begin{table}[h]
+  \centering
+  \caption{ライブラリの内容}
+  \label{table:deck}
+  \begin{tabular}{|c|c|c|c|c|}
+  \hline
+  攻撃力 & HP & コスト & 特殊効果 & 枚数 \\ \hline
+  1 & 1 & 0 & 無し & 2 \\ \hline
+  2 & 1 & 1 & 無し & 2 \\ \hline
+  3 & 2 & 2 & 無し & 2 \\ \hline
+  4 & 3 & 3 & 無し & 2 \\ \hline
+  5 & 4 & 4 & 無し & 2 \\ \hline
+  2 & 2 & 2 & 召喚 & 2 \\ \hline
+  2 & 3 & 3 & 召喚 & 2 \\ \hline
+  1 & 1 & 1 & 循環 & 2 \\ \hline
+  1 & 3 & 2 & 循環 & 2 \\ \hline
+  2 & 1 & 2 & 速攻 & 2 \\ \hline
+  3 & 1 & 3 & 速攻 & 2 \\ \hline
+  1 & 2 & 2 & 攻撃 & 2 \\ \hline
+  2 & 3 & 3 & 攻撃 & 2 \\ \hline
+  1 & 1 & 1 & 治癒 & 2 \\ \hline
+  2 & 1 & 3 & 治癒 & 2 \\ \hline
+  \end{tabular}
+  \end{table}
+
+また, ゲームバランス調整のためのシミュレーションのために学習したエージェントを用いる予定のため学習相手にはルールベースで作成した好戦的な行動ルーチンを組んだ.アルゴリズム \ref{alg1} に作成した対戦相手の行動ルーチンを示す.
+\begin{figure}[ht]
+  \begin{algorithm}[H]
+      \caption{敵の行動}
+      \label{alg1}
+      \begin{algorithmic}[1] 
+      \FOR{手札のカード}
+      \IF{盤面にプレイできる}
+      \STATE カードをプレイ
+      \ELSE
+      \STATE pass
+      \ENDIF
+      \ENDFOR
+      \FOR{自盤面のカード}
+      \IF{敵の盤面に 1 回の攻撃で倒せるカードがある}
+      \STATE そのカードを選んで攻撃
+      \ELSE
+      \STATE 敵プレイヤーを攻撃
+      \ENDIF
+      \ENDFOR
+      \end{algorithmic}
+  \end{algorithm}
+\end{figure}
+
+また, 表 \ref{table:state} , \ref{table:action} に定義し直した状態空間, 行動空間を示す.
+
+\begin{table}[h]
+  \centering
+  \caption{定義した状態空間}
+  \label{table:state}
+  \begin{tabular}{|c|c|c|c|}
+  \hline
+  状態説明                        & 次元数        & 最小値        & 最大値         \\ \hline
+  自, 敵プレイヤーのHP  & 2 & 0 & 20 \\
+  \hline
+  自, 敵プレイヤーのコスト & 2 & 0 & 5 \\ \hline
+
+  手札 1 $\sim$9 の HP と攻撃力      & 18         & 0          & 20          \\ \hline
+  手札 1 $\sim$ 9 のコスト & 9 & 0 & 5 \\ \hline
+  手札 1 $\sim$ 9 の特殊効果 &  9 & 0 & 5 \\ \hline
+  自盤面 1 $\sim$ 5 の HP と攻撃力     & 10         & 0          & 20          \\ \hline
+  敵盤面 1 $\sim$ 5 の HP と攻撃力     & 10         & 0          & 20          \\ \hline
+  自盤面 1 $\sim$ 5 がターン中行動可能かどうか & 5          & 0          & 1           \\ \hline
+  お互いのライブラリの残り枚数     & 2 & 0 & 15 \\ \hline
+  \end{tabular}
+  \end{table}
+
+  \begin{table}[h]
+    \centering
+    \caption{定義した行動空間}
+    \label{table:action}
+    \begin{tabular}{|c|c|}
+    \hline
+    行動説明                          & 次元数        \\ \hline
+    手札 1 $\sim$ 9 を自盤面に出す             & 9          \\ \hline
+    手札 1 $\sim$ 9 を自盤面に出さない & 9 \\ \hline
+    自盤面 1 が敵盤面 1 $\sim$ 5 に攻撃 or 何もしない or 敵プレイヤーに攻撃    & 7          \\ \hline
+    自盤面 2 が敵盤面 1 $\sim$ 5 に攻撃 or 何もしない or 敵プレイヤーに攻撃    & 7   \\ \hline
+    自盤面 3 が敵盤面 1 $\sim$ 5 に攻撃 or 何もしない or 敵プレイヤーに攻撃    & 7\\ \hline
+    自盤面 4 が敵盤面 1 $\sim$ 5 に攻撃 or 何もしない or 敵プレイヤーに攻撃    & 7 \\ \hline
+    自盤面 5 が敵盤面 1 $\sim$ 5 に攻撃 or 何もしない or 敵プレイヤーに攻撃    & 7\\ \hline
+    \end{tabular}
+    \end{table}
+  
+  報酬は以下のように定義した.
+  \begin{equation*}
+    \label{reward}
+    reward = 0.0,
+    \quad 
+    \mathrm{1 エピソード終了後}
+    reward \text{ = }
+    \left\{
+      \begin{aligned}
+          1.0 \quad & (学習プレイヤーの勝利) \\
+          -1.0 \quad & (敵プレイヤーの勝利) \\
+      \end{aligned}
+      \right.
+  \end{equation*}
+
+  \subsection{実験 1}
+  先週は 先攻側で DQN を用いて 1000000 ステップ実験を行い, 10000 回ゲームを実行し算出された勝率は 0.1461 とかなり低い数値だった. そこで, ステップ数の問題かどうか調べるため学習ステップを 10 倍の 10000000 ステップに増やして実験した.
+
+  \subsection{実験 1 結果}
+  図 \ref{fig:DQN} に実験 1 における学習時の獲得報酬の平均の推移を示す.
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=120mm]{assets/result1.eps}
+    \caption{実験 1 における獲得報酬平均の推移}
+    \label{fig:DQN}
+  \end{figure}
+  
+  200 エピソードにおける平均獲得報酬が -0.9 付近で安定しており学習が進んでいないことが判明した.勝率は記録していませんでした.申し訳ありません.
+  
+\section{実験 2}
+実験 1 の結果を受けてエージェントの行動空間に 2 種類変更を施して学習 $\rightarrow$ 勝率計算の流れで実験した.
+また, 共通して DQN における $\mathrm{\epsilon-greedy}$ に改良を施した.
+\begin{itemize}
+  \item 変更前
+  \begin{equation*}
+    \epsilon = \mathrm{max}(\mathrm{\epsilon_{min}} \quad , \quad -\frac{\mathrm{\epsilon_{max}} - \mathrm{\epsilon_{min}}}{\mathrm{stepnum}} (stepcount) + \mathrm{\epsilon_{max}})
+  \end{equation*}
+  学習時に, $stepcount$ が $\mathrm{stepnum}$ ステップに達するまで$\mathrm{\epsilon_{max}}$ から $\mathrm{\epsilon_{min}}$ へと線形的に減少する.
+  \item 変更後
+  \begin{equation*}
+    \epsilon = \mathrm{max}(\mathrm{\epsilon_{min}} \quad , \quad \mathrm{\epsilon_{min}} + (\mathrm{\epsilon_{max} - \epsilon_{min}}) \exp(- \frac{stepcount}{\mathrm{\epsilon_{decay}}}))
+  \end{equation*}
+  学習時に, $\mathrm{\epsilon_{decay}}$ に応じて, $\mathrm{\epsilon_{max}}$ から $\mathrm{\epsilon_{min}}$ へと指数的に減少する.
+\end{itemize}
+表 \ref{table:updateparam} にこの方策に基づいた実験 2 における DQN のパラメータを示す.
+
+\begin{table}[h]
+  \centering
+  \caption{DQNのパラメータ}
+  \label{table:updateparam}
+  \begin{tabular}{|c||c|}
+  \hline
+  方策                 & ε-greedy \\ \hline
+  $\mathrm{\epsilon_{max}}$                      & 1.0      \\ \hline
+  $\mathrm{\epsilon_{min}}$                  & 0.05      \\ \hline
+  $\mathrm{\epsilon_{decay}}$    & 学習ステップ数 / 10.0      \\ \hline       
+  全結合層の活性化関数             & ReLU     \\ \hline
+  全結合層の次元                & 64       \\ \hline
+  最適化アルゴリズム              & Adam     \\ \hline
+  Target Network 更新重み              & 0.5     \\ \hline
+  Exprience Memory への書き込み開始step & 10000 \\ \hline
+  Experience Replayのメモリ量 & 50000  \\ \hline
+  \end{tabular}
+  \end{table}
+
+\subsection{実験 2 - 1 }
+盤面にあるカードに対して「相手プレイヤーに攻撃」という選択肢があるにもかかわらず「何もしない」という選択肢を選ぶのは特にメリットがないと感じたため表 \ref{table:action2} のように行動空間を変更した.
+
+\begin{table}[h]
+  \centering
+  \caption{実験 2 - 1 で定義した行動空間 (太字は変更した箇所)}
+  \label{table:action2}
+  \begin{tabular}{|c|c|}
+  \hline
+  行動説明                          & 次元数        \\ \hline
+  手札 1 $\sim$ 9 を自盤面に出す             & 9          \\ \hline
+  手札 1 $\sim$ 9 を自盤面に出さない & 9 \\ \hline
+  \textbf{自盤面 1 が敵盤面 1 $\sim$ 5 に攻撃 or 敵プレイヤーに攻撃}    &  \textbf{6}          \\ \hline
+  \textbf{自盤面 2 が敵盤面 1 $\sim$ 5 に攻撃 or 敵プレイヤーに攻撃}    & \textbf{6}   \\ \hline
+  \textbf{自盤面 3 が敵盤面 1 $\sim$ 5 に攻撃 or 敵プレイヤーに攻撃}    & \textbf{6} \\ \hline
+  \textbf{自盤面 4 が敵盤面 1 $\sim$ 5 に攻撃 or 敵プレイヤーに攻撃}    & \textbf{6} \\ \hline
+  \textbf{自盤面 5 が敵盤面 1 $\sim$ 5 に攻撃 or 敵プレイヤーに攻撃}    & \textbf{6} \\ \hline
+  \end{tabular}
+  \end{table}
+
+この条件下で先攻側を 3000000 ステップ学習し, 10000 回ゲームを実行し勝率を計算した.
+
+\subsection{実験 2 - 1 結果}
+図 \ref{fig:result2-1} に実験 2 - 1 における学習時の 500 エピソードの平均獲得報酬の推移を示す.
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=120mm]{assets/result2.eps}
+    \caption{実験 2 - 1 における平均獲得報酬の推移}
+    \label{fig:result2-1}
+  \end{figure}
+
+また, 表 \ref{table:result2-1} に勝率を示す.
+
+\begin{table}[t]
+  \centering
+  \caption{実験 2 - 1 結果}
+  \vspace{-0.3cm}
+  \label{table:result2-1}
+  \scalebox{1.0}[1.0]{
+    \begin{tabular}{|c|c|}
+      \hline
+      手法 & 勝率 \\ \hline
+      DQN & 0.6022 \\ \hline
+      対戦相手と同じ戦略 & \textbf{0.6425} \\ \hline
+
+      \end{tabular}
+  }
+  \end{table}
+
+実験 1 に比べ , 学習は進んでいくにつれ平均の報酬が高くなり, 約 6 割の勝率を記録した.
+しかし, 先攻側にアルゴリズム \ref{alg1} で示した行動ルーチンを持つプレイヤーを配置した場合の勝敗に比べると小さく, ルールベースな敵 AI よりも強化学習を用いる意味がない.
+
+\subsection{実験 2 - 2 }
+手札において「盤面に出さない」という選択肢が学習が進まなくなる要因であると当たりをつけ, プレイヤーの選択肢に「ターンエンド」を追加した. 表 \ref{table:action2-2} に定義した行動空間を示す.
+
+\begin{table}[h]
+  \centering
+  \caption{実験 2 - 2 で定義した行動空間 (太字は変更した箇所)}
+  \label{table:action2-2}
+  \begin{tabular}{|c|c|}
+  \hline
+  行動説明                          & 次元数        \\ \hline
+  手札 1 $\sim$ 9 を自盤面に出す             & 9          \\ \hline
+  自盤面 1 が敵盤面 1 $\sim$ 5 に攻撃 or 敵プレイヤーに攻撃    & 6          \\ \hline
+  自盤面 2 が敵盤面 1 $\sim$ 5 に攻撃 or 敵プレイヤーに攻撃    & 6   \\ \hline
+  自盤面 3 が敵盤面 1 $\sim$ 5 に攻撃 or 敵プレイヤーに攻撃    & 6\\ \hline
+  自盤面 4 が敵盤面 1 $\sim$ 5 に攻撃 or 敵プレイヤーに攻撃    & 6 \\ \hline
+  自盤面 5 が敵盤面 1 $\sim$ 5 に攻撃 or 敵プレイヤーに攻撃    & 6\\ \hline
+  \textbf{ターンエンド} & \textbf{1} \\ \hline
+  \end{tabular}
+  \end{table}
+
+  この条件下で先攻側を 3000000 ステップ学習し, 10000 回ゲームを実行し勝率を計算した.
+
+\subsection{実験 2 - 2 結果}
+図 \ref{fig:result2-2} に実験 2 - 2 における学習時の 500 エピソードの平均獲得報酬の推移を示す.
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=120mm]{assets/result3.eps}
+    \caption{実験 2 - 2 における平均獲得報酬の推移}
+    \label{fig:result2-2}
+  \end{figure}
+
+また, 表 \ref{table:result2-2} に勝率を示す.
+
+\begin{table}[t]
+  \centering
+  \caption{実験 2 - 2 結果}
+  \vspace{-0.3cm}
+  \label{table:result2-2}
+  \scalebox{1.0}[1.0]{
+    \begin{tabular}{|c|c|}
+      \hline
+      手法 & 勝率 \\ \hline
+      DQN & \textbf{0.9708} \\ \hline
+      対戦相手と同じ戦略 & 0.6425 \\ \hline
+
+      \end{tabular}
+  }
+  \end{table}
+学習時の獲得平均報酬が大きく上昇し, ルールベースで作成した敵に対して 9 割 5 分以上の勝率を記録することができた.
+学習したエージェントの行動を見てみると先攻プレイヤーらしく, 積極的に相手プレイヤーに攻撃し, 手札からも攻撃の特殊効果を持つカードを優先的にプレイしていた.
+
+\section{後攻側の学習}
+高い勝率を記録した実験 2 - 2 の条件で学習プレイヤーを後攻に配置して, 1000000 ステップ学習後 10000 回ゲームを実行して勝率を計算した.
+図 \ref{fig:result4} に学習時の 500 エピソードの平均獲得報酬の推移を示す.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=120mm]{assets/result4.eps}
+  \caption{学習時における平均獲得報酬の推移}
+  \label{fig:result4}
+\end{figure}
+
+また, 表 \ref{table:result4} に勝率を示す.
+
+\begin{table}[t]
+\centering
+\caption{実験結果}
+\vspace{-0.3cm}
+\label{table:result4}
+\scalebox{1.0}[1.0]{
+  \begin{tabular}{|c|c|}
+    \hline
+    手法 & 勝率 \\ \hline
+    DQN & \textbf{0.7969} \\ \hline
+    対戦相手と同じ戦略 & 0.3575 \\ \hline
+
+    \end{tabular}
+}
+\end{table}
+後攻側の学習においてもルールベースで作成した敵に対して高い勝率を記録した.
+
+\section{今後の課題}
+
+\begin{quote}
+  \begin{itemize}
+   \item 対戦相手の行動の改善
+   \par
+   今回の実験で, エージェントの行動空間の定義を改善することができ学習によりルールベースで作成した敵よりも高い勝率を残すエージェントを作成することができた.
+   しかし現在は学習の際,対戦相手は好戦的な行動ルーチンに基づいて行動している. バランス調整のシミュレーション回す際に学習したエージェントを用いる予定なので防戦的な行動ルーチンを作成し, エピソードごとに敵のルーチンを変えるなどしてどちらにも勝てるようなエージェントを作成する必要がある.
+  \end{itemize}
+ \end{quote}
+
+\end{document}

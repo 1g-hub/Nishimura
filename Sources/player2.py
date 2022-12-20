@@ -117,7 +117,7 @@ class Player2:
                 break
         return ""
 
-    #場のカード使う
+     #場のカード使う
     def usecard(self):
         #自分の盤面に手札がなかったら
         if len(self.is_played) == 0:
@@ -132,7 +132,7 @@ class Player2:
                         #trueにして使えるようにする
                         use_card.is_used == True
                         #target指定
-                        target = self.selecttarget()
+                        target = self.selecttarget(use_card)
                         #ターゲットが無ければ顔殴る
                         if target == False:
                             #print(self.name + "は" + use_card + "で" +  self.enemy.name + "を攻撃した")
@@ -161,15 +161,13 @@ class Player2:
         return chosen_card
     
     #相手のターゲットを選ぶ
-    def selecttarget(self):
-            selectnum =  random.random()
-            if selectnum > 0.50:
-                return False
-            else:
-                #相手の盤面にカードがなかったらFalse
+    def selecttarget(self,use_card):
+         #相手の盤面にカードがなかったらFalse
                 if len(self.enemy.is_played) <= 0:
                     return False
-                #カードあったらランダムに一枚選ぶ
+               #倒せるカードがあればそいつ倒して無ければ敵を殴る
                 else:
-                    target = random.choice(self.enemy.is_played)
-                    return target
+                    for enemy in self.enemy.is_played:
+                        if enemy.hp <= use_card.attack:
+                            return enemy
+                    return False
