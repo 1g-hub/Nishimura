@@ -114,7 +114,13 @@ class CardGameEnv2:
                         ])
         self.observation_space = spaces.Box(low=LOW,high=HIGH)
 
-        
+        self.action_record = { i : 0 for i in range(self.action_space.n)}
+        self.action_record_total = { i : 0 for i in range(self.action_space.n)}
+        self.action_record_win = {i : 0 for i in range(self.action_space.n)}
+        self.action_record_tmp = {i : 0 for i in range(self.action_space.n)}
+        self.card_record_total = {i : 0 for i in range(15)}
+        self.card_record_win = {i : 0 for i in range(15)}
+        self.card_record_tmp = {i : 0 for i in range(15)}
         self.curr_episode = -1
         self.already_selected_actions=[]
         self.isGameEnd = False
@@ -159,6 +165,11 @@ class CardGameEnv2:
         self.setup_game()
         self.isGameEnd = False
         player = self.player
+        #action 回数記録用
+        self.action_record = { i : 0 for i in range(self.action_space.n)}
+        self.action_record_tmp = {i : 0 for i in range(self.action_space.n)}
+        #card記録用
+        self.card_record_tmp = {i : 0 for i in range(15)}
         self.action_episode_memory=[]
         self.previous_action = 100
         
@@ -316,6 +327,9 @@ class CardGameEnv2:
         #行動を行う
         if self.isGameEnd == False:
             self.take_action(action)
+        
+        #print("observation")
+        #print(self.get_state())
                                         
         #ステップごとに終了条件満たしてるか判定
         if player.is_dead or player.is_deckend or player.enemy.is_dead or player.enemy.is_deckend:
@@ -331,6 +345,41 @@ class CardGameEnv2:
         done = self.get_done()
         reward = self.get_reward()
         self.observation = self.get_state()
+
+        #action record 表示
+        if done:
+            for i in range(self.action_space.n):
+                self.action_record_total[i] += self.action_record[i]
+            
+            action_record_total = sorted(self.action_record_total.items(), key=lambda x:x[1], reverse=True)
+            #print("action_record_total")
+            #print(action_record_total)
+
+
+        if done and reward == 1.0:
+            for i in range(self.action_space.n):
+                self.action_record_win[i] += self.action_record_tmp[i]
+            action_record_win = sorted(self.action_record_win.items(), key=lambda x:x[1], reverse=True)
+            #print("action_record_win")
+            #print(action_record_win)
+            
+        #card record 表示
+        if done:
+            for i in range(15):
+                self.card_record_total[i] += self.card_record_tmp[i]
+            
+            card_record_total = sorted(self.card_record_total.items(), key=lambda x:x[1], reverse=True)
+            #print("card_record_total")
+            #print(card_record_total)
+
+        if done and reward == 1.0:
+            for i in range(15):
+                self.card_record_win[i] += self.card_record_tmp[i]
+            
+            card_record_win = sorted(self.card_record_win.items(), key=lambda x:x[1], reverse=True)
+            #print("card_record_win")
+            #print(card_record_win)
+
 
         #記録
         self.curr_step += 1
@@ -529,6 +578,8 @@ class CardGameEnv2:
                     player.discard.append(eliminated_card)
                 #カードをactivateさせる
                 play_card.activate(player)
+                #card record 追加
+                self.card_record_tmp[play_card.id] += 1
         
         #action 9~17は自手札0~8を盤面に出さない
         #elif action >= 9 and action <= 17:
@@ -751,6 +802,8 @@ class CardGameEnv2:
         self.now_action = valid_actions[action]
         #print("selected_action")
         #print(valid_actions[action])
+        self.action_record[valid_actions[action]] += 1
+        self.action_record_tmp[valid_actions[action]] += 1
         self.do_action(valid_actions[action])
         self.already_selected_actions.append(valid_actions[action])
         '''

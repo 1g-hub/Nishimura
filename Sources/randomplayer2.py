@@ -147,6 +147,8 @@ class RandomPlayer2:
                 play_card = self.hand.pop(draw_card_num)
                 #decrease cost
                 self.cost -= play_card.cost
+                #record dict
+                self.play_count_dict[play_card.id] += 1
                 #playercost
                 print(self.name + "残りcost" + str(self.cost))
                 #自分の盤面カードリストに追加
@@ -277,3 +279,11 @@ class RandomPlayer2:
         print(valid_actions[action])
         self.do_action(valid_actions[action])
         return valid_actions[action]
+
+    def generate_dict(self):
+        self.play_count_dict = {card.id : 0 for card in self.deck}
+        print(self.play_count_dict)
+    
+    def get_record(self):
+        self.play_count_dict = sorted(self.play_count_dict.items())
+        return self.play_count_dict

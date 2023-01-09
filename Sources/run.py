@@ -26,9 +26,6 @@ def inithands(player):
     player.enemy.draw()
     player.enemy.draw()
     player.enemy.draw()
-    #player.enemy.draw()
-    #player.enemy.draw()
-
 
 #カードのis_used状態をリセット（ターン処理で呼ばれる)
 def resetuse(player):
@@ -127,7 +124,7 @@ if __name__ == '__main__':
     sum = 0
     win_sum = 0
     lose_sum = 0
-    for i in range(10000):
+    for i in range(1):
         if play(isFirst = True) == 1:
             win_sum += 1
         else:

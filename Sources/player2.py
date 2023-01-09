@@ -165,9 +165,26 @@ class Player2:
          #相手の盤面にカードがなかったらFalse
                 if len(self.enemy.is_played) <= 0:
                     return False
+                #Blocking あればそいつしか殴れない
                #倒せるカードがあればそいつ倒して無ければ敵を殴る
                 else:
                     for enemy in self.enemy.is_played:
+                        if enemy.isBlocking:
+                            return enemy
+                    #Blocking 無ければ倒せる敵探す
+                    for enemy in self.enemy.is_played:
                         if enemy.hp <= use_card.attack:
                             return enemy
-                    return False
+                    #倒せる敵無くても敵の盤面の攻撃力総和が自分の hp より大きかったら敵盤面の最大攻撃力カードを殴る
+                    sum = 0
+                    attack_list = []
+                    for enemy in self.enemy.is_played:
+                        sum += enemy.attack
+                        attack_list.append(enemy.attack)
+                    #HP 判断
+                    if sum >= self.hp:
+                        max_attack_index = attack_list.index(max(attack_list))
+                        return self.enemy.is_played[max_attack_index]
+                    else:
+                        return False
+                return False

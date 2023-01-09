@@ -49,21 +49,24 @@ class Card:
 class Unit(Card):
 
     #コンストラクタ
-    def __init__(self,name,player,attack,hp,cost,activate=0,use=Card.use,discard=Card.discard):
+    def __init__(self,name,id,player,attack,hp,cost,activate=0,use=Card.use,discard=Card.discard):
         #親クラスのコンストラクタ呼び出し
         super().__init__(player)
         #name:名前　attack:攻撃力 hp:体力 cost:コスト
         self.name = name
+        self.id = id
         self.attack = attack
         self.hp = hp
         self.cost = cost
-        #effectlist
-        self.effectlist = [Card.activate,cardeffect.SpawnUnit,cardeffect.PlayerDraw,cardeffect.CanAttack,cardeffect.EnemyDamage2,cardeffect.PlayerHeal2]
+        #effectlist(0 ~ 7)
+        self.effectlist = [Card.activate,cardeffect.SpawnUnit,cardeffect.PlayerDraw,cardeffect.CanAttack,cardeffect.EnemyDamage2,cardeffect.PlayerHeal2, cardeffect.DestroyAll, cardeffect.Blocking]
         #後述のオーバーライド用に変数化
         self.effectnum = activate
         self.act = self.effectlist[self.effectnum]
         self.u = use
         self.dis = discard
+        #blocking用に追加
+        self.isBlocking = False
         
     #strオーバーライド
     def __str__(self):

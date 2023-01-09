@@ -1,3 +1,5 @@
+
+
 import gym
 from gym import spaces
 import player2
@@ -69,7 +71,6 @@ class CardGameEnv:
         })
         
         #dict型むりそう；；
-
         """
         #これで行けなかったら終わり
         LOW = np.array([
@@ -113,10 +114,12 @@ class CardGameEnv:
                         30,30#decknum
                         ])
         self.observation_space = spaces.Box(low=LOW,high=HIGH)
-
-        
-        self.curr_episode = -1
+        self.action_record = { i : 0 for i in range(self.action_space.n)}
+        self.action_record_total = { i : 0 for i in range(self.action_space.n)}
+        self.action_record_win = {i : 0 for i in range(self.action_space.n)}
+        self.action_record_tmp = {i : 0 for i in range(self.action_space.n)}
         self.already_selected_actions=[]
+        self.curr_episode = -1
         self.isGameEnd = False
         self.reset()
 
@@ -160,6 +163,9 @@ class CardGameEnv:
         self.isGameEnd = False
         player = self.player
         self.action_episode_memory=[]
+        #action 回数記録用
+        self.action_record = { i : 0 for i in range(self.action_space.n)}
+        self.action_record_tmp = {i : 0 for i in range(self.action_space.n)}
         self.previous_action = 100
         
         #初期状態
@@ -331,6 +337,21 @@ class CardGameEnv:
         done = self.get_done()
         reward = self.get_reward()
         self.observation = self.get_state()
+        #action record 表示
+        if done:
+            for i in range(self.action_space.n):
+                self.action_record_total[i] += self.action_record[i]
+            
+            action_record_total = sorted(self.action_record_total.items(), key=lambda x:x[1], reverse=True)
+            print("action_record_total")
+            print(action_record_total)
+
+        if done and reward == 1.0:
+            for i in range(self.action_space.n):
+                self.action_record_win[i] += self.action_record_tmp[i]
+            action_record_win = sorted(self.action_record_win.items(), key=lambda x:x[1], reverse=True)
+            print("action_record_win")
+            print(action_record_win)
 
         #記録
         self.curr_step += 1
@@ -404,6 +425,7 @@ class CardGameEnv:
     #finish条件 
     def get_done(self):
         if self.isGameEnd == True:
+            
             return True
         else:
             return False
@@ -711,6 +733,8 @@ class CardGameEnv:
         self.now_action = valid_actions[action]
         #print("selected_action")
         #print(valid_actions[action])
+        self.action_record[valid_actions[action]] += 1
+        self.action_record_tmp[valid_actions[action]] += 1
         self.do_action(valid_actions[action])
         self.already_selected_actions.append(valid_actions[action])
 

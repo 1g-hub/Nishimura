@@ -19,10 +19,13 @@ def inithands(player):
     player.draw()
     player.draw()
     player.draw()
+    player.draw()
+    player.draw()
     player.enemy.draw()
     player.enemy.draw()
     player.enemy.draw()
-
+    player.enemy.draw()
+    player.enemy.draw()
 
 #カードのis_used状態をリセット（ターン処理で呼ばれる)
 def resetuse(player):
@@ -77,6 +80,7 @@ def play(isFirst):
     player = randomplayer2.RandomPlayer2()
 
     initdecks(player)
+    player.generate_dict()
 
     inithands(player)
 
@@ -107,25 +111,45 @@ def play(isFirst):
         #敵の勝利条件
         if player.is_dead == True or player.is_deckend == True:
             print(player.enemy.name + "Win!!")
+            record = player.get_record()
             #sys.exit(player.enemy.name + "Win!!")
-            return -1
+            return [-1, record]
         #自分の勝利条件
         elif player.enemy.is_dead == True or player.enemy.is_deckend == True:
             print(player.name + "Win!!")
+            record = player.get_record()
             #sys.exit(player.name + "Win!!")
-            return 1
+            return [1, record]
 
 if __name__ == '__main__':
     print ("")
     print ("-----------------------")
     sum = 0
-    win_sum = 0
-    lose_sum = 0
-    for i in range(1):
-        if play(isFirst = True) == 1:
-            win_sum += 1
+    #後攻の勝率が５５％超えるまでループしていろいろいじる
+    while(1):
+        win_sum = 0
+        lose_sum = 0
+        playsum_whenwin = { i : 0 for i in range(15)}
+        for i in range(10000):
+            res = play(isFirst = True)
+            if res[0] == 1:
+                record = res[1]
+                for t in record:
+                    playsum_whenwin[t[0]] += t[1]
+                print(record)
+                win_sum += 1
+            elif res[0] == -1:
+                lose_sum += 1
+        if lose_sum >= 5500:
+            break
         else:
-            lose_sum += 1
+            pass
+            #ここに後攻のパラメータいじる処理
+    
+    #print(playsum_whenwin)
+    #for i in range(10000):
+        #playsum_whenwin[i] /= win_sum
+    #print(playsum_whenwin)
     print("win_sum " + str(win_sum))
     print("lose_sum " + str(lose_sum))
     print("win_rate " + str(win_sum / 10000))

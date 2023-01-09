@@ -5,6 +5,7 @@ from rl.policy import EpsGreedyQPolicy, LinearAnnealedPolicy
 from rl.memory import SequentialMemory
 from rl.processors import MultiInputProcessor
 from CardGameEnv import CardGameEnv
+from CardGameEnv2 import CardGameEnv2
 from tensorflow import keras
 from keras.optimizers import Adam
 from keras.layers import Dense, Activation, Flatten, Input, concatenate
@@ -38,11 +39,11 @@ class EpisodeLogger(rl.callbacks.Callback):
 
 episode_logger = EpisodeLogger()
 # 環境の生成
-env = CardGameEnv()
+env = CardGameEnv2()
 action_history = []
 reward_history = []
 nb_actions = env.action_space.n
-step_count = 3000000
+step_count = 1000000
 #print(nb_actions)
 print(env.observation)
 #observation_value_list = list(env.observation_space.values())
@@ -93,7 +94,7 @@ model.add(Activation('linear'))
 # エージェントの設定
 memory = SequentialMemory(limit=100000, window_length=1)
 policy = CustomAnnealedPolicy(EpsGreedyQPolicy(), attr='eps',
-                                    value_max=1.0, value_min=0.05, value_decay = step_count/50.0,value_test=.00)
+                                    value_max=1.0, value_min=0.1, value_decay = step_count/50.0,value_test=0.0)
 dqn = DQNAgent(model=model, nb_actions=nb_actions, memory=memory, gamma=0.99, nb_steps_warmup=10000,target_model_update=0.5, policy=policy)
 dqn.compile(Adam(lr=1e-3), metrics=['mae'])
 
@@ -104,7 +105,7 @@ history = dqn.fit(env, nb_steps=step_count, visualize=False, verbose=1)
 dqn.test(env, nb_episodes=10000, visualize=False,nb_max_episode_steps=500, callbacks = [episode_logger])
 
 #モデルの保存
-model.save(str(step_count)+'stepFirst.h5')
+model.save(str(step_count)+'step.h5')
 
 
 interval = 500
@@ -136,7 +137,7 @@ win_sum = 0
 loss_sum = 0
 
 for obs in episode_logger.rewards.values():
-    #print(obs[-1])
+    print(obs[-1])
     if obs[-1] > 0.0:
         win_sum += 1
     else:

@@ -5,11 +5,13 @@ from rl.policy import EpsGreedyQPolicy
 from rl.memory import SequentialMemory
 from rl.processors import MultiInputProcessor
 from CardGameEnv import CardGameEnv
+from CardGameEnv2 import CardGameEnv2
 from tensorflow import keras
 from keras.optimizers import Adam
 from keras.layers import Dense, Activation, Flatten, Input, concatenate
 from keras.models import Sequential,Model
 from keras.utils import plot_model
+from CustomEpsGreedy import CustomAnnealedPolicy
 import numpy as np
 import sys
 import rl.callbacks
@@ -37,14 +39,15 @@ class EpisodeLogger(rl.callbacks.Callback):
 
 episode_logger = EpisodeLogger()
 # 環境の生成
-env = CardGameEnv()
+env = CardGameEnv2()
 
 #モデルを読み込み
-model = load_model('10000000stepFirst.h5')
+model = load_model('0107Env2First1000000.h5')
 
 # エージェントの設定
-memory = SequentialMemory(limit=50000, window_length=1)
-policy = EpsGreedyQPolicy(eps=0.0)
+memory = SequentialMemory(limit=100000, window_length=1)
+policy = CustomAnnealedPolicy(EpsGreedyQPolicy(), attr='eps',
+                                    value_max=1.0, value_min=0.05, value_decay = 50.0,value_test=0.00)
 dqn = DQNAgent(model=model, nb_actions=env.action_space.n, memory=memory, gamma=.99, nb_steps_warmup=10000,target_model_update=0.5, policy=policy)
 dqn.compile(Adam(lr=1e-3), metrics=['mae'])
 
@@ -52,33 +55,32 @@ dqn.compile(Adam(lr=1e-3), metrics=['mae'])
 winratelist = []
 for _ in range(5):
 
-    # 評価
-    dqn.test(env, nb_episodes=10000, visualize=False,nb_max_episode_steps=100, callbacks = [episode_logger])
-
-
-    win_sum = 0
-    loss_sum = 0
-
-    for obs in episode_logger.rewards.values():
-        print(obs)
-        if obs[-1] > 0.0:
-            win_sum += 1
-        else:
-            loss_sum += 1
-
-    print("win_sum")
-    print(win_sum)
-    print("loss_sum")
-    print(loss_sum)
-
-
-    print("win rate")
-    print(win_sum / 10000.0)
-    winratelist.append(win_sum / 10000.0)
-
 print(winratelist)
 '''
-
-# 評価
-history = dqn.test(env, nb_episodes=1, visualize=False,nb_max_episode_steps=200, callbacks = [episode_logger])
+'''
+# ( 5 エピソード実行確認用)
+history = dqn.test(env, nb_episodes=3, visualize=False,nb_max_episode_steps=200, callbacks = [episode_logger])
 print(history.history["episode_reward"])
+'''
+# 評価(10000回勝率計算)
+dqn.test(env, nb_episodes=10000, visualize=False,nb_max_episode_steps=500, callbacks = [episode_logger])
+
+
+win_sum = 0
+loss_sum = 0
+
+for obs in episode_logger.rewards.values():
+    #print(obs)
+    if obs[-1] > 0.0:
+        win_sum += 1
+    else:
+        loss_sum += 1
+
+print("win_sum")
+print(win_sum)
+print("loss_sum")
+print(loss_sum)
+
+
+print("win rate")
+print(win_sum / 10000.0)
