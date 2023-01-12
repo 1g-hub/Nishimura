@@ -5,7 +5,7 @@ import randomplayer1
 
 class RandomPlayer2:
     #コンストラクタ
-    def __init__(self,name="Random First"):
+    def __init__(self,name="Random 2"):
         #体力と最大体力と名前
         self.hp = 20
         self.maxhp = 20
@@ -28,6 +28,8 @@ class RandomPlayer2:
         self.is_deckend = False
         #HPが0以下になったフラグ
         self.is_dead = False
+        #プレイヤー初期ドロー枚数
+        self.init_draw_count = 3
 
     #デッキシャッフル
     def shuffle(self):
@@ -45,7 +47,7 @@ class RandomPlayer2:
             #デッキからカード一枚とって手札に加える
             draw_card = self.deck.pop()
             self.hand.append(draw_card)
-            print(self.name + "は" + draw_card + "をドローした")
+            #print(self.name + "は" + draw_card + "をドローした")
             #手札の枚数制限を超えたら最後にドローしたカード排除して墓地に入れる
             if len(self.hand) > self.hand_maxnum:
                 eliminated_card = self.hand.pop(-1)
@@ -57,7 +59,7 @@ class RandomPlayer2:
         self.hp -= cnt
         if self.hp < 0:
             self.hp = 0
-        print(self.name + "health: " + str(self.hp)  +"/"+ str(self.maxhp))
+        #print(self.name + "health: " + str(self.hp)  +"/"+ str(self.maxhp))
         if self.hp <= 0:
             self.is_dead = True
             #print("GAMEEND : DEAD")
@@ -84,8 +86,8 @@ class RandomPlayer2:
         if self.turnmaxcost < self.maxcost:
             self.turnmaxcost += 1
         self.cost = self.turnmaxcost
-        print("updated cost")
-        print(self.name + ":" + str(self.cost))
+        #print("updated cost")
+        #print(self.name + ":" + str(self.cost))
 
     #盤面から使える行動を選んでvalid_movesに追加、それをreturn 
     def get_valid_moves(self):
@@ -148,12 +150,13 @@ class RandomPlayer2:
                 #decrease cost
                 self.cost -= play_card.cost
                 #record dict
-                self.play_count_dict[play_card.id] += 1
+                if self.play_count_dict[play_card.id] == 0:
+                    self.play_count_dict[play_card.id] += 1
                 #playercost
-                print(self.name + "残りcost" + str(self.cost))
+                #print(self.name + "残りcost" + str(self.cost))
                 #自分の盤面カードリストに追加
                 self.is_played.append(play_card)
-                print(self.name + "は" + play_card + "を場に出した")
+                #print(self.name + "は" + play_card + "を場に出した")
                 #盤面の枚数制限超えてたら最後に追加したカード削除
                 if len(self.is_played) > self.is_played_maxnum:
                     eliminated_card = self.is_played.pop(-1)
@@ -272,17 +275,17 @@ class RandomPlayer2:
             #print(self.observation)
             print("cant execute")
             pass
-        print("valid_moves")
-        print(valid_actions)
+        #print("valid_moves")
+        #print(valid_actions)
         action = random.randint(0, len(valid_actions) - 1)
-        print("selected_action")
-        print(valid_actions[action])
+        #print("selected_action")
+        #print(valid_actions[action])
         self.do_action(valid_actions[action])
         return valid_actions[action]
 
     def generate_dict(self):
         self.play_count_dict = {card.id : 0 for card in self.deck}
-        print(self.play_count_dict)
+        #print(self.play_count_dict)
     
     def get_record(self):
         self.play_count_dict = sorted(self.play_count_dict.items())
