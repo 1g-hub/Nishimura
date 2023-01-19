@@ -27,6 +27,8 @@ class Player1:
         self.is_deckend = False
         #HPが0以下になったフラグ
         self.is_dead = False
+        #戦略変えるしきい値(乱数)
+        self.policydecision = random.random()
 
     #デッキシャッフル
     def shuffle(self):
@@ -141,7 +143,7 @@ class Player1:
 
                         else:
                             #print("")
-                            #rint(self.name +"の攻撃")
+                            #print(self.name +"の攻撃")
                             use_card.use(target)
                 #盤面全滅したか
                 if len(self.is_played) <= 0:
@@ -162,6 +164,7 @@ class Player1:
     
     #相手のターゲットを選ぶ
     def selecttarget(self,use_card):
+        if self.policydecision > 0.50:
          #相手の盤面にカードがなかったらFalse
                 if len(self.enemy.is_played) <= 0:
                     return False
@@ -187,7 +190,26 @@ class Player1:
                         return self.enemy.is_played[max_attack_index]
                     else:
                         return False
-                return False
+        else:
+             #相手の盤面にカードがなかったらFalse
+                if len(self.enemy.is_played) <= 0:
+                    return False
+                #Blocking あればそいつしか殴れない
+               #倒せるカードがあればそいつ倒して無ければ敵を殴る
+                else:
+                    for enemy in self.enemy.is_played:
+                        if enemy.isBlocking:
+                            return enemy
+                    #Blocking 無ければ倒せる敵探す
+                    for enemy in self.enemy.is_played:
+                        if enemy.hp <= use_card.attack:
+                            return enemy
+                    #倒せる敵無い場合は敵盤面の最大攻撃力のカードから攻撃していく
+                    attack_list = []
+                    for enemy in self.enemy.is_played:
+                        attack_list.append(enemy.attack)
+                    max_attack_index = attack_list.index(max(attack_list))
+                    return self.enemy.is_played[max_attack_index]
 
                 '''
                 #とりあえず相手の盤面のカードランダムに殴る

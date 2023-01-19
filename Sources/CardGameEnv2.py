@@ -98,15 +98,15 @@ class CardGameEnv2:
                         #敵のHP,コスト
                         20,5,
                         #手札1~9のカードのAttackとHPとコストとeffectnum
-                        5,5,5,6,
-                        5,5,5,6,
-                        5,5,5,6,
-                        5,5,5,6,
-                        5,5,5,6,
-                        5,5,5,6,
-                        5,5,5,6,
-                        5,5,5,6,
-                        5,5,5,6,
+                        5,5,5,7,
+                        5,5,5,7,
+                        5,5,5,7,
+                        5,5,5,7,
+                        5,5,5,7,
+                        5,5,5,7,
+                        5,5,5,7,
+                        5,5,5,7,
+                        5,5,5,7,
                         5,5,5,5,5,5,5,5,5,5,#自盤面1~5のAtackとHP
                         5,5,5,5,5,5,5,5,5,5,#敵盤面1~5のAtackとHP
                         1,1,1,1,1,#自盤面1~5のcanAttack
@@ -118,9 +118,15 @@ class CardGameEnv2:
         self.action_record_total = { i : 0 for i in range(self.action_space.n)}
         self.action_record_win = {i : 0 for i in range(self.action_space.n)}
         self.action_record_tmp = {i : 0 for i in range(self.action_space.n)}
+        self.card_record_inhand_total = {i : 0 for i in range(15)}
         self.card_record_total = {i : 0 for i in range(15)}
         self.card_record_win = {i : 0 for i in range(15)}
         self.card_record_tmp = {i : 0 for i in range(15)}
+        self.draw_count_total = {i : 0 for i in range(15)}
+        self.draw_count_win = {i :0 for i in range(15)}
+        self.play_count_total = {i : 0 for i in range(15)}
+        self.play_count_win = {i : 0 for i in range(15)}
+        self.play_count_tmp = {i : 0 for i in range(15)}
         self.curr_episode = -1
         self.already_selected_actions=[]
         self.isGameEnd = False
@@ -129,8 +135,29 @@ class CardGameEnv2:
     def setup_game(self):
         self.player = player2.Player2()
         player = self.player
+        #print("enemy policy decision")
+        #print(player.enemy.policydecision)
 
-        run.initdecks(self.player)
+        card_values = [
+            1,2,1,#0
+            2,2,2,#1
+            3,3,3,#2
+            4,3,4,#3
+            5,4,5,#4
+            2,2,2,#5
+            2,3,3,#6
+            1,1,1,#7
+            1,3,2,#8
+            2,1,2,#9
+            3,1,3,#10
+            1,2,2,#11
+            2,3,3,#12
+            1,1,1,#13
+            2,1,3 #14
+        ]
+
+        run.initdecks(self.player, card_arr=card_values)
+        player.generate_dict_draw()
 
         run.inithands(self.player)
 
@@ -170,6 +197,9 @@ class CardGameEnv2:
         self.action_record_tmp = {i : 0 for i in range(self.action_space.n)}
         #card記録用
         self.card_record_tmp = {i : 0 for i in range(15)}
+        #winrateplay記録用
+        self.play_count_tmp = {i : 0 for i in range(15)}
+
         self.action_episode_memory=[]
         self.previous_action = 100
         
@@ -316,14 +346,8 @@ class CardGameEnv2:
         #print("action")
         #print(self.action_episode_memory)
 
-        #reward設定用is_playedの個数の和
-        is_used_sum = 0
-        for i in player.is_played:
-            if i.is_used == False:
-                is_used_sum += 1
         
-    
-
+        
         #行動を行う
         if self.isGameEnd == False:
             self.take_action(action)
@@ -379,6 +403,53 @@ class CardGameEnv2:
             card_record_win = sorted(self.card_record_win.items(), key=lambda x:x[1], reverse=True)
             #print("card_record_win")
             #print(card_record_win)
+        
+        #win rate when draw
+        if done:
+            draw_record = player.get_draw_record()
+            for t in draw_record:
+                self.draw_count_total[t[0]] += t[1]
+            
+            if reward == 1.0:
+                for t in draw_record:
+                    self.draw_count_win[t[0]] += t[1]
+            
+            zero_div_flag = False
+            for i in range(15):
+                if self.draw_count_total[i] == 0:
+                    zero_div_flag = True
+
+            if not zero_div_flag:
+                win_rate_when_draw = { i : 0 for i in range(15)}
+                for i in range(15):
+                    win_rate_when_draw[i] = self.draw_count_win[i] / self.draw_count_total[i]
+                sorted_wrd = sorted(win_rate_when_draw.items(), key=lambda x:x[1], reverse=True)
+                print("WinRatewhenDraw sorted")
+                print(sorted_wrd)
+        
+        #win rate when play
+        if done:
+            for i in range(15):
+                self.play_count_total[i] += self.play_count_tmp[i]
+            
+            if reward == 1.0:
+                for i in range(15):
+                    self.play_count_win[i] += self.play_count_tmp[i]
+            
+            zero_div_flag_2 = False
+            for i in range(15):
+                if self.play_count_total[i] == 0:
+                    zero_div_flag_2 = True
+            
+            if not zero_div_flag_2:
+                win_rate_when_play = { i : 0 for i in range(15)}
+                for i in range(15):
+                    win_rate_when_play[i] = self.play_count_win[i] / self.play_count_total[i]
+                sorted_wrp = sorted(win_rate_when_play.items(), key=lambda x:x[1], reverse=True)
+                print("WinRatewhenPlay sorted")
+                print(sorted_wrp)
+        
+            
 
 
         #記録
@@ -553,11 +624,24 @@ class CardGameEnv2:
         player = self.player
         #action 0~8 は　自手札0~8を盤面に出す操作
         if action >= 0 and action <= 8:
-            draw_card_num = action
             #盤面表示
             #player.enemy.printisplayed()
+            #player.enemy.printhand()
             #player.printisplayed()
             #player.printhand()
+            #ここでついでに手札のカードにおいてプレイ可能な状態のステップ数計測
+            checked_id_list =  []
+            for hand_card in player.hand:
+                if hand_card.id in checked_id_list:
+                    pass
+                else:
+                    checked_id_list.append(hand_card.id)
+                    if hand_card.cost <= player.cost:
+                        self.card_record_inhand_total[hand_card.id] += 1
+            #print("card_record_inhand")
+            #print(self.card_record_inhand_total)
+
+            draw_card_num = action
             #action番目のカードをDraw
             if action+1 > len(player.hand):
                 pass
@@ -580,6 +664,10 @@ class CardGameEnv2:
                 play_card.activate(player)
                 #card record 追加
                 self.card_record_tmp[play_card.id] += 1
+                if self.play_count_tmp[play_card.id] == 0:
+                    self.play_count_tmp[play_card.id] += 1
+                #print("card_record_tmp")
+                #print(self.card_record_tmp)
         
         #action 9~17は自手札0~8を盤面に出さない
         #elif action >= 9 and action <= 17:
@@ -594,6 +682,8 @@ class CardGameEnv2:
         
         #action 9~14は自カード1の攻撃
         elif action >= 9 and action <= 14:
+
+            
             action -= 9
             enemy_num = action
             #action = 0~4 attack enemycard
@@ -737,6 +827,7 @@ class CardGameEnv2:
     def get_valid_moves(self):
         player = self.player
         valid_moves = []
+
         #手札
         for i in range(len(player.hand)):
             if player.hand[i].is_see == False:
@@ -746,34 +837,103 @@ class CardGameEnv2:
 
         #盤面1
         if len(player.is_played) > 0 and player.is_played[0].is_used == False:
-            valid_moves.append(14)
+            #Blocking の数数えてあればそいつだけ追加, なければ敵盤面あるカード全部と敵
+            blocking_sum = 0
             for i in range(len(player.enemy.is_played)):
-                valid_moves.append(i+9)
+                #print(player.enemy.is_played[i])
+                if player.enemy.is_played[i].isBlocking:
+                    #print("Blockingあるぞ")
+                    blocking_sum += 1
+            #print("blocking_sum")
+            #print(blocking_sum)
+            if blocking_sum > 0:
+                for i in range(len(player.enemy.is_played)):
+                    if player.enemy.is_played[i].isBlocking:
+                        valid_moves.append(i+9)
+            else:
+                valid_moves.append(14)
+                for i in range(len(player.enemy.is_played)):
+                    valid_moves.append(i+9)
         
         #盤面2
         if len(player.is_played) > 1 and player.is_played[1].is_used == False:
-            valid_moves.append(20)
+            #Blocking の数数えてあればそいつだけ追加, なければ敵盤面あるカード全部と敵
+            blocking_sum = 0
             for i in range(len(player.enemy.is_played)):
-                valid_moves.append(i+15)
+                #print(player.enemy.is_played[i])
+                if player.enemy.is_played[i].isBlocking:
+                    #print("Blockingあるぞ")
+                    blocking_sum += 1
+            #print("blocking_sum")
+            #print(blocking_sum)
+            if blocking_sum > 0:
+                for i in range(len(player.enemy.is_played)):
+                    if player.enemy.is_played[i].isBlocking:
+                        valid_moves.append(i+15)
+            else:
+                valid_moves.append(20)
+                for i in range(len(player.enemy.is_played)):
+                    valid_moves.append(i+15)
         
         #盤面3
         if len(player.is_played) > 2 and player.is_played[2].is_used == False:
-            valid_moves.append(26)
+            #Blocking の数数えてあればそいつだけ追加, なければ敵盤面あるカード全部と敵
+            blocking_sum = 0
             for i in range(len(player.enemy.is_played)):
-                valid_moves.append(i+21)
+                #print(player.enemy.is_played[i])
+                if player.enemy.is_played[i].isBlocking:
+                    #print("Blockingあるぞ")
+                    blocking_sum += 1
+            #print("blocking_sum")
+            #print(blocking_sum)
+            if blocking_sum > 0:
+                for i in range(len(player.enemy.is_played)):
+                    if player.enemy.is_played[i].isBlocking:
+                        valid_moves.append(i+21)
+            else:
+                valid_moves.append(26)
+                for i in range(len(player.enemy.is_played)):
+                    valid_moves.append(i+21)
         
         #盤面4
         if len(player.is_played) > 3 and player.is_played[3].is_used == False:
-            valid_moves.append(32)
+            #Blocking の数数えてあればそいつだけ追加, なければ敵盤面あるカード全部と敵
+            blocking_sum = 0
             for i in range(len(player.enemy.is_played)):
-                valid_moves.append(i+27)
+                #print(player.enemy.is_played[i])
+                if player.enemy.is_played[i].isBlocking:
+                    #print("Blockingあるぞ")
+                    blocking_sum += 1
+            #print("blocking_sum")
+            #print(blocking_sum)
+            if blocking_sum > 0:
+                for i in range(len(player.enemy.is_played)):
+                    if player.enemy.is_played[i].isBlocking:
+                        valid_moves.append(i+27)
+            else:
+                valid_moves.append(32)
+                for i in range(len(player.enemy.is_played)):
+                    valid_moves.append(i+27)
 
         #盤面5
         if len(player.is_played) > 4 and player.is_played[4].is_used == False:
-            valid_moves.append(38)
+            #Blocking の数数えてあればそいつだけ追加, なければ敵盤面あるカード全部と敵
+            blocking_sum = 0
             for i in range(len(player.enemy.is_played)):
-                valid_moves.append(i+33)
-
+                #print(player.enemy.is_played[i])
+                if player.enemy.is_played[i].isBlocking:
+                    #print("Blockingあるぞ")
+                    blocking_sum += 1
+            #print("blocking_sum")
+            #print(blocking_sum)
+            if blocking_sum > 0:
+                for i in range(len(player.enemy.is_played)):
+                    if player.enemy.is_played[i].isBlocking:
+                        valid_moves.append(i+33)
+            else:
+                valid_moves.append(38)
+                for i in range(len(player.enemy.is_played)):
+                    valid_moves.append(i+33)
         #turn end
         valid_moves.append(39)
 

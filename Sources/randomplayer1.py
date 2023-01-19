@@ -28,7 +28,7 @@ class RandomPlayer1:
         #HPが0以下になったフラグ
         self.is_dead = False
         #プレイヤー初期ドロー枚数
-        self.init_draw_count = 3
+        self.init_draw_count = 5
 
     #デッキシャッフル
     def shuffle(self):
@@ -51,6 +51,15 @@ class RandomPlayer1:
             if len(self.hand) > self.hand_maxnum:
                 eliminated_card = self.hand.pop(-1)
                 self.discard.append(eliminated_card)
+    
+    def selectdraw(self, select_num):
+        for i in range(len(self.deck)):
+            if self.deck[i].id == select_num:
+                draw_card = self.deck.pop(i)
+                self.hand.append(draw_card)
+                break
+        print(self.name + "は" + draw_card + "をドローした")
+                
 
     #ダメージ受けた時
     def damage(self,cnt):
@@ -90,6 +99,7 @@ class RandomPlayer1:
 
     #盤面から使える行動を選んでvalid_movesに追加、それをreturn 
     def get_valid_moves(self):
+        player = self
         valid_moves = []
         #手札
         for i in range(len(self.hand)):
@@ -99,34 +109,104 @@ class RandomPlayer1:
                     valid_moves.append(i)
 
         #盤面1
-        if len(self.is_played) > 0 and self.is_played[0].is_used == False:
-            valid_moves.append(14)
-            for i in range(len(self.enemy.is_played)):
-                valid_moves.append(i+9)
+        if len(player.is_played) > 0 and player.is_played[0].is_used == False:
+            #Blocking の数数えてあればそいつだけ追加, なければ敵盤面あるカード全部と敵
+            blocking_sum = 0
+            for i in range(len(player.enemy.is_played)):
+                #print(player.enemy.is_played[i])
+                if player.enemy.is_played[i].isBlocking:
+                    #print("Blockingあるぞ")
+                    blocking_sum += 1
+            #print("blocking_sum")
+            #print(blocking_sum)
+            if blocking_sum > 0:
+                for i in range(len(player.enemy.is_played)):
+                    if player.enemy.is_played[i].isBlocking:
+                        valid_moves.append(i+9)
+            else:
+                valid_moves.append(14)
+                for i in range(len(player.enemy.is_played)):
+                    valid_moves.append(i+9)
         
         #盤面2
-        if len(self.is_played) > 1 and self.is_played[1].is_used == False:
-            valid_moves.append(20)
-            for i in range(len(self.enemy.is_played)):
-                valid_moves.append(i+15)
+        if len(player.is_played) > 1 and player.is_played[1].is_used == False:
+            #Blocking の数数えてあればそいつだけ追加, なければ敵盤面あるカード全部と敵
+            blocking_sum = 0
+            for i in range(len(player.enemy.is_played)):
+                #print(player.enemy.is_played[i])
+                if player.enemy.is_played[i].isBlocking:
+                    #print("Blockingあるぞ")
+                    blocking_sum += 1
+            #print("blocking_sum")
+            #print(blocking_sum)
+            if blocking_sum > 0:
+                for i in range(len(player.enemy.is_played)):
+                    if player.enemy.is_played[i].isBlocking:
+                        valid_moves.append(i+15)
+            else:
+                valid_moves.append(20)
+                for i in range(len(player.enemy.is_played)):
+                    valid_moves.append(i+15)
         
         #盤面3
-        if len(self.is_played) > 2 and self.is_played[2].is_used == False:
-            valid_moves.append(26)
-            for i in range(len(self.enemy.is_played)):
-                valid_moves.append(i+21)
+        if len(player.is_played) > 2 and player.is_played[2].is_used == False:
+            #Blocking の数数えてあればそいつだけ追加, なければ敵盤面あるカード全部と敵
+            blocking_sum = 0
+            for i in range(len(player.enemy.is_played)):
+                #print(player.enemy.is_played[i])
+                if player.enemy.is_played[i].isBlocking:
+                    #print("Blockingあるぞ")
+                    blocking_sum += 1
+            #print("blocking_sum")
+            #print(blocking_sum)
+            if blocking_sum > 0:
+                for i in range(len(player.enemy.is_played)):
+                    if player.enemy.is_played[i].isBlocking:
+                        valid_moves.append(i+21)
+            else:
+                valid_moves.append(26)
+                for i in range(len(player.enemy.is_played)):
+                    valid_moves.append(i+21)
         
         #盤面4
-        if len(self.is_played) > 3 and self.is_played[3].is_used == False:
-            valid_moves.append(32)
-            for i in range(len(self.enemy.is_played)):
-                valid_moves.append(i+27)
+        if len(player.is_played) > 3 and player.is_played[3].is_used == False:
+            #Blocking の数数えてあればそいつだけ追加, なければ敵盤面あるカード全部と敵
+            blocking_sum = 0
+            for i in range(len(player.enemy.is_played)):
+                #print(player.enemy.is_played[i])
+                if player.enemy.is_played[i].isBlocking:
+                    #print("Blockingあるぞ")
+                    blocking_sum += 1
+            #print("blocking_sum")
+            #print(blocking_sum)
+            if blocking_sum > 0:
+                for i in range(len(player.enemy.is_played)):
+                    if player.enemy.is_played[i].isBlocking:
+                        valid_moves.append(i+27)
+            else:
+                valid_moves.append(32)
+                for i in range(len(player.enemy.is_played)):
+                    valid_moves.append(i+27)
 
         #盤面5
-        if len(self.is_played) > 4 and self.is_played[4].is_used == False:
-            valid_moves.append(38)
-            for i in range(len(self.enemy.is_played)):
-                valid_moves.append(i+33)
+        if len(player.is_played) > 4 and player.is_played[4].is_used == False:
+            #Blocking の数数えてあればそいつだけ追加, なければ敵盤面あるカード全部と敵
+            blocking_sum = 0
+            for i in range(len(player.enemy.is_played)):
+                #print(player.enemy.is_played[i])
+                if player.enemy.is_played[i].isBlocking:
+                    #print("Blockingあるぞ")
+                    blocking_sum += 1
+            #print("blocking_sum")
+            #print(blocking_sum)
+            if blocking_sum > 0:
+                for i in range(len(player.enemy.is_played)):
+                    if player.enemy.is_played[i].isBlocking:
+                        valid_moves.append(i+33)
+            else:
+                valid_moves.append(38)
+                for i in range(len(player.enemy.is_played)):
+                    valid_moves.append(i+33)
 
         #turn end
         valid_moves.append(39)

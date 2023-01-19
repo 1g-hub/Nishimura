@@ -528,9 +528,9 @@ class CardGameEnv:
         if action >= 0 and action <= 8:
             draw_card_num = action
             #盤面表示
-            #player.enemy.printisplayed()
-            #player.printisplayed()
-            #player.printhand()
+            player.enemy.printisplayed()
+            player.printisplayed()
+            player.printhand()
             #action番目のカードをDraw
             if action+1 > len(player.hand):
                 pass
@@ -544,7 +544,7 @@ class CardGameEnv:
                 #print("player 残りcost" + str(player.cost))
                 #自分の盤面カードリストに追加
                 player.is_played.append(play_card)
-                #print(player.name + "は" + play_card + "を場に出した")
+                print(player.name + "は" + play_card + "を場に出した")
                 #盤面の枚数制限超えてたら最後に追加したカード削除
                 if len(player.is_played) > player.is_played_maxnum:
                     eliminated_card = player.is_played.pop(-1)
@@ -719,8 +719,8 @@ class CardGameEnv:
             #print(self.observation)
             print("cant execute")
             pass
-        #print("valid_moves")
-        #print(valid_actions)
+        print("valid_moves")
+        print(valid_actions)
         cnt=0
         #print("already_selected_actions")
         #print(self.already_selected_actions)
@@ -731,8 +731,8 @@ class CardGameEnv:
             cnt=cnt+1
         self.action_episode_memory.append(valid_actions[action])
         self.now_action = valid_actions[action]
-        #print("selected_action")
-        #print(valid_actions[action])
+        print("selected_action")
+        print(valid_actions[action])
         self.action_record[valid_actions[action]] += 1
         self.action_record_tmp[valid_actions[action]] += 1
         self.do_action(valid_actions[action])

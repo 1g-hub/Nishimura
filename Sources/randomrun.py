@@ -5,13 +5,14 @@ import math
 import sys
 
 #デッキの初期化
-def initdecks(player):
+def initdecks(player,card_arr):
     #デッキ生成
-    player.deck = deck.generateDeck(player)
+    player.deck = deck.generateDeck(player,card_arr)
+    #player.showDeck()
     #デッキのシャッフル
     player.shuffle()
     #対戦相手にも同じこと
-    player.enemy.deck = deck.generateDeckEnemy(player.enemy)
+    player.enemy.deck = deck.generateDeckEnemy(player.enemy, card_arr)
     player.enemy.shuffle()
 
 #ゲーム開始時のドロー
@@ -71,11 +72,12 @@ def doTurn(player,isFirst,turnnum):
     if player.enemy.is_dead:
         return
 
-def play(isFirst):
+def play(isFirst,card_arr):
     player = randomplayer2.RandomPlayer2()
 
-    initdecks(player)
+    initdecks(player,card_arr)
     player.generate_dict()
+    player.generate_dict_draw()
 
     inithands(player)
 
@@ -107,17 +109,58 @@ def play(isFirst):
         if player.is_dead == True or player.is_deckend == True:
             #print(player.enemy.name + "Win!!")
             record = player.get_record()
+            draw_record = player.get_draw_record()
             #sys.exit(player.enemy.name + "Win!!")
-            return [-1, record]
+            return [-1, record, draw_record]
         #自分の勝利条件
         elif player.enemy.is_dead == True or player.enemy.is_deckend == True:
             #print(player.name + "Win!!")
             
             record = player.get_record()
+            draw_record = player.get_draw_record()
             #sys.exit(player.name + "Win!!")
-            return [1, record]
+            return [1, record,draw_record]
 
 if __name__ == '__main__':
+    
+    #NEW
+    card_values = [
+            1,2,1,#0
+            2,2,2,#1
+            3,3,3,#2
+            4,3,4,#3
+            5,4,5,#4
+            2,2,2,#5
+            2,3,3,#6
+            1,1,1,#7
+            1,3,2,#8
+            2,1,2,#9
+            3,1,3,#10
+            1,2,2,#11
+            2,3,3,#12
+            1,1,1,#13
+            2,1,3 #14
+        ]
+    '''
+    #old
+    card_values = [
+        1,1,0,#0
+        2,1,1,#1
+        3,2,2,#2
+        4,3,3,#3
+        5,4,4,#4
+        2,2,2,#5
+        2,3,3,#6
+        1,1,1,#7
+        1,3,2,#8
+        2,1,2,#9
+        3,1,3,#10
+        1,2,2,#11
+        2,3,3,#12
+        1,1,1,#13
+        2,1,3 #14
+    ]
+    '''
     #print ("")
     #print ("-----------------------")
     #後攻の勝率が５５％超えるまでループしていろいろいじる
@@ -125,6 +168,8 @@ if __name__ == '__main__':
     win_rate_list = []
     play_count_total = { i : 0 for i in range(15)}
     play_count_win = { i : 0 for i in range(15)}
+    draw_count_total = { i : 0 for i in range(15)}
+    draw_count_win = {i : 0 for i in range(15)}
     total_win_count = 0
     for _ in range(5):
         win_sum = 0
@@ -132,16 +177,24 @@ if __name__ == '__main__':
         playsum_whenwin = { i : 0 for i in range(15)}
         playsum_total = { i : 0 for i in range(15)}
         for i in range(10000):
-            res = play(isFirst = False)
+            res = play(isFirst = False, card_arr = card_values)
+            #print("DrawRecord")
+            #print(res[2])
             for t in res[1]:
                 playsum_total[t[0]] += t[1]
                 play_count_total[t[0]] += t[1]
+            for t in res[2]:
+                draw_count_total[t[0]] += t[1]
+            
             # if win
             if res[0] == 1:
                 record = res[1]
                 for t in record:
                     playsum_whenwin[t[0]] += t[1]
                     play_count_win[t[0]] += t[1]
+                draw_record = res[2]
+                for t in draw_record:
+                    draw_count_win[t[0]] += t[1]
                 #print(record)
                 win_sum += 1
             #if lose
@@ -175,6 +228,16 @@ if __name__ == '__main__':
         win_per_card[i] = play_count_win[i] / play_count_total[i]
     sorted_win_per_card = sorted(win_per_card.items(), key=lambda x:x[1], reverse=True)
     print(sorted_win_per_card)
+    print("draw_count_total")
+    print(draw_count_total)
+    print("draw_count_win")
+    print(draw_count_win)
+    print("draw したときの勝率 sorted")
+    win_rate_when_draw = { i : 0 for i in range(15)}
+    for i in range(15):
+        win_rate_when_draw[i] = draw_count_win[i] / draw_count_total[i]
+    sorted_wrd = sorted(win_rate_when_draw.items(), key=lambda x:x[1], reverse=True)
+    print(sorted_wrd)
     print("win_rate")
     print(win_rate_list)
     sum = 0

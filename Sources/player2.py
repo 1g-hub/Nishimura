@@ -44,6 +44,8 @@ class Player2:
             #デッキからカード一枚とって手札に加える
             draw_card = self.deck.pop()
             self.hand.append(draw_card)
+            if self.draw_count_dict[draw_card.id] == 0:
+                self.draw_count_dict[draw_card.id] += 1
             #print(self.name + "は" + draw_card + "をドローした")
             #手札の枚数制限を超えたら最後にドローしたカード排除して墓地に入れる
             if len(self.hand) > self.hand_maxnum:
@@ -188,3 +190,13 @@ class Player2:
                     else:
                         return False
                 return False
+    def showDeck(self):
+        for deckcard in self.deck:
+            print(deckcard)
+    
+    def generate_dict_draw(self):
+        self.draw_count_dict = {card.id: 0 for card in self.deck}
+
+    def get_draw_record(self):
+        self.draw_count_dict = sorted(self.draw_count_dict.items())
+        return self.draw_count_dict

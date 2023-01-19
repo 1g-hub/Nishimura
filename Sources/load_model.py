@@ -42,7 +42,7 @@ episode_logger = EpisodeLogger()
 env = CardGameEnv2()
 
 #モデルを読み込み
-model = load_model('0107Env2First1000000.h5')
+model = load_model('01170101NewDeck.h5')
 
 # エージェントの設定
 memory = SequentialMemory(limit=100000, window_length=1)

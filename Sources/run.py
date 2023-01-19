@@ -1,16 +1,17 @@
 import player2
+import randomplayer2
 import deck
 import card
 import sys
 
 #デッキの初期化
-def initdecks(player):
+def initdecks(player,card_arr):
     #デッキ生成
-    player.deck = deck.generateDeck(player)
+    player.deck = deck.generateDeck(player, card_arr)
     #デッキのシャッフル
     player.shuffle()
     #対戦相手にも同じこと
-    player.enemy.deck = deck.generateDeckEnemy(player.enemy)
+    player.enemy.deck = deck.generateDeckEnemy(player.enemy, card_arr)
     player.enemy.shuffle()
 
 #ゲーム開始時のドロー
@@ -80,7 +81,25 @@ def doTurn(player,isFirst,turnnum):
 def play(isFirst):
     player = player2.Player2()
 
-    initdecks(player)
+    card_values = [
+        1,1,0,#0
+        2,1,1,#1
+        3,2,2,#2
+        4,3,3,#3
+        5,4,4,#4
+        2,2,2,#5
+        2,3,3,#6
+        1,1,1,#7
+        1,3,2,#8
+        2,1,2,#9
+        3,1,3,#10
+        1,2,2,#11
+        2,3,3,#12
+        1,1,1,#13
+        2,1,3 #14
+    ]
+
+    initdecks(player,card_arr=card_values)
 
     inithands(player)
 
@@ -124,7 +143,7 @@ if __name__ == '__main__':
     sum = 0
     win_sum = 0
     lose_sum = 0
-    for i in range(1):
+    for i in range(10000):
         if play(isFirst = True) == 1:
             win_sum += 1
         else:
