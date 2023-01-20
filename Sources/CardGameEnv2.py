@@ -155,6 +155,8 @@ class CardGameEnv2:
             1,1,1,#13
             2,1,3 #14
         ]
+        
+
 
         run.initdecks(self.player, card_arr=card_values)
         player.generate_dict_draw()
@@ -424,8 +426,8 @@ class CardGameEnv2:
                 for i in range(15):
                     win_rate_when_draw[i] = self.draw_count_win[i] / self.draw_count_total[i]
                 sorted_wrd = sorted(win_rate_when_draw.items(), key=lambda x:x[1], reverse=True)
-                print("WinRatewhenDraw sorted")
-                print(sorted_wrd)
+                #print("WinRatewhenDraw sorted")
+                #print(sorted_wrd)
         
         #win rate when play
         if done:
@@ -446,8 +448,8 @@ class CardGameEnv2:
                 for i in range(15):
                     win_rate_when_play[i] = self.play_count_win[i] / self.play_count_total[i]
                 sorted_wrp = sorted(win_rate_when_play.items(), key=lambda x:x[1], reverse=True)
-                print("WinRatewhenPlay sorted")
-                print(sorted_wrp)
+                #print("WinRatewhenPlay sorted")
+                #print(sorted_wrp)
         
             
 

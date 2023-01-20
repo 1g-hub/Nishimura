@@ -83,9 +83,9 @@ class Player2:
     #場にカード出す
     def playcard(self):
         #盤面表示
-        #self.enemy.printisplayed()
-        #self.printisplayed()
-        #self.printhand()
+        self.enemy.printisplayed()
+        self.printisplayed()
+        self.printhand()
         #ここではランダムに
         #random.shuffle(self.hand)
         #出す順番固定

@@ -78,6 +78,7 @@ def play(isFirst,card_arr):
     initdecks(player,card_arr)
     player.generate_dict()
     player.generate_dict_draw()
+    player.generate_dict_action()
 
     inithands(player)
 
@@ -110,16 +111,18 @@ def play(isFirst,card_arr):
             #print(player.enemy.name + "Win!!")
             record = player.get_record()
             draw_record = player.get_draw_record()
+            card_action_record = player.get_action_record()
             #sys.exit(player.enemy.name + "Win!!")
-            return [-1, record, draw_record]
+            return [-1, record, draw_record, card_action_record]
         #自分の勝利条件
         elif player.enemy.is_dead == True or player.enemy.is_deckend == True:
             #print(player.name + "Win!!")
             
             record = player.get_record()
             draw_record = player.get_draw_record()
+            card_action_record = player.get_action_record()
             #sys.exit(player.name + "Win!!")
-            return [1, record,draw_record]
+            return [1, record,draw_record, card_action_record]
 
 if __name__ == '__main__':
     
@@ -170,6 +173,8 @@ if __name__ == '__main__':
     play_count_win = { i : 0 for i in range(15)}
     draw_count_total = { i : 0 for i in range(15)}
     draw_count_win = {i : 0 for i in range(15)}
+    card_action_count_total = { i : 0 for i in range(15)}
+    card_action_count_win = { i : 0 for i in range(15)}
     total_win_count = 0
     for _ in range(5):
         win_sum = 0
@@ -185,6 +190,9 @@ if __name__ == '__main__':
                 play_count_total[t[0]] += t[1]
             for t in res[2]:
                 draw_count_total[t[0]] += t[1]
+            for t in res[3]:
+                card_action_count_total[t[0]] += t[1]
+
             
             # if win
             if res[0] == 1:
@@ -195,6 +203,9 @@ if __name__ == '__main__':
                 draw_record = res[2]
                 for t in draw_record:
                     draw_count_win[t[0]] += t[1]
+                card_action_record = res[3]
+                for t in card_action_record:
+                    card_action_count_win[t[0]] += t[1]
                 #print(record)
                 win_sum += 1
             #if lose
@@ -238,6 +249,16 @@ if __name__ == '__main__':
         win_rate_when_draw[i] = draw_count_win[i] / draw_count_total[i]
     sorted_wrd = sorted(win_rate_when_draw.items(), key=lambda x:x[1], reverse=True)
     print(sorted_wrd)
+    print("card_action_total")
+    print(card_action_count_total)
+    print("card_action_win")
+    print(card_action_count_win)
+    print("カードがなんかaction したときの勝率 sorted")
+    #win_rate_when_action = { i : 0 for i in range(15)}
+    #for i in range(15):
+    #    win_rate_when_action[i] = card_action_count_win[i] / card_action_count_total[i]
+    #sorted_wra  = sorted(win_rate_when_action.items(), key=lambda x:x[1], reverse=True)
+    #print(sorted_wra)
     print("win_rate")
     print(win_rate_list)
     sum = 0

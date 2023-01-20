@@ -42,7 +42,7 @@ episode_logger = EpisodeLogger()
 env = CardGameEnv2()
 
 #モデルを読み込み
-model = load_model('01170101NewDeck.h5')
+model = load_model('0step.h5')
 
 # エージェントの設定
 memory = SequentialMemory(limit=100000, window_length=1)
@@ -63,7 +63,7 @@ history = dqn.test(env, nb_episodes=3, visualize=False,nb_max_episode_steps=200,
 print(history.history["episode_reward"])
 '''
 # 評価(10000回勝率計算)
-dqn.test(env, nb_episodes=10000, visualize=False,nb_max_episode_steps=500, callbacks = [episode_logger])
+dqn.test(env, nb_episodes=50000, visualize=False,nb_max_episode_steps=500, callbacks = [episode_logger])
 
 
 win_sum = 0
@@ -83,4 +83,4 @@ print(loss_sum)
 
 
 print("win rate")
-print(win_sum / 10000.0)
+print(win_sum / 50000.0)

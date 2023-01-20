@@ -54,7 +54,7 @@ print(env.observation)
 
 
 #環境デバック用テストコード(CPUでも動く)
-'''
+
 for _ in range(1000):
     env.player.printhand()
     env.player.enemy.printhand()
@@ -158,3 +158,4 @@ print(len(history.history["episode_reward"]))
 
 
 sys.exit("学習おわり")
+'''
