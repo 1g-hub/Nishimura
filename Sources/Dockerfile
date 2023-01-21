@@ -24,6 +24,7 @@ RUN pip install --ignore-installed tensorflow
 RUN pip install --ignore-installed matplotlib
 RUN pip install --ignore-installed numpy
 RUN pip install --ignore-installed pydot
+RUN pip install --ignore-installed tqdm
 #RUN pip install --ignore-installed random
 
 # 7. Poetry によるライブラリの依存関係の解決 (初めて環境構築する際は, ここはコメントアウト)#

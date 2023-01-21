@@ -139,7 +139,7 @@ class CardGameEnv2:
         #print(player.enemy.policydecision)
 
         card_values = [
-            1,2,1,#0
+            4,4,1,#0
             2,2,2,#1
             3,3,3,#2
             4,3,4,#3
@@ -153,7 +153,7 @@ class CardGameEnv2:
             1,2,2,#11
             2,3,3,#12
             1,1,1,#13
-            2,1,3 #14
+            1,1,5 #14
         ]
         
 
