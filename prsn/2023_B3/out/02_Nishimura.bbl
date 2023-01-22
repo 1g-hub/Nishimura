@@ -1,0 +1,16 @@
+\begin{thebibliography}{1}
+
+\bibitem{OpenAIGym}
+Greg {Brockman}, Vicki {Cheung}, Ludwig {Pettersson}, Jonas {Schneider}, John
+  {Schulman}, Jie {Tang}, and Wojciech {Zaremba}.
+\newblock {OpenAI Gym}.
+\newblock {\em arXiv e-prints}, p. arXiv:1606.01540, June 2016.
+
+\bibitem{mnih2013atari}
+Volodymyr Mnih, Koray Kavukcuoglu, David Silver, Alex Graves, Ioannis
+  Antonoglou, Daan Wierstra, and Martin Riedmiller.
+\newblock Playing atari with deep reinforcement learning.
+\newblock 2013.
+\newblock cite arxiv:1312.5602Comment: NIPS Deep Learning Workshop 2013.
+
+\end{thebibliography}

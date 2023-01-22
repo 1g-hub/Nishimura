@@ -1,0 +1,49 @@
+This is pBibTeX, Version 0.99d-j0.33 (TeX Live 2019/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: 02_Nishimura.aux
+The style file: junsrt.bst
+Database file #1: index.bib
+Warning--empty journal in mnih2013atari
+You've used 2 entries,
+            2270 wiz_defined-function locations,
+            550 strings with 4538 characters,
+and the built_in function-call counts, 924 in all, are:
+= -- 76
+> -- 44
+< -- 1
++ -- 16
+- -- 14
+* -- 37
+:= -- 115
+add.period$ -- 7
+call.type$ -- 2
+change.case$ -- 2
+chr.to.int$ -- 0
+cite$ -- 3
+duplicate$ -- 61
+empty$ -- 60
+format.name$ -- 28
+if$ -- 229
+int.to.chr$ -- 0
+int.to.str$ -- 2
+missing$ -- 2
+newline$ -- 14
+num.names$ -- 2
+pop$ -- 13
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 68
+stack$ -- 0
+substring$ -- 32
+swap$ -- 34
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 1
+while$ -- 3
+width$ -- 3
+write$ -- 24
+is.kanji.str$ -- 29
+(There was 1 warning)
