@@ -56,13 +56,43 @@
   \item 先週考えた手法の有効性を示そうとした実験
   \par
   \begin{itemize}
-    \item DQN を用いて汎用的に勝つ戦略を作成し, 調整対象のカード (強すぎるカードと弱すぎるカード) を検出する
+    \item DQN を用いてどのような戦略を持つ相手にも平均的に勝つ戦略を構築し, 調整対象のカード (強すぎるカードと弱すぎるカード) を検出する
     \item GA でパラメータの変更量を抑えつつ, 勝率が 50 \% に近づくように調整する.
   \end{itemize}
 \end{itemize}
 
 
-\section{}
+\section{DQN}
+\subsection{対戦相手の戦略の修正}
+対戦相手として, アグロとコントロールを用意した. また, よりルールベースな AI へと改良した. 
+
+\begin{figure}[t]
+  \vspace{-0.3cm}
+  \begin{algorithm}[H]
+    \small
+      \caption{
+        対戦相手の行動ルーチン
+        }
+      \label{alg1}
+      \begin{algorithmic}[1] 
+      \STATE 盤面にカードを 1 枚プレイ
+      \FOR{盤面のカード (プレイ順が古い方から)}
+      \IF{敵の盤面に 1 回の攻撃で破壊できるカードがある}
+      \STATE その攻撃対象を選んで攻撃
+      \ELSE
+      \IF{敵盤面の総攻撃力が自身の HP 以上}
+      \STATE 敵盤面の最も攻撃力高いカードを攻撃
+      \ELSE
+      \STATE 敵プレイヤーを攻撃
+      \ENDIF
+      \ENDIF
+      \ENDFOR
+      \STATE ターンを終了
+      \end{algorithmic}
+  \end{algorithm}
+  \vspace{-0.3cm}
+  \end{figure}
+
 
 
 \section{???}
