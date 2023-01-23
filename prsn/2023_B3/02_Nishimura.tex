@@ -114,7 +114,7 @@ OpenAI Gym \cite{OpenAIGym} は非営利企業 OpenAI が提供する強化学�
 \subsection{対戦相手の行動ルーチン}
 
 学習, 勝率計算の際には学習するプレイヤーの対戦相手を用意する必要がある.
-Algorithm \ref{alg1} に今回の実験における対戦相手の手動で作成した行動ルーチンを示す.
+Algorithm \ref{alg1} に今回の実験における対戦相手の行動ルーチンを示す.
 \begin{figure}[t]
   \vspace{-0.3cm}
   \begin{algorithm}[H]
@@ -124,7 +124,7 @@ Algorithm \ref{alg1} に今回の実験における対戦相手の手動で作�
         }
       \label{alg1}
       \begin{algorithmic}[1] 
-      \STATE 盤面にカードを出せるだけプレイ (ドロー順が古い方から)
+      \STATE 手札から盤面にカードを出せるだけプレイ (ドロー順が古い方から)
       \FOR{盤面のカード (プレイ順が古い方から)}
       \IF{敵の盤面に 1 回の攻撃で破壊できるカードがある}
       \STATE その攻撃対象を選んで攻撃
