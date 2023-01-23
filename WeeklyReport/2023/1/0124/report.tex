@@ -1,0 +1,79 @@
+
+%\documentstyle[epsf,twocolumn]{jarticle}       %LaTeX2.09仕様
+%\documentclass[twocolumn]{jarticle}     %pLaTeX2e仕様
+\documentclass{jarticle}     %pLaTeX2e仕様
+
+%一枚組だったら[twocolumn]関係のとこ消す
+
+\setlength{\topmargin}{-45pt}
+%\setlength{\oddsidemargin}{0cm} 
+\setlength{\oddsidemargin}{-7.5mm}
+%\setlength{\evensidemargin}{0cm} 
+\setlength{\textheight}{24.1cm}
+%setlength{\textheight}{25cm} 
+\setlength{\textwidth}{17.4cm}
+%\setlength{\textwidth}{172mm} 
+\setlength{\columnsep}{11mm}
+
+\kanjiskip=.07zw plus.5pt minus.5pt
+
+\usepackage{graphicx}
+\usepackage[dvipdfmx]{color}
+\usepackage{subcaption}
+\usepackage{enumerate}
+\usepackage{comment}
+\usepackage{url}
+\usepackage{multirow}
+\usepackage{diagbox}
+\usepackage{algorithmic}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{lipsum}
+\usepackage[jis2004]{otf}
+
+\begin{document}
+
+  \noindent
+  \onecolumn
+  \hspace{1em}
+
+  \today
+  \hfill
+  \ \  B3 西村昭賢 
+
+  \vspace{2mm}
+  \hrule
+  \begin{center}
+  {\Large \bf 進捗報告}
+  \end{center}
+  \hrule
+  \vspace{3mm}
+
+
+\section{今週やったこと}
+\begin{itemize}
+  \item B3 発表用資料, スライド加筆修正
+  \item 先週考えた手法の有効性を示そうとした実験
+  \par
+  \begin{itemize}
+    \item DQN を用いて汎用的に勝つ戦略を作成し, 調整対象のカード (強すぎるカードと弱すぎるカード) を検出する
+    \item GA でパラメータの変更量を抑えつつ, 勝率が 50 \% に近づくように調整する.
+  \end{itemize}
+\end{itemize}
+
+
+\section{}
+
+
+\section{???}
+
+
+\section{???}
+
+
+%index.bibはtexファイルと同階層に置く
+%ちゃんと\citeしないと表示されない(1敗)
+\bibliography{index.bib}
+\bibliographystyle{junsrt}
+
+\end{document}
