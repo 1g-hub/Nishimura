@@ -30,6 +30,7 @@
 \usepackage{algorithm}
 \usepackage{lipsum}
 \usepackage[jis2004]{otf}
+\usepackage{diagbox}
 
 \begin{document}
 
@@ -64,26 +65,35 @@
 
 \section{DQN}
 \subsection{対戦相手の戦略の修正}
-対戦相手として, アグロとコントロールを用意した. また, よりルールベースな AI へと改良した. 
-
-\begin{figure}[t]
+対戦相手の戦略としてアグロとコントロールを用意した. また, よりルールベースな AI へと改良した. 
+Algorithm \ref{controll}, \ref{aguro} に疑似コードを示す.
+\begin{figure}[ht]
   \vspace{-0.3cm}
   \begin{algorithm}[H]
     \small
       \caption{
-        対戦相手の行動ルーチン
+        対戦相手の行動ルーチン (コントロール)
         }
-      \label{alg1}
+      \label{controll}
       \begin{algorithmic}[1] 
-      \STATE 盤面にカードを 1 枚プレイ
+      \STATE 手札から盤面にカードを出せるだけプレイ (ドロー順が古い方から)
       \FOR{盤面のカード (プレイ順が古い方から)}
-      \IF{敵の盤面に 1 回の攻撃で破壊できるカードがある}
-      \STATE その攻撃対象を選んで攻撃
-      \ELSE
-      \IF{敵盤面の総攻撃力が自身の HP 以上}
-      \STATE 敵盤面の最も攻撃力高いカードを攻撃
-      \ELSE
+      \IF {敵盤面にカードがない}
       \STATE 敵プレイヤーを攻撃
+      \ELSE 
+      \STATE 敵盤面カードの総攻撃力を計算
+      \STATE 自盤面カードの総攻撃力を計算
+      \IF{自盤面カードの総攻撃力 $>=$ 敵プレイヤーの残り HP}
+      \STATE 敵プレイヤーを攻撃
+      \ENDIF
+      \IF {敵盤面に有利トレードできるカードがある}
+      \STATE そのカードを攻撃
+      \ELSE
+      \IF {敵盤面に相討ちできるカードがある}
+      \STATE そのカードを攻撃
+      \ELSE 
+      \STATE 敵盤面で最も攻撃力が高いカードを攻撃
+      \ENDIF
       \ENDIF
       \ENDIF
       \ENDFOR
@@ -93,12 +103,282 @@
   \vspace{-0.3cm}
   \end{figure}
 
+\begin{figure}[ht]
+  \vspace{-0.3cm}
+  \begin{algorithm}[H]
+    \small
+      \caption{
+        対戦相手の行動ルーチン (アグロ)
+        }
+      \label{aguro}
+      \begin{algorithmic}[1] 
+      \STATE 手札から盤面にカードを出せるだけ出す (ドロー順が古い方から)
+      \FOR{盤面のカード (プレイ順が古い方から) }
+      \IF {敵の盤面にカードがない}
+      \STATE 敵プレイヤーを攻撃
+      \ELSE
+      \STATE 敵盤面カードの総攻撃力を計算
+      \STATE 自盤面カードの総攻撃力を計算
+      \IF {自盤面カードの総攻撃力 $>=$ 敵プレイヤーの残り HP}
+      \STATE 敵プレイヤーを攻撃
+      \ENDIF 
+      \IF {残りHP が 10 以上であり, かつ敵盤面の総攻撃力より多い}
+      \STATE  敵プレイヤーを攻撃
+      \ENDIF
+      \IF {残りHP が 10 未満}
+      \IF {敵盤面に有利トレードできるカードがある}
+      \STATE そのカードを攻撃
+      \ELSE
+      \STATE 敵プレイヤーを攻撃
+      \ENDIF
+      \ENDIF
+      \IF {敵盤面の総攻撃力 $>=$ 残りHP}
+      \IF {敵盤面に有利トレードできるカードがある}
+      \STATE そのカードを攻撃
+      \ELSE
+      \IF {敵盤面に相討ちできるカードがある}
+      \STATE そのカードを攻撃
+      \ELSE 
+      \STATE 敵盤面で最も攻撃力が高いカードを攻撃
+      \ENDIF
+      \ENDIF
+      \ENDIF
+      \ENDIF
+      \ENDFOR
+      \STATE ターンエンド
+      \end{algorithmic}
+  \end{algorithm}
+  \vspace{-0.3cm}
+  \end{figure}
+
+\subsection{実験条件}
+DQN で強すぎるカードと弱すぎるカードをどのように検出するかどうか調べることが目的.
+そのため, 表 \ref{table:OPdeck} デッキにあえて強すぎるカードと弱すぎるカードを含めて学習を行った.
+
+\begin{table}[h]
+  \centering
+  \caption{実験で用いた強すぎるカードと弱すぎるカードを含んだデッキ (太字が変更点)}
+  \label{table:OPdeck}
+  \begin{tabular}{|c|c|c|c|c|c|}
+  \hline
+  ID & 攻撃力 & HP & コスト & 特殊効果 & 枚数 \\ \hline
+  0 & \textbf{4} & \textbf{4} & 1 & 無し & 2 \\ \hline
+  1 & 2 & 2 & 2 & 無し & 2 \\ \hline
+  2 & 3 & 3 & 3 & 無し & 2 \\ \hline
+  3 & 4 & 3 & 4 & 無し & 2 \\ \hline
+  4 & 5 & 4 & 5 & 無し & 2 \\ \hline
+  5 & 2 & 2 & 2 & 召喚 & 2 \\ \hline
+  6 & 2 & 3 & 3 & 召喚 & 2 \\ \hline
+  7 & 1 & 1 & 1 & 取得 & 2 \\ \hline
+  8 & 1 & 3 & 2 & 取得 & 2 \\ \hline
+  9 & 2 & 1 & 2 & 速攻 & 2 \\ \hline
+  10 & 3 & 1 & 3 & 速攻 & 2 \\ \hline
+  11 & 1 & 2 & 2 & 攻撃 & 2 \\ \hline
+  12 & 2 & 3 & 3 & 攻撃 & 2 \\ \hline
+  13 & 1 & 1 & 1 & 治癒 & 2 \\ \hline
+  14 & \textbf{1} & 1 & \textbf{5} & 治癒 & 2 \\ \hline
+  \end{tabular}
+  \end{table}
+
+デッキは対戦相手にも同じものを持たせた. 先攻側で 1000000 ステップ学習した.
+コントロールとアグロに平均的に勝利する戦略を学習するため, 1 エピソードごとに対戦相手の戦略を乱数で等確率に決定した. また, 比較材料として対戦相手の戦略を変化させない場合も学習した.
+
+\section{結果}
+学習済みのモデルで 50000 回ゲームを実行し勝率を記録した.
+表 \ref{winrate} に結果を示す.
+
+\begin{table}[ht]
+  \centering 
+  \caption{50000 回のゲーム実行における勝率}
+  \label{winrate}
+  \begin{tabular}{|c|c|c|c|}
+    
+  \hline
+  \diagbox[]{勝率計算時の対戦相手}{学習時の対戦相手}    & ランダムに戦略が変化する & コントロール  & アグロ              \\ \hline
+  コントロール & 0.87850      & 0.87884 & \textbf{0.88158}   \\ \hline
+  アグロ    & 0.67630      & 0.67362 & \textbf{0.67852}       \\ \hline
+  \end{tabular}
+  \end{table}
+
+また, 表 \ref{action} に 3 つの学習済みエージェントにおける選択された総数が多い行動上位 5 つを示す.
+
+\begin{table}[ht]
+  \centering
+  \caption{3 種類の学習済みエージェントの行動}
+  \label{action}
+  \scalebox{0.9}[0.9]{
+    \begin{tabular}{|cc|cc|cc|}
+      \hline
+      \multicolumn{2}{|c|}{ランダムに戦略が変化}                & \multicolumn{2}{c|}{コントロール}                    & \multicolumn{2}{c|}{アグロ}                       \\ \hline
+      \multicolumn{1}{|c|}{行動説明}             & 総数     & \multicolumn{1}{c|}{行動説明}             & 総数     & \multicolumn{1}{c|}{行動説明}             & 総数     \\ \hline
+      \multicolumn{1}{|c|}{ターンエンド}           & 270153 & \multicolumn{1}{c|}{ターンエンド}           & 270674 & \multicolumn{1}{c|}{ターンエンド}           & 271243 \\ \hline
+      \multicolumn{1}{|c|}{手札 1 を盤面に出す}      & 247143 & \multicolumn{1}{c|}{手札 1 を盤面に出す}      & 247081 & \multicolumn{1}{c|}{手札 1 を盤面に出す}      & 248676 \\ \hline
+      \multicolumn{1}{|c|}{盤面 1 で相手プレイヤーに攻撃} & 212046 & \multicolumn{1}{c|}{盤面 1 で相手プレイヤーに攻撃} & 212709 & \multicolumn{1}{c|}{盤面 1 で相手プレイヤーに攻撃} & 212380 \\ \hline
+      \multicolumn{1}{|c|}{盤面 2 で相手プレイヤーに攻撃} & 120773 & \multicolumn{1}{l|}{盤面 2 で相手プレイヤーに攻撃} & 120803 & \multicolumn{1}{c|}{盤面 2 で相手プレイヤーに攻撃} & 120952 \\ \hline
+      \multicolumn{1}{|c|}{手札 2 を盤面に出す}      & 74531  & \multicolumn{1}{c|}{手札 2 を盤面に出す}      & 74769  & \multicolumn{1}{c|}{手札 2 を盤面に出す}      & 74579  \\ \hline
+      \end{tabular}
+  }
+  
+  \end{table}
+
+  このことから 3 つのエージェントとも同じように学習の結果として相手プレイヤーに攻撃して早くゲーム終了を迎えるアグロの戦略を構築したと考えられる. デッキに入れた強いカードは 1 コスト (5, 5) のカードであるため, アグロの戦略が有利と考えられる. そのため, 学習時の対戦相手に関係なくこのような結果になったと考えられる. 
+  
+  また, 表 \ref{winrate} において最も勝率が高かったアグロ相手に学習したエージェントについて 50000 回ゲームを実行した結果を用いてバランス調整に相応しいカードを選択するための指標について検討した. 
+  今回用いる指標は, WRD (Win Rate when Draw), WRP (Win Rate when Play), PlayRate (そのカードが盤面にプレイされたゲーム数 / 総ゲーム数) の 3 つを用いた. 表 \ref{up3}, \ref{bottom3} に各指標の上位 3 つ, 下位 3 つのカードとその値を示す. 
+
+  \begin{table}[ht]
+    \centering
+    \caption{各指標上位 3 カード (降順)}
+    \label{up3}
+    \begin{tabular}{|cc|cc|cc|}
+    \hline
+    \multicolumn{2}{|c|}{WRD}          & \multicolumn{2}{c|}{WRP}          & \multicolumn{2}{c|}{PlayRate}     \\ \hline
+    \multicolumn{1}{|c|}{0}  & 0.86888 & \multicolumn{1}{c|}{0}  & 0.89930 & \multicolumn{1}{c|}{0}  & 0.57976 \\ \hline
+    \multicolumn{1}{|c|}{13} & 0.79735 & \multicolumn{1}{c|}{10} & 0.82776 & \multicolumn{1}{c|}{13} & 0.53634 \\ \hline
+    \multicolumn{1}{|c|}{7}  & 0.79133 & \multicolumn{1}{c|}{4}  & 0.81306 & \multicolumn{1}{c|}{7}  & 0.52146 \\ \hline
+    \end{tabular}
+    \end{table}
+
+  
+\begin{table}[ht]
+  \centering
+  \caption{各指標下位 3 カード (昇順)}
+  \label{bottom3}
+  \begin{tabular}{|cc|cc|cc|}
+  \hline
+  \multicolumn{2}{|c|}{WRD}          & \multicolumn{2}{c|}{WRP}         & \multicolumn{2}{c|}{PlayRate}     \\ \hline
+  \multicolumn{1}{|c|}{14} & 0.76367 & \multicolumn{1}{c|}{8} & 0.77762 & \multicolumn{1}{c|}{14} & 0.34086 \\ \hline
+  \multicolumn{1}{|c|}{8}  & 0.77028 & \multicolumn{1}{c|}{3} & 0.78577 & \multicolumn{1}{c|}{4}  & 0.36054 \\ \hline
+  \multicolumn{1}{|c|}{4}  & 0.77150 & \multicolumn{1}{c|}{1} & 0.79052 & \multicolumn{1}{c|}{3}  & 0.40752 \\ \hline
+  \end{tabular}
+  \end{table}
+  
+PlayRate に関して, 上位 3 つは コスト 1 のカードで占められ, 下位 3 つは コスト 4 の ID 3, コスト 5 の ID 14, 4 となっており構築されたアグロ戦略への適応度を表す指標であると考えられる. 仮に DQN で作成した戦略がデッキの最適な戦略であればこの指標を用いてその戦略におけるカードパワーを測る指標と考えられる.\par
+WRD は上位 3 つがコスト 1 のカードであることからも戦略を踏まえたカードパワーの指標になっていると考えられる. 下位 3 つにもコストが 5 の ID 14, 4 のカード, 2 コスト (1, 3) で 1枚ドローの ID 8 と構築したアグロ戦略とは噛み合わないカードが並んでいる.\par
+WRP は盤面に出たときの勝率であるため戦略よりも単純なカードパワーを示していると考えられる. ID 0 はもちろんのこと, 他の指標では下位にランクインしていた ID 4 のカードが WRP では上位 3 つに入っていることからも WRP が単純なカードパワーを示していることが伺える. 
+ただ, WRP の下位には数値上では強い ID 3 のカードが入っていたり, ID 14 のカードが 下から 4 番目にランクインしているなど下位になるにつれよくわからない指標になっていた.\par
+今回は深層強化学習で平均的に勝てる戦略を構築しそれを元に調整対象のカードを選択するアプローチを取るため, WRD と PlayRate が調整対象のカード選択の指標として相応しいと考えている. なお, いずれの指標においても 「バランスブレイカー」だったり「弱すぎる」という値は具体的にどのような値で示されるのかがまだ決まっていない. 単純に上位のものを順に GA でバランス調整にかけることが無難かもしれない. 
+  
+ \section{GA を用いたカードのパラメータ (HP, 攻撃力, コスト) の調整}
+前々から参考にしているハースストーン環境におけるバランス調整を GA を用いて試みた先行研究 \cite{Hearthstone} では, 各デッキ間の勝率を 50 \% にするために 単一目的 GA, 更にパラメータの変化量を少なくなるようにする多目的 GA を用いていた. 先行研究では,多目的 GA として NSGA-2 を用いていたため本環境でも NSGA-2 を実装してみた\cite{NSGA}.
+
+\begin{table}[h]
+  \centering
+  \caption{前回の単一目的 GA で扱ったデッキの内容}
+  \label{table:Redeck}
+  \begin{tabular}{|c|c|c|c|c|c|}
+  \hline
+  ID & 攻撃力 & HP & コスト & 特殊効果 & 枚数 \\ \hline
+  0 & 1 & 2 & 1 & 無し & 2 \\ \hline
+  1 & 2 & 2 & 2 & 無し & 2 \\ \hline
+  2 & 3 & 3 & 3 & 無し & 2 \\ \hline
+  3 & 4 & 3 & 4 & 無し & 2 \\ \hline
+  4 & 5 & 4 & 5 & 無し & 2 \\ \hline
+  5 & 2 & 2 & 2 & 召喚 & 2 \\ \hline
+  6 & 2 & 3 & 3 & 召喚 & 2 \\ \hline
+  7 & 1 & 1 & 1 & 循環 & 2 \\ \hline
+  8 & 1 & 3 & 2 & 循環 & 2 \\ \hline
+  9 & 2 & 1 & 2 & 速攻 & 2 \\ \hline
+  10 & 3 & 1 & 3 & 速攻 & 2 \\ \hline
+  11 & 1 & 2 & 2 & 攻撃 & 2 \\ \hline
+  12 & 2 & 3 & 3 & 攻撃 & 2 \\ \hline
+  13 & 1 & 1 & 1 & 治癒 & 2 \\ \hline
+  14 & 2 & 1 & 3 & 治癒 & 2 \\ \hline
+  \end{tabular}
+  \end{table}
+
+表 \ref{NSGA-2} のパラメータを示す. NSGA - 2 で表 \ref{table:GAdeck} に示すデッキにおいてランダムに行動する同士の対戦環境において後攻で勝率が 50 \% になるように学習した.
+
+\begin{table}[h]
+  \centering
+  \caption{NSGA - 2 のパラメータ}
+  \label{NSGA-2}
+  \begin{tabular}{|c|c|}
+
+  \hline
+  パラメータ     & 値                         \\ \hline
+  目的関数 1    & パラメータの総変更量                \\ \hline
+  目的関数 2    & $(0.50 - \mathrm{r_{win}})^2$                \\ \hline
+  世代数       & 100                       \\ \hline
+  個体数       & 100                       \\ \hline
+  交叉        & 2 点交叉                     \\ \hline
+  勝率計算の際の回数 & 1000 \\ \hline
+  \end{tabular}
+  \end{table}
+
+\begin{table}[h]
+  \centering
+  \caption{ GA で扱ったデッキの内容}
+  \label{table:GAdeck}
+  \begin{tabular}{|c|c|c|c|c|c|}
+  \hline
+  ID & 攻撃力 & HP & コスト & 特殊効果 & 枚数 \\ \hline
+  0 & 1 & 2 & 1 & 無し & 2 \\ \hline
+  1 & 2 & 2 & 2 & 無し & 2 \\ \hline
+  2 & 3 & 3 & 3 & 無し & 2 \\ \hline
+  3 & 4 & 3 & 4 & 無し & 2 \\ \hline
+  4 & 5 & 4 & 5 & 無し & 2 \\ \hline
+  5 & 2 & 2 & 2 & 召喚 & 2 \\ \hline
+  6 & 2 & 3 & 3 & 召喚 & 2 \\ \hline
+  7 & 1 & 1 & 1 & 循環 & 2 \\ \hline
+  8 & 1 & 3 & 2 & 循環 & 2 \\ \hline
+  9 & 2 & 1 & 2 & 速攻 & 2 \\ \hline
+  10 & 3 & 1 & 3 & 速攻 & 2 \\ \hline
+  11 & 1 & 2 & 2 & 攻撃 & 2 \\ \hline
+  12 & 2 & 3 & 3 & 攻撃 & 2 \\ \hline
+  13 & 1 & 1 & 1 & 治癒 & 2 \\ \hline
+  14 & 2 & 1 & 3 & 治癒 & 2 \\ \hline
+  \end{tabular}
+  \end{table}
+
+  \begin{figure}[t]
+    \centering
+    \small
+    \includegraphics[width=140.0mm]{assets/NSGA_result.eps}
+    \caption{NSGA-2 を用いた最適化の結果 (青点はパレートフロント)}
+    \label{fig:DQNresult}
+  \end{figure}
+
+  パラメータの総変更量が 6 で後攻の勝率が 0.50 となった個体が存在した. 表 \ref{table:NSGAresdeck} にそのデッキを示す. 先週の単一目的 GA ではパラメータの総変更量は 25 となったので, パラメータの変更量を減らしながら目的を達成できている. ただ, 勝率計算におけるゲームの実行数が 1000 回と少ないため数を増やしてより厳密な解を得たい.
 
 
-\section{???}
+
+  \begin{table}[h]
+    \centering
+    \caption{ NSGA-2 で得た総変化量 6 のデッキの内容 (太字は表 \ref{table:GAdeck} からの変更箇所)}
+    \label{table:NSGAresdeck}
+    \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    ID & 攻撃力 & HP & コスト & 特殊効果 & 枚数 \\ \hline
+    0 & 1 & \textbf{1} & 1 & 無し & 2 \\ \hline
+    1 & 2 & 2 & 2 & 無し & 2 \\ \hline
+    2 & 3 & 3 & 3 & 無し & 2 \\ \hline
+    3 & 4 & 3 & 4 & 無し & 2 \\ \hline
+    4 & 5 & 4 & 5 & 無し & 2 \\ \hline
+    5 & 2 & 2 & 2 & 召喚 & 2 \\ \hline
+    6 & 2 & 3 & \textbf{1} & 召喚 & 2 \\ \hline
+    7 & 1 & 1 & 1 & 循環 & 2 \\ \hline
+    8 & 1 & 3 & \textbf{1} & 循環 & 2 \\ \hline
+    9 & 2 & 1 & 2 & 速攻 & 2 \\ \hline
+    10 & 3 & 1 & 3 & 速攻 & 2 \\ \hline
+    11 & 1 & \textbf{4} & 2 & 攻撃 & 2 \\ \hline
+    12 & 2 & 3 & 3 & 攻撃 & 2 \\ \hline
+    13 & 1 & 1 & 1 & 治癒 & 2 \\ \hline
+    14 & 2 & 1 & \textbf{2} & 治癒 & 2 \\ \hline
+    \end{tabular}
+    \end{table}
+
+    
 
 
-\section{???}
+\section{今後の課題}
+\begin{itemize}
+  \item 新規性
+  \par
+  多目的最適化を誰もやってないと勘違いして NSGA-2 で新規性生めると思っていた. 
+  DQN で変更するパラメータを絞るなら, 勝率の他の目的関数をデッキの平均マナレシオに近づけるなどに変えてみればいいかもしれない.
+  \item 卒論テーマ決め \& 執筆
+\end{itemize}
 
 
 %index.bibはtexファイルと同階層に置く
