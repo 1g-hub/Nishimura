@@ -5,7 +5,7 @@ import numpy as np
 
 class NSGA2Utils:
 
-    def __init__(self, problem, num_of_individuals=100,
+    def __init__(self, problem, num_of_individuals=50,
                  num_of_tour_particips=2, tournament_prob=0.9, crossover_param=2, mutation_param=5):
 
         self.problem = problem
@@ -158,7 +158,7 @@ class NSGA2Utils:
     '''
     def __mutate(self, child):
         num_of_features = len(child.features)
-        index = np.random.randint(0, num_of_features - 1)
+        index = np.random.randint(0, num_of_features)
         child.features[index] = np.random.randint(self.problem.variables_range[0][0], self.problem.variables_range[0][1] + 1)
 
 

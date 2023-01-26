@@ -5,7 +5,7 @@ from tqdm import tqdm
 
 class Evolution:
 
-    def __init__(self, problem, num_of_generations=1000, num_of_individuals=100, num_of_tour_particips=2, #An integer, default = 2, representing the number of participants in tournament selection operator.
+    def __init__(self, problem, num_of_generations=50, num_of_individuals=50, num_of_tour_particips=2, #An integer, default = 2, representing the number of participants in tournament selection operator.
                  tournament_prob=0.9, crossover_param=2,#representing the parameter used in simulated binary crossover.
                  mutation_param=5#representing the paramenter used in polynomial mutation.
                 ):
@@ -19,8 +19,8 @@ class Evolution:
     def evolve(self):
         #初期個体群生成
         self.population = self.utils.create_initial_population()
-        #print(self.population)
-        #print(len(self.population))
+        print(self.population)
+        print(len(self.population))
         #高速優越ソート
         self.utils.fast_nondominated_sort(self.population)
         #print(self.population.fronts)

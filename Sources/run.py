@@ -41,12 +41,12 @@ def updatecost(player):
     if player.turnmaxcost < player.maxcost:
         player.turnmaxcost += 1
     player.cost = player.turnmaxcost
-    print("updated cost")
-    print(player.name + ":" + str(player.cost))
+    #print("updated cost")
+    #print(player.name + ":" + str(player.cost))
 
 def doTurn(player,isFirst,turnnum):
-    print ("")
-    print ("-----------------------------------------------------------------------------------------------")
+    #print ("")
+    #print ("-----------------------------------------------------------------------------------------------")
 
     #敵のカードドロー
     if isFirst == True or turnnum != 0:
@@ -66,8 +66,8 @@ def doTurn(player,isFirst,turnnum):
     if player.is_dead:
         return
 
-    print ("")
-    print ("-----------------------------------------------------------------------------------------------")
+    #print ("")
+    #print ("-----------------------------------------------------------------------------------------------")
     #自分も同じことする
     player.draw()
     #自分がデッキ切れ起こしたらreturn 
@@ -78,28 +78,11 @@ def doTurn(player,isFirst,turnnum):
     resetuse(player)
     updatecost(player)
 
-def play(isFirst):
+def play(isFirst, card_values):
     player = player2.Player2()
 
-    card_values = [
-        1,1,0,#0
-        2,1,1,#1
-        3,2,2,#2
-        4,3,3,#3
-        5,4,4,#4
-        2,2,2,#5
-        2,3,3,#6
-        1,1,1,#7
-        1,3,2,#8
-        2,1,2,#9
-        3,1,3,#10
-        1,2,2,#11
-        2,3,3,#12
-        1,1,1,#13
-        2,1,3 #14
-    ]
-
     initdecks(player,card_arr=card_values)
+    player.generate_dict_draw()
 
     inithands(player)
 
@@ -109,13 +92,13 @@ def play(isFirst):
     turnnum = 0
 
     while True:
-        player.enemy.printhand()
-        player.printhand()
+        #player.enemy.printhand()
+        #player.printhand()
         #player1の場を表示
-        player.enemy.printisplayed()
+        #player.enemy.printisplayed()
 
         #player2の場を表示
-        player.printisplayed()
+        #player.printisplayed()
         if isFirst == True and turnnum == 0:
             log = player.playcard()
             log += player.usecard()
@@ -128,23 +111,40 @@ def play(isFirst):
         #勝利条件
         #敵の勝利条件
         if player.is_dead == True or player.is_deckend == True:
-            print(player.enemy.name + "Win!!")
+            #print(player.enemy.name + "Win!!")
             #sys.exit(player.enemy.name + "Win!!")
             return -1
         #自分の勝利条件
         elif player.enemy.is_dead == True or player.enemy.is_deckend == True:
-            print(player.name + "Win!!")
+            #print(player.name + "Win!!")
             #sys.exit(player.name + "Win!!")
             return 1
 
 if __name__ == '__main__':
-    print ("")
-    print ("-----------------------")
+    #print ("")
+    #print ("-----------------------")
+    card_values = [
+            1,2,1,#0
+            2,2,2,#1
+            3,3,3,#2
+            4,3,4,#3
+            5,4,5,#4
+            2,2,2,#5
+            2,3,3,#6
+            1,1,1,#7
+            1,3,2,#8
+            2,1,2,#9
+            3,1,3,#10
+            1,2,2,#11
+            2,3,3,#12
+            1,1,1,#13
+            2,1,3 #14
+        ]
     sum = 0
     win_sum = 0
     lose_sum = 0
     for i in range(10000):
-        if play(isFirst = True) == 1:
+        if play(isFirst = True, card_values=card_values) == 1:
             win_sum += 1
         else:
             lose_sum += 1

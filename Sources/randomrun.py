@@ -5,14 +5,21 @@ import math
 import sys
 
 #デッキの初期化
-def initdecks(player,card_arr):
+def initdecks(player,card_arr, is_all_changed):
     #デッキ生成
-    player.deck = deck.generateDeck(player,card_arr)
+    if is_all_changed:
+        player.deck = deck.generateDeck(player,card_arr)
+    else:
+        player.deck = deck.generatePartialDeck(player,card_arr)
     #player.showDeck()
     #デッキのシャッフル
     player.shuffle()
     #対戦相手にも同じこと
-    player.enemy.deck = deck.generateDeckEnemy(player.enemy, card_arr)
+    #デッキ生成
+    if is_all_changed:
+        player.enemy.deck = deck.generateDeckEnemy(player.enemy, card_arr)
+    else:
+        player.enemy.deck = deck.generatePartialDeck(player.enemy, card_arr)
     player.enemy.shuffle()
 
 #ゲーム開始時のドロー
@@ -72,10 +79,11 @@ def doTurn(player,isFirst,turnnum):
     if player.enemy.is_dead:
         return
 
-def play(isFirst,card_arr):
+def play(isFirst,card_arr,is_all_change):
     player = randomplayer2.RandomPlayer2()
 
-    initdecks(player,card_arr)
+    initdecks(player,card_arr,is_all_change)
+    #player.showDeck()
     player.generate_dict()
     player.generate_dict_draw()
     player.generate_dict_action()
@@ -125,10 +133,10 @@ def play(isFirst,card_arr):
             return [1, record,draw_record, card_action_record]
 
 if __name__ == '__main__':
-    
+    '''
     #NEW
     card_values = [
-            1,2,1,#0
+            4,4,1,#0
             2,2,2,#1
             3,3,3,#2
             4,3,4,#3
@@ -142,8 +150,20 @@ if __name__ == '__main__':
             1,2,2,#11
             2,3,3,#12
             1,1,1,#13
-            2,1,3 #14
+            1,1,5 #14
         ]
+    '''
+    #NEW (PARTAIL)
+    '''
+    card_values = [
+        4,4,1,#0
+        2,3,5 #14
+    ]
+    '''
+    card_values = [
+        1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 3, 4, 5, 4, 5, 2, 2, 2, 2, 3, 1, 1, 1, 1, 1, 3, 1, 2, 1, 2, 3, 1, 3, 1, 4, 2, 2, 3, 3, 1, 1, 1, 2, 1, 2
+    ]
+
     '''
     #old
     card_values = [
@@ -182,7 +202,7 @@ if __name__ == '__main__':
         playsum_whenwin = { i : 0 for i in range(15)}
         playsum_total = { i : 0 for i in range(15)}
         for i in range(10000):
-            res = play(isFirst = False, card_arr = card_values)
+            res = play(isFirst = False, card_arr = card_values, is_all_change=True)
             #print("DrawRecord")
             #print(res[2])
             for t in res[1]:

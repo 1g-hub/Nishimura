@@ -126,6 +126,8 @@ plt.fill_between(indices, means - stds, means + stds,
                  alpha=0.1, color="g")
 plt.plot(indices, means, "o-", color="g",
          label="Rewards for each {} episode".format(interval))
+plt.xlabel('episode', fontsize=15)
+plt.ylabel('reward', fontsize=15)
 plt.legend(loc="best")
 plt.savefig("DQN.png", format="png", dpi=300)
 

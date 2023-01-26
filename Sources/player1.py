@@ -28,7 +28,8 @@ class Player1:
         #HPが0以下になったフラグ
         self.is_dead = False
         #戦略変えるしきい値(乱数) 0.5 以上ならアグロ, それ以下ならコントロール
-        self.policydecision = random.random()
+        self.policydecision = 0.0
+        #print(self.policydecision)
 
     #デッキシャッフル
     def shuffle(self):
@@ -252,9 +253,22 @@ class Player1:
                     for my_card in self.is_played:
                         if not my_card.is_used:
                             can_attack_sum += my_card.attack
+                    #敵盤面カードの総残り体力
+                    enemy_hp_sum = 0
+                    for enemy in self.enemy.is_played:
+                        enemy_hp_sum += enemy.hp
+                    #自盤面カードの総残り体力
+                    mycard_hp_sum = 0
+                    for my_card in self.is_played:
+                        if not my_card.is_used:
+                            mycard_hp_sum += my_card.hp
+                    
                     
                     #総攻撃して相手を倒せるなら総攻撃
                     if self.enemy.hp <= can_attack_sum:
+                        return False
+                    #余裕あるなら殴る
+                    if enemy_attack_sum * 2.0 < self.hp:
                         return False
                     
                     #有利トレード
@@ -265,12 +279,18 @@ class Player1:
                     for enemy in self.enemy.is_played:
                         if enemy.hp <= use_card.attack:
                             return enemy
-                    #最も攻撃力が高いカード攻撃
-                    enemy_attack_list = []
-                    for enemy in self.enemy.is_played:
-                        enemy_attack_list.append(enemy.attack)
-                    max_attack_index = enemy_attack_list.index(max(enemy_attack_list))
-                    return self.enemy.is_played[max_attack_index]
+                    if enemy_attack_sum < self.hp:
+                        #最もHP低いカード攻撃
+                        enemy_hp_list = []
+                        for enemy in self.enemy.is_played:
+                            enemy_hp_list.append(enemy.attack)
+                        min_hp_index = enemy_hp_list.index(min(enemy_hp_list))
+                        return self.enemy.is_played[min_hp_index]
+
+
+
+
+
 
                     print("この場合を数え漏らしてるぞ！！")
                     return False
