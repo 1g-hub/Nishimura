@@ -2,6 +2,7 @@ from nsga2_problem import Problem
 from nsga2_evolution import Evolution
 import matplotlib.pyplot as plt
 import randomrun
+import run
 import math
 
 '''
@@ -34,10 +35,12 @@ DESIRE_WIN_RATE = 0.50
 
 #勝率
 def f1(x):
+    total_sum = 0
     win_sum = 0
     for _ in range(TEST_COUNT):
-        res = randomrun.play(isFirst=False, card_arr=x, is_all_change=True)
-        if res[0] == 1:
+        #res = randomrun.play(isFirst=False, card_arr=x, is_all_change=True)
+        #if res[0] == 1:
+        if run.play(isFirst=True, card_values=x, p1policy=1.0, p2policy=1.0) == 1:
             win_sum += 1
     win_rate = win_sum / TEST_COUNT
     return math.sqrt((DESIRE_WIN_RATE - win_rate) * (DESIRE_WIN_RATE - win_rate))
@@ -45,10 +48,29 @@ def f1(x):
 
 #初期デッキからのパラメータの総変更量
 def f2(x):
+    total_sum = 0
+    win_sum = 0
+    for _ in range(TEST_COUNT):
+        #res = randomrun.play(isFirst=False, card_arr=x, is_all_change=True)
+        #if res[0] == 1:
+        if run.play(isFirst=False, card_values=x, p1policy=1.0, p2policy=0.0) == 1:
+            win_sum += 1
+    win_rate = win_sum / TEST_COUNT
+    total_sum += math.sqrt((DESIRE_WIN_RATE - win_rate) * (DESIRE_WIN_RATE - win_rate))
+    win_sum1 = 0
+    for _ in range(TEST_COUNT):
+        #res = randomrun.play(isFirst=False, card_arr=x, is_all_change=True)
+        #if res[0] == 1:
+        if run.play(isFirst=False, card_values=x, p1policy=0.0, p2policy=1.0) == 1:
+            win_sum1 += 1
+    win_rate1 = win_sum1 / TEST_COUNT
+    total_sum += math.sqrt((DESIRE_WIN_RATE - win_rate1) * (DESIRE_WIN_RATE - win_rate1))
+    '''
     sum = 0
     for i in range(len(x)):
         sum += abs(x[i] - INITIAL_DECK[i])
-    return sum
+    '''
+    return total_sum
 
 
 problem = Problem(num_of_variables=45, objectives=[f1, f2], variables_range=[(1, 5)], expand= False)

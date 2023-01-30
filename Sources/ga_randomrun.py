@@ -1,7 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import randomrun
-
+import run
+from tqdm import tqdm
+import math
 
 class Individual:
     # 各個体のクラス
@@ -14,12 +16,13 @@ class Individual:
     def set_fitness(self):
         win_sum = 0
         for _ in range(TEST_COUNT):
-            res = randomrun.play(isFirst=False, card_arr=self.genom)
-            if res[0] == 1:
+            #res = randomrun.play(isFirst=False, card_arr=self.genom)
+            #if res[0] == 1:
+            if run.play(isFirst=False, card_values=self.genom, p1policy= 1.0, p2policy= 1.0) == 1:
                 win_sum += 1
         win_rate = win_sum / TEST_COUNT
 
-        self.fitness =  (DESIRE_WIN_RATE - win_rate)*(DESIRE_WIN_RATE - win_rate)
+        self.fitness =  math.sqrt((DESIRE_WIN_RATE - win_rate) * (DESIRE_WIN_RATE - win_rate))
 
     # self.fitness を出力
     def get_fitness(self):
@@ -98,6 +101,7 @@ def mutate(children):
 
 # 初期世代の作成
 def create_generation(POPURATIONS, GENOMS):
+    print("create generation")
     generation = []
     for i in range(POPURATIONS):
         generation.append(Individual(INITAIL_DECK))
@@ -109,7 +113,7 @@ def ga_solve(generation):
     worst = []
     # Generation loop
     print("Generation Loop Start")
-    for i in range(GENERATIONS):
+    for i in tqdm(range(GENERATIONS)):
         # --- Step1. Print fitness in the generation
         best_ind = min(generation, key=Individual.get_fitness)
         best.append(best_ind.fitness)
@@ -136,7 +140,7 @@ def ga_solve(generation):
 
 
 # ハイパーパラメータ
-POPURATIONS = 100  # 1 世代あたりの個体数
+POPURATIONS =50  # 1 世代あたりの個体数
 GENOM_SIZE = 45  # 遺伝子のサイズ今回は 3 × 15 で
 GENERATIONS = 50 # 世代数
 CROSSOVER_PB = 0.40
@@ -158,7 +162,7 @@ INITAIL_DECK = [
     1, 1, 1,  # 13
     2, 1, 3  # 14
 ]
-TEST_COUNT = 500
+TEST_COUNT = 10000
 DESIRE_WIN_RATE = 0.50
 
 

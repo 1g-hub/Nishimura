@@ -28,7 +28,7 @@ class Player2:
         #HPが0以下になったフラグ
         self.is_dead = False
         #戦略変えるしきい値(乱数) 0.5 以上ならアグロ, それ以下ならコントロール
-        self.policydecision = 0.0
+        self.policydecision = 1.0
 
         #デッキシャッフル
     def shuffle(self):
@@ -174,7 +174,6 @@ class Player2:
                     return False
             #敵盤面にカードあれば
                 else:
-                    
                     #敵盤面の総攻撃力計算
                     enemy_attack_sum = 0
                     for enemy in self.enemy.is_played:
@@ -185,60 +184,19 @@ class Player2:
                         if not my_card.is_used:
                             can_attack_sum += my_card.attack
                     
-                    #総攻撃して相手を倒せるなら総攻撃
-                    if self.enemy.hp <= can_attack_sum:
-                        return False
                     #残りHP が半分(10)以上であり相手盤面の残り攻撃力が残り体力より少なかった(ワンパンされない)なら殴る
-                    elif self.hp >= 10 and enemy_attack_sum < self.hp:
+                    if self.hp >= 12:
                         return False
                     #残りHP が 10 切った時は有利トレード取れる時は盤面処理、そうでなければ殴る
-                    elif self.hp < 10:
-                        for enemy in self.enemy.is_played:
-                            if enemy.hp <= use_card.attack and enemy.attack < use_card.hp:
-                                return enemy
-                        return False
-                    #相手盤面が総攻撃してきたら倒れる場合
-                    elif enemy_attack_sum >= self.hp:
-                        #有利トレード
-                        for enemy in self.enemy.is_played:
-                            if enemy.hp <= use_card.attack and enemy.attack < use_card.hp:
-                                return enemy
+                    elif self.hp < 12:
                         #相討ちも含む
                         for enemy in self.enemy.is_played:
                             if enemy.hp <= use_card.attack:
                                 return enemy
-                        #最も攻撃力が高いカード攻撃
-                        enemy_attack_list = []
-                        for enemy in self.enemy.is_played:
-                            enemy_attack_list.append(enemy.attack)
-                        max_attack_index = enemy_attack_list.index(max(enemy_attack_list))
-                        return self.enemy.is_played[max_attack_index]
+                        return False
                     else:
                         print("この場合を数え漏らしてるぞ！！")
                         return False
-                    '''
-                    #Blocking あればそいつしか殴れない
-                #倒せるカードがあればそいつ倒して無ければ敵を殴る
-                    for enemy in self.enemy.is_played:
-                        if enemy.isBlocking:
-                            return enemy
-                    #Blocking 無ければ倒せる敵探す
-                    for enemy in self.enemy.is_played:
-                        if enemy.hp <= use_card.attack:
-                            return enemy
-                    #倒せる敵無くても敵の盤面の攻撃力総和が自分の hp より大きかったら敵盤面の最大攻撃力カードを殴る
-                    sum = 0
-                    attack_list = []
-                    for enemy in self.enemy.is_played:
-                        sum += enemy.attack
-                        attack_list.append(enemy.attack)
-                    #HP 判断
-                    if sum >= self.hp:
-                        max_attack_index = attack_list.index(max(attack_list))
-                        return self.enemy.is_played[max_attack_index]
-                    else:
-                        return False
-                    '''
         #コントロール
         else:
              #相手の盤面にカードがなかったらFalse
@@ -255,9 +213,21 @@ class Player2:
                     for my_card in self.is_played:
                         if not my_card.is_used:
                             can_attack_sum += my_card.attack
+                    #敵盤面カードの総残り体力
+                    enemy_hp_sum = 0
+                    for enemy in self.enemy.is_played:
+                        enemy_hp_sum += enemy.hp
+                    #自盤面カードの総残り体力
+                    mycard_hp_sum = 0
+                    for my_card in self.is_played:
+                        if not my_card.is_used:
+                            mycard_hp_sum += my_card.hp
                     
                     #総攻撃して相手を倒せるなら総攻撃
                     if self.enemy.hp <= can_attack_sum:
+                        return False
+                    #余裕あるなら殴る
+                    if enemy_attack_sum * 2.0 < mycard_hp_sum:
                         return False
                     
                     #有利トレード
@@ -268,12 +238,24 @@ class Player2:
                     for enemy in self.enemy.is_played:
                         if enemy.hp <= use_card.attack:
                             return enemy
-                    #最も攻撃力が高いカード攻撃
-                    enemy_attack_list = []
-                    for enemy in self.enemy.is_played:
-                        enemy_attack_list.append(enemy.attack)
-                    max_attack_index = enemy_attack_list.index(max(enemy_attack_list))
-                    return self.enemy.is_played[max_attack_index]
+
+                    if enemy_attack_sum < self.hp:
+                        #最もHP低いカード攻撃
+                        enemy_hp_list = []
+                        for enemy in self.enemy.is_played:
+                            enemy_hp_list.append(enemy.hp)
+                        min_hp_index = enemy_hp_list.index(min(enemy_hp_list))
+                        return self.enemy.is_played[min_hp_index]
+                    else:
+                        #最も攻撃力が高いカード攻撃
+                        enemy_attack_list = []
+                        for enemy in self.enemy.is_played:
+                            enemy_attack_list.append(enemy.attack)
+                        max_attack_index = enemy_attack_list.index(min(enemy_attack_list))
+                        return self.enemy.is_played[max_attack_index]
+
+
+
     def showDeck(self):
         for deckcard in self.deck:
             print(deckcard)

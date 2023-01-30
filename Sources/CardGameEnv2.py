@@ -12,7 +12,7 @@ class CardGameEnv2:
         self.curr_step = -1
         self.previous_action = 100
         #first or second
-        self.isfirstAttack = True
+        self.isfirstAttack = False
         #手札を自盤面に出す・・・0~8
         #手札1が敵カード12345攻撃or敵・・・9~14
         #手札2・・・15~20
@@ -159,6 +159,22 @@ class CardGameEnv2:
 
 
         run.initdecks(self.player, card_arr=card_values)
+        p1policy = player.enemy.policydecision
+        #print(p1policy)
+        if p1policy > 0.5:
+            #aguro用デッキ
+            card_aguro = [1, 1, 3, 1, 1, 5, 3, 2, 4, 2, 2, 4, 1, 2, 5, 1, 2, 4, 1, 2, 4, 1, 1, 4, 2, 5, 1, 4, 4, 1, 1, 1, 4, 1, 2, 3, 1, 3, 5, 1, 4, 1, 1, 2, 3]
+            #デッキ生成
+            player.enemy.deck = deck.generateDeck(player.enemy, card_aguro)
+            #デッキのシャッフル
+            player.shuffle()
+        if p1policy < 0.5:
+            #コントロール用デッキ
+            card_controll = [1, 2, 2, 1, 3, 2, 1, 2, 2, 2, 2, 4, 1, 4, 2, 1, 1, 2, 1, 1, 3, 1, 2, 2, 1, 3, 3, 5, 5, 1, 1, 1, 2, 1, 2, 2, 1, 1, 2, 2, 2, 1, 2, 2, 2]
+            #デッキ生成
+            player.enemy.deck = deck.generateDeck(player.enemy, card_controll)
+            #デッキのシャッフル
+            player.enemy.shuffle()
         player.generate_dict_draw()
 
         run.inithands(self.player)

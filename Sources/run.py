@@ -78,10 +78,26 @@ def doTurn(player,isFirst,turnnum):
     resetuse(player)
     updatecost(player)
 
-def play(isFirst, card_values):
+def play(isFirst, card_values, p1policy, p2policy):
     player = player2.Player2()
+    player.policydecision = p2policy
+    player.enemy.policydecision = p1policy
 
     initdecks(player,card_arr=card_values)
+    if p2policy < 0.5:
+        #コントロール用デッキ
+        card_aguro = [1, 2, 2, 1, 3, 2, 1, 2, 2, 2, 2, 4, 1, 4, 2, 1, 1, 2, 1, 1, 3, 1, 2, 2, 1, 3, 3, 5, 5, 1, 1, 1, 2, 1, 2, 2, 1, 1, 2, 2, 2, 1, 2, 2, 2]
+        #デッキ生成
+        player.deck = deck.generateDeck(player, card_aguro)
+        #デッキのシャッフル
+        player.shuffle()
+    if p1policy < 0.5:
+        #コントロール用デッキ
+        card_aguro = [1, 2, 2, 1, 3, 2, 1, 2, 2, 2, 2, 4, 1, 4, 2, 1, 1, 2, 1, 1, 3, 1, 2, 2, 1, 3, 3, 5, 5, 1, 1, 1, 2, 1, 2, 2, 1, 1, 2, 2, 2, 1, 2, 2, 2]
+        #デッキ生成
+        player.enemy.deck = deck.generateDeck(player.enemy, card_aguro)
+        #デッキのシャッフル
+        player.enemy.shuffle()
     player.generate_dict_draw()
 
     inithands(player)
@@ -123,34 +139,36 @@ def play(isFirst, card_values):
 if __name__ == '__main__':
     #print ("")
     #print ("-----------------------")
+    '''
     card_values = [
-            1,2,1,#0
-            2,2,2,#1
-            3,3,3,#2
-            4,3,4,#3
-            5,4,5,#4
-            2,2,2,#5
-            2,3,3,#6
-            1,1,1,#7
-            1,3,2,#8
-            2,1,2,#9
-            3,1,3,#10
-            1,2,2,#11
-            2,3,3,#12
-            1,1,1,#13
-            2,1,3 #14
+            1,1,1,#0
+            1,2,2,#1
+            2,2,3,#2
+            4,2,4,#3
+            3,4,5,#4
+            1,1,2,#5
+            1,2,3,#6
+            2,1,1,#7
+            2,3,2,#8
+            1,2,1,#9
+            2,1,3,#10
+            1,1,1,#11
+            2,4,3,#12
+            1,1,2,#13
+            1,2,3 #14
         ]
-    sum = 0
+        '''
+    card_values = [1, 1, 3, 1, 1, 5, 3, 2, 4, 2, 2, 4, 1, 2, 5, 1, 2, 4, 1, 2, 4, 1, 1, 4, 2, 5, 1, 4, 4, 1, 1, 1, 4, 1, 2, 3, 1, 3, 5, 1, 4, 1, 1, 2, 3]
     win_sum = 0
     lose_sum = 0
-    for i in range(10000):
-        if play(isFirst = True, card_values=card_values) == 1:
+    for i in range(50000):
+        if play(isFirst = True, card_values=card_values, p1policy=0.0, p2policy= 0.0) == 1:
             win_sum += 1
         else:
             lose_sum += 1
     print("win_sum " + str(win_sum))
     print("lose_sum " + str(lose_sum))
-    print("win_rate " + str(win_sum / 10000))
+    print("win_rate " + str(win_sum / 50000))
     
     print(sum)
 
