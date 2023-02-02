@@ -1,0 +1,65 @@
+\documentclass[a4paper,twoside,twocolumn,10pt]{article}
+\usepackage{abstract} % Style for abstracts in Dept. CSIS, OPU
+%\usepackage{abstract4past} % Style for abstracts for the past curriculum
+
+%%%%%%%%%% Designate packages you need %%%%%%%%%%
+\usepackage[dvipdfmx]{graphicx}   %pLaTeX2e仕様(\documentstyle ->\documentclass)
+\usepackage{url} % Verbatim with URL-sensitive line breaks
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\newcommand{\bv}[1]{\mbox{\boldmath$#1$}}
+\newcommand{\argmax}{\mathop{\rm arg~max}\limits}
+\newcommand{\argmin}{\mathop{\rm arg~min}\limits}
+\usepackage{comment}
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+
+
+%%%%%%%%%% Parameters that should be customized %%%%%%%%%%
+% Language (1 = Japanese, 2 = English)
+\setlang{1}
+% Bachelor or Master (1 = Bachelor, 2 = Master)
+\setborm{1}
+% Fiscal year
+\setfy{2022}
+% Group number
+\setgnum{1}
+% Presentation order
+\setorder{1}
+% Increase page number (optional)
+%% \pplus{1}
+
+% Title
+\title{深層強化学習に基づく
+\par
+トレーディングカードゲーム環境の構築}
+% Author
+\author{西村 昭賢}
+%%%%%%%%%% Parameters that should be customized (end) %%%%%%%%%%
+
+\begin{document}
+\maketitle % Insert title
+\small
+
+\section{はじめに}
+
+\section{要素技術}
+
+\section{データセット}
+
+\section{提案手法}
+
+\section{実験}
+
+\section{実験結果}
+
+\section{まとめと今後の課題}
+
+\bibliography{index.bib}
+\bibliographystyle{junsrt}
+
+\end{document}
