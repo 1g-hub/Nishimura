@@ -5,12 +5,27 @@
 \usepackage{iepaper}
 \usepackage{epsf}
 \usepackage{ccaption}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{subcaption}
+\usepackage{enumerate}
+\usepackage{comment}
+\usepackage{url}
+\usepackage{multirow}
+\usepackage{diagbox}
+\usepackage{amsmath,amssymb}
+\usepackage{mathtools}
+\usepackage{wrapfig}
+\usepackage{graphicx}
+\usepackage{float}
 
-\title{}
-\author{} 
-\gakuseki{}[B]  %卒論はB，修論はM
-\group{知能情報第 グループ}            % 卒論の場合
-\shidou{教授}                          % 卒論の場合
+\title{深層強化学習に基づく
+\par
+トレーディングカードゲーム環境の構築}
+\author{西村 昭賢} 
+\gakuseki{1201201100}[B]  %卒論はB，修論はM
+\group{第 1 研究グループ}            % 卒論の場合
+\shidou{森 直樹 教授}                          % 卒論の場合
 %\syusa{教授}                            % 修論の場合
 %\hukusa{教授}{教授}
 
@@ -54,6 +69,118 @@
 % 文書開始
 \include{./doc/introduction}
 \clearpage
+
+\section{要素技術}
+
+\subsection{OpenAI Gym}
+OpenAI Gym \cite{OpenAIGym} は非営利企業 OpenAI が提供する強化学習のシミュレーション用ライブラリであり, 強化学習の環境として図 \ref{fig:OpenAIGymSample} に示すように多くのゲーム, シミュレータが登録されている. さらには提供されているインターフェースに沿って, エージェントの行動空間や状態空間, 報酬などを定義,実装することで自作の強化学習環境を構築し利用することができる. 様々な強化学習用ライブラリに対応しているため比較的容易に強化学習を試すことができる.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=150mm]{assets/OpenAiGym.eps}
+  \caption{OpenAI Gym が提供している様々な環境}
+  \label{fig:OpenAIGymSample}
+\end{figure}
+
+
+
+\subsection{Q 学習}
+強化学習では,エージェントが行動することで環境における状態が変化し報酬を得る. 強化学習における行動はその直後に獲得する報酬の大きさではなく, 未来に渡っての報酬の総和を見積もった値である「価値」の最大化に繋がるかという観点で評価される.
+価値の最大化を目指す場合にはある状態 $s$ において行動 $a$ をとった時の価値が分かればよい.この価値のことを Q 値, あるいは行動価値関数と呼ぶ. この Q 値を基に行動を選択していく価値ベースの強化学習手法において代表的な手法が Q 学習である. 
+ Q 学習ではエージェントの 1 ステップごとに (\ref{updateQ}) 式に示す更新式で Q 値を更新する.
+\begin{equation}
+  \centering
+  \label{updateQ}
+  Q(s_t,a_t) \leftarrow Q(s_t,a_t) + 
+   \alpha(r_{t+1} + \gamma \mathrm{max}_{a_{t+1}}Q(s_{t+1},a_{t+1}) - Q(s_t,a_t))
+\end{equation}
+なお $t$ は時間, $r$ は報酬, $\alpha$ は Q 値の更新度合いを表す学習率, $\gamma$ は将来の価値の割引度合いを表す割引率である. 
+\par
+また, Q 学習に代表される強化学習においては環境の調査を目的とする探索と, 探索により得られた良い報酬を得ることができる経験の活用をそれぞれどの程度にすればよいかといういわゆる「探索と活用のトレードオフ」という問題が発生する. これを解決する手法として一般的なものが $\mathrm{\epsilon - greedy}$ 法である. $\mathrm{\epsilon - greedy}$ 法では確率 $\epsilon$ でランダムに行動し探索, それ以外では経験を活用して価値が最も高い行動を選択することで探索と活用のバランスをとっている.  
+
+
+\subsection{Deep Q Network}
+Q 学習を実際に実装する場合, 状態と行動をインデックスとした Q 値のテーブルを作成する. しかし状態空間や行動空間が高次元である, あるいは状態や行動が離散値ではなく連続値で表現される場合には Q テーブルのメモリ量は爆発してしまう. この問題を解決した技術が Deep Q Network (DQN) \cite{DQN} である.
+ DQN ではニューラルネットワークを用いて, ある状態における行動ごとの Q 値を推定することでたとえ状態が連続値であっても学習可能としている. DQN では, エージェントが経験した過去の体験を Replay Memory に一定期間保存しておき, 過去の経験をランダムにサンプリングして学習する Experience Replay や行動を決定する Q 値のネットワークと Q 値を学習するネットワークを分けることで Q 値の過大評価を防ぐ Fixed Target Network といった工夫により安定した学習を可能としている.
+
+ \begin{figure}[H]
+  \begin{algorithm}[H]
+    \small
+      \caption{
+        deep Q-learning with experience replay
+        }
+      \label{alg1}
+      \begin{algorithmic}[1] 
+      \STATE Initialize replay memory $D$ to capacity $N$
+      \STATE Initialize action-value function $Q$ with random weights $\theta$
+      \STATE Initialize target action-value function $\hat{Q}$ with weights $\theta^{-}$ = $\theta$
+      \FOR{episode = 1, $M$} 
+      \STATE Initialize sequence $s_{1} = \{x_1\}$ and preprocessed sequence $\phi_1$ = $\phi(s_1)$ 
+      \FOR{$t$ = 1, $T$}
+      \STATE With probability $\epsilon$ select a random action $a_{t}$
+      \STATE otherwise select $a_t = \mathrm{argmax}_{a}Q(\phi(s_{t}),a; \theta)$
+      \STATE Execute action $a_t$ in emulator and observe reward $r_t$ and image $x_{t+1}$
+      \STATE Set $s_{t+1} = s_t,a_t,x_{t+1} and preprocess \phi{t+1} = \phi(s_{t+1}) $
+      \STATE Store transition $(\phi_t,a_t,r_t,\phi_{t+1})$ in $D$
+      \STATE Sample random minibatch of transitions $(\phi_j,a_j,r_j,w_{j+1})$ from $D$
+      \STATE 
+      \begin{equation*} 
+        \mathrm{Set} y_j = 
+        \left\{
+          \begin{aligned}
+              r_j \quad & \text{if episode terminates at step } j + 1 \\
+              r_j + \gamma \mathrm{max}_{a'} \hat{Q}(\phi_{j+1},a';\theta^{-}) \quad  & \text{otherwise}\\
+          \end{aligned}
+        \right.     
+      \end{equation*}      
+      \STATE Perform a gradient descent step on $(y_j - Q(\phi_j,a_j;\theta))^2$ with respect to the network parameters $\theta$
+      \STATE Every C steps reset $\hat{Q} = Q$
+        
+      \ENDFOR
+      \ENDFOR
+      \end{algorithmic}
+  \end{algorithm}
+  \caption{DQN のアルゴリズムの疑似コード \cite{DQN_algorithm}}
+  \end{figure}
+
+\subsection{Genetic Algorithm}
+Genetic Alogorithm (GA) とは, 生物の進化と進化の過程を模した最適化手法であり, 主に組み合わせ最適化問題に対して適用される. GA では 1 つの解を 1 つの個体として表現し, 多数の個体からなる個体群を用いて解空間の多点を同時に探索する. 各個体はどの程度良い解であるかという指標として適用度を持つ. また, 各個体は染色体と呼ばれる配列で表される. この染色体を構成する要素を遺伝子, 染色体上の遺伝子が収まる座標を遺伝子座と呼ぶ. 探索においては, 個体群に対して選択, 交叉, 突然変異と呼ばれる 3 種類の遺伝演算子を適用させ世代と呼ばれる探索ステップを進めていく.\par
+選択では, 探索において適用度が良好な個体が存在する部分を重点化するように現在の個体群から個体を選び, 次世代の個体群を生成する. 選択方法としては, 個体の適応度に比例する確率で個体を選択するルーレット戦略, 個体群からランダムに数個個体を抽出しその中で最も良好な個体を選択するトーナメント戦略がある. またこれらと併用される戦略として各世代の最良個体を保存するエリート保存戦略がある. エリート保存戦略により探索で発見した良い個体が失われることを防ぐことができる. 
+交叉では, 2 つの個体からそれらの形質を受け継いだ新たな個体を生成する. 交叉においても染色体のランダムな 1 点で染色体を切断し部分列を染色体同士で交換する 1 点交叉, ランダムな 2 点で切断する 2 点交叉, 遺伝子座ごとランダムに交換する一様交叉など様々な方法がある. 
+突然変異では, 各遺伝子座の遺伝子を許容された範囲の遺伝子の内容に置換する.
+交叉や突然変異にはそれぞれ確率が設定されていることが一般的である. 
+
+
+
+\subsection{Nondominated
+Sorting Genetic Algorithm II}
+
+\clearpage
+\section{提案手法}
+本研究では, Magic : The Gathering \footnote[1]{https://magic.wizards.com} といったトレーディングカードゲーム (Trading Card Game : TCG) を参考にした. 
+
+\subsection{関連研究}
+カードゲームにおけるバランス調整に関して, Fernando らは HearthStone \footnote[2]{https://hearthstone.blizzard.com} 環境内においてデッキ間の勝率が 50 \% となるように, 3 つのデッキの計 64 枚のカードにおける 180 個の調整可能なパラメータを 180 個の要素を持つ 1 次元配列として GA, NSGA-II を適用した\cite{EvolvingHearthStone}.
+GA を用いた場合, デッキ間の勝率をほぼ 50 \% に近づけるという目標は達成したが, 180 個の調整可能パラメータの総変更量は 402 となり元のデッキの原型が無くなった. 
+NSGA-II において勝率とパラメータの総変更量の 2 つの目的関数を最適化するように設定した場合, 勝率は GA を用いた場合とほぼ変わらず, パラメータの総変更量は 402 から 154 へと減少した.
+\par
+しかし, NSGA-II を用いることで GA に比べてカードのパラメータの総変更量は減少したが, 変更を及ぼす領域は調整対象のカード全体に及んでいる.  
+本研究における提案手法は, 遺伝的アルゴリズムの解空間の次元を深層強化学習により削減することで, 調整を施すカードの数を減らすことを目的としている.
+
+\subsection{深層強化学習によるデッキ内のカードパワーの測定}
+
+
+\subsection{解空間の次元を削減した最適化}
+
+\clearpage
+\section{実験方法}
+
+\clearpage
+\section{結果と考察}
+\clearpage
+\section{まとめと今後の課題}
+
+
 \clearpage
 \include{./doc/conclusion}
 

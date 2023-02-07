@@ -1,0 +1,68 @@
+\begin{thebibliography}{1}
+
+\bibitem{DQN_algorithm}
+Volodymyr Mnih, Koray Kavukcuoglu, David Silver, Andrei~A. Rusu, Joel Veness,
+  Marc~G. Bellemare, Alex Graves, Martin Riedmiller, Andreas~K. Fidjeland,
+  Georg Ostrovski, Stig Petersen, Charles Beattie, Amir Sadik, Ioannis
+  Antonoglou, Helen King, Dharshan Kumaran, Daan Wierstra, Shane Legg, and
+  Demis Hassabis.
+\newblock Human-level control through deep reinforcement learning.
+\newblock {\em Nature}, Vol. 518, No. 7540, pp. 529--533, February 2015.
+
+\bibitem{Vehicle}
+Andreas Folkers, Matthias Rick, and Christof B{\"{u}}skens.
+\newblock Controlling an autonomous vehicle with deep reinforcement learning.
+\newblock {\em CoRR}, Vol. abs/1909.12153, , 2019.
+
+\bibitem{robotics}
+Shixiang Gu*, Ethan Holly*, Timothy Lillicrap, and Sergey Levine.
+\newblock Deep reinforcement learning for robotic manipulation with
+  asynchronous off-policy updates.
+\newblock In {\em Proceedings of the IEEE International Conference on Robotics
+  and Automation (ICRA)}, Piscataway, NJ, USA, May 2017. IEEE.
+\newblock *equal contribution.
+
+\bibitem{recommendation}
+Guanjie Zheng, Fuzheng Zhang, Zihan Zheng, Yang Xiang, Nicholas~Jing Yuan, Xing
+  Xie, and Zhenhui Li.
+\newblock Drn: A deep reinforcement learning framework for news recommendation.
+\newblock In {\em Proceedings of the 2018 World Wide Web Conference}, WWW '18,
+  p. 167^^e2^^80^^93176, Republic and Canton of Geneva, CHE, 2018.
+  International World Wide Web Conferences Steering Committee.
+
+\bibitem{AlphaGo}
+David Silver, Julian Schrittwieser, Karen Simonyan, Ioannis Antonoglou, Aja
+  Huang, Arthur Guez, Thomas Hubert, Lucas Baker, Matthew Lai, Adrian Bolton,
+  Yutian Chen, Timothy Lillicrap, Fan Hui, Laurent Sifre, George van~den
+  Driessche, Thore Graepel, and Demis Hassabis.
+\newblock Mastering the game of go without human knowledge.
+\newblock {\em Nature}, Vol. 550, pp. 354--, October 2017.
+
+\bibitem{AlphaZero}
+David Silver, Thomas Hubert, Julian Schrittwieser, Ioannis Antonoglou, Matthew
+  Lai, Arthur Guez, Marc Lanctot, Laurent Sifre, Dharshan Kumaran, Thore
+  Graepel, et~al.
+\newblock A general reinforcement learning algorithm that masters chess, shogi,
+  and go through self-play.
+\newblock {\em Science}, Vol. 362, No. 6419, pp. 1140--1144, 2018.
+
+\bibitem{OpenAIGym}
+Greg {Brockman}, Vicki {Cheung}, Ludwig {Pettersson}, Jonas {Schneider}, John
+  {Schulman}, Jie {Tang}, and Wojciech {Zaremba}.
+\newblock {OpenAI Gym}.
+\newblock {\em arXiv e-prints}, p. arXiv:1606.01540, June 2016.
+
+\bibitem{DQN}
+Volodymyr Mnih, Koray Kavukcuoglu, David Silver, Alex Graves, Ioannis
+  Antonoglou, Daan Wierstra, and Martin Riedmiller.
+\newblock Playing atari with deep reinforcement learning.
+\newblock 2013.
+\newblock cite arxiv:1312.5602Comment: NIPS Deep Learning Workshop 2013.
+
+\bibitem{EvolvingHearthStone}
+Fernando de~Mesentier~Silva, Rodrigo Canaan, Scott Lee, Matthew~C. Fontaine,
+  Julian Togelius, and Amy~K. Hoover.
+\newblock Evolving the hearthstone meta.
+\newblock {\em CoRR}, Vol. abs/1907.01623, , 2019.
+
+\end{thebibliography}
