@@ -148,3 +148,4 @@ def generatePartialDeck(player, p_card_values):
         deck.append(card.Unit("healer2", 14, player, p_card_values[3],p_card_values[4],p_card_values[5], 5))
 
     return deck
+

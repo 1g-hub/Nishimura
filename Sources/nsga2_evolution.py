@@ -48,4 +48,4 @@ class Evolution:
             for front in self.population.fronts:
                 self.utils.calculate_crowding_distance(front)
             children = self.utils.create_children(self.population)
-        return returned_population.fronts[0]
+        return returned_population.fronts

@@ -18,8 +18,25 @@ def f2(x):
 problem = Problem(num_of_variables=5, objectives=[f1, f2], variables_range=[(1, 5)], expand= False)
 evo = Evolution(problem)
 evol = evo.evolve()
-func = [i.objectives for i in evol]
-ans_list = [i.features for i in evol]
+for i in range(len(evol)):
+    func = [i.objectives for i in evol[i]]
+    ans_list = [i.features for i in evol[i]]
+    print("func")
+    print(func)
+    print("ans_list")
+    print(ans_list)
+    function1 = [i[0] for i in func]
+    function2 = [i[1] for i in func]
+    plt.xlabel('Function 1', fontsize=15)
+    plt.ylabel('Function 2', fontsize=15)
+    if i == 0:
+        plt.scatter(function1, function2, c = "red")
+    else:
+        plt.scatter(function1, function2, c = "blue")
+plt.savefig("nsga2.png", format="png", dpi=300)
+'''
+func = [i.objectives for i in evol[0]]
+ans_list = [i.features for i in evol[0]]
 print("func")
 print(func)
 print("ans_list")
@@ -28,5 +45,6 @@ function1 = [i[0] for i in func]
 function2 = [i[1] for i in func]
 plt.xlabel('Function 1', fontsize=15)
 plt.ylabel('Function 2', fontsize=15)
-plt.scatter(function1, function2)
+plt.scatter(function1, function2, c = "red")
 plt.savefig("nsga2.png", format="png", dpi=300)
+'''

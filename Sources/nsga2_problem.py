@@ -31,8 +31,9 @@ class Problem:
             1,1,5 #14
             ]
             '''
+        
         ini_gene = [
-                1,1,1,#0
+                4,4,1,#0
                 2,2,2,#1
                 3,3,3,#2
                 4,3,4,#3
@@ -46,23 +47,17 @@ class Problem:
                 1,2,2,#11
                 2,3,3,#12
                 1,1,1,#13
-                2,1,3 #14
+                1,1,5 #14
             ]
 
-        
+        deck = []
 
         for i in range(self.num_of_variables):
-            tmp = np.random.randint(0,3)
-            if tmp  ==  0:
-                ini_gene[i] += 1
-                if ini_gene[i] > self.variables_range[0][1]:
-                    ini_gene[i] = self.variables_range[0][1]
-            elif tmp  ==  1:
-                ini_gene[i] -= 1
-                if ini_gene[i] < self.variables_range[0][0]:
-                    ini_gene[i] = self.variables_range[0][0]
+            deck.append(random.randint(self.variables_range[0][0], self.variables_range[0][1]))
+        '''
+        '''
         
-        individual.features = ini_gene
+        individual.features = deck
         #print(individual.features)
         return individual
     

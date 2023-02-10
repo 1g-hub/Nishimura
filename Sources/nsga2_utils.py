@@ -2,6 +2,7 @@
 from nsga2_population import Population
 import random
 import numpy as np
+from nsga2_individual import Individual
 
 class NSGA2Utils:
 
@@ -17,11 +18,36 @@ class NSGA2Utils:
 
     def create_initial_population(self):
         population = Population()
-        for _ in range(self.num_of_individuals):
+        #1 つだけ元デッキ追加
+        INITIAL_DECK = [
+            4,4,1,#0
+            2,2,2,#1
+            3,3,3,#2
+            4,3,4,#3
+            5,4,5,#4
+            2,2,2,#5
+            2,3,3,#6
+            1,1,1,#7
+            1,3,2,#8
+            2,1,2,#9
+            3,1,3,#10
+            1,2,2,#11
+            2,3,3,#12
+            1,1,1,#13
+            1,1,5 #14
+            ]
+        individual = Individual()
+        individual.features = INITIAL_DECK
+        #print(individual.features)
+        self.problem.calculate_objectives(individual)
+        population.append(individual)
+        # その他ランダム
+        for _ in range(self.num_of_individuals - 1):
             individual = self.problem.generate_individual()
             self.problem.calculate_objectives(individual)
             #print(individual.features)
             population.append(individual)
+            #print(individual.features)
         return population
 
     #Non-dominated Sorting: the population is sorted and partitioned into fronts (F1, F2, etc.), where F1 (first front) indicates the approximated Pareto front.

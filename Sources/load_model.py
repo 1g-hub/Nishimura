@@ -44,7 +44,7 @@ episode_logger = EpisodeLogger()
 env = CardGameEnv2()
 
 #モデルを読み込み
-model = load_model('0121EnemyRandomFirst1000000.h5')
+model = load_model('0131EnemyRandom.h5')
 
 # エージェントの設定
 memory = SequentialMemory(limit=100000, window_length=1)
@@ -64,6 +64,8 @@ for episode in tqdm(range(NB_EPISODES)):
     observation = env.reset()
     #print("Initial State")
     #print(observation)
+    #env.player.showDeck()
+    #env.player.enemy.showDeck()
     episode_reward = 0.0
     turn_num = 1
     while 1:
@@ -138,8 +140,8 @@ print("lose_cnt")
 print(lose_cnt)
 print("win_rate")
 print(win_cnt / NB_EPISODES)
-
-
+'''
+'''
 
 '''
 winratelist = []
@@ -155,7 +157,7 @@ print(history.history["episode_reward"])
 '''
 # 評価(10000×5回勝率計算)
 win_rate_list = []
-for i in range(5):
+for i in range(1):
     dqn.test(env, nb_episodes=10000, visualize=False,nb_max_episode_steps=500, callbacks = [episode_logger])
     win_sum = 0
     loss_sum = 0
@@ -176,14 +178,15 @@ for i in range(5):
     win_rate_list.append(win_sum / 10000.0)
 
 sum = 0
-for i in range(5):
+for i in range(1):
     sum += win_rate_list[i]
 ave = sum / 5.0
 print("ave " + str(ave))
 tmp = 0
-for i in range(5):
+for i in range(1):
     tmp += (win_rate_list[i] - ave) * (win_rate_list[i] - ave)
 e = math.sqrt(tmp/5.0)
 print("e " + str(e))
-'''
+
 #dqn.test(env, nb_episodes=50000, visualize=False,nb_max_episode_steps=500, callbacks = [episode_logger])
+'''

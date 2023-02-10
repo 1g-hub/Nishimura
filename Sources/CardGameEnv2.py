@@ -12,7 +12,7 @@ class CardGameEnv2:
         self.curr_step = -1
         self.previous_action = 100
         #first or second
-        self.isfirstAttack = False
+        self.isfirstAttack = True
         #手札を自盤面に出す・・・0~8
         #手札1が敵カード12345攻撃or敵・・・9~14
         #手札2・・・15~20
@@ -158,16 +158,20 @@ class CardGameEnv2:
         
 
 
-        run.initdecks(self.player, card_arr=card_values)
+        run.initdecks(self.player, card_arr=card_values, is_elimenated=False, elim_num_pla = 0, elim_num_ene= 0)
         p1policy = player.enemy.policydecision
+        player.enemy.deck = deck.generateDeck(player.enemy, card_values)
+        player.enemy.shuffle()
         #print(p1policy)
+
+        '''
         if p1policy > 0.5:
             #aguro用デッキ
             card_aguro = [1, 1, 3, 1, 1, 5, 3, 2, 4, 2, 2, 4, 1, 2, 5, 1, 2, 4, 1, 2, 4, 1, 1, 4, 2, 5, 1, 4, 4, 1, 1, 1, 4, 1, 2, 3, 1, 3, 5, 1, 4, 1, 1, 2, 3]
             #デッキ生成
             player.enemy.deck = deck.generateDeck(player.enemy, card_aguro)
             #デッキのシャッフル
-            player.shuffle()
+            player.enemy.shuffle()
         if p1policy < 0.5:
             #コントロール用デッキ
             card_controll = [1, 2, 2, 1, 3, 2, 1, 2, 2, 2, 2, 4, 1, 4, 2, 1, 1, 2, 1, 1, 3, 1, 2, 2, 1, 3, 3, 5, 5, 1, 1, 1, 2, 1, 2, 2, 1, 1, 2, 2, 2, 1, 2, 2, 2]
@@ -175,7 +179,11 @@ class CardGameEnv2:
             player.enemy.deck = deck.generateDeck(player.enemy, card_controll)
             #デッキのシャッフル
             player.enemy.shuffle()
+        '''
         player.generate_dict_draw()
+
+        #print(p1policy)
+        #player.enemy.showDeck()
 
         run.inithands(self.player)
 
@@ -209,6 +217,7 @@ class CardGameEnv2:
         
         self.setup_game()
         self.isGameEnd = False
+        
         player = self.player
         #action 回数記録用
         self.action_record = { i : 0 for i in range(self.action_space.n)}
@@ -397,8 +406,8 @@ class CardGameEnv2:
                 self.card_record_total[i] += self.card_record_tmp[i]
             
             card_record_total = sorted(self.card_record_total.items(), key=lambda x:x[1], reverse=True)
-            #print("card_record_total")
-            #print(card_record_total)
+            print("card_record_total")
+            print(card_record_total)
 
         if done and reward == 1.0:
             for i in range(15):

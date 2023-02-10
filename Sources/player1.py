@@ -28,7 +28,7 @@ class Player1:
         #HPが0以下になったフラグ
         self.is_dead = False
         #戦略変えるしきい値(乱数) 0.5 以上ならアグロ, それ以下ならコントロール
-        self.policydecision = 1.0
+        self.policydecision = random.random()
         #print(self.policydecision)
 
     #デッキシャッフル
@@ -323,3 +323,7 @@ class Player1:
                 '''
                 
 
+    def showDeck(self):
+        print(self.name)
+        for deckcard in self.deck:
+            print(deckcard)
