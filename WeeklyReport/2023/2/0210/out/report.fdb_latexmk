@@ -1,0 +1,11 @@
+# Fdb version 3
+["dvipdf"] 0 "out/report.dvi" "out/report.pdf" "out/report" 0
+  "out/report.dvi" 0 -1 0 "latex"
+  (generated)
+  "out/report.pdf"
+["latex"] 0 "/home/nishimura/document/Nishimura/WeeklyReport/2023/2/0210/report.tex" "out/report.dvi" "report" 0
+  "/home/nishimura/document/Nishimura/WeeklyReport/2023/2/0210/report.tex" 0 -1 0 ""
+  "out/report.aux" 1676076043 8 a94a2480d3289e625eea47cd1b285758 ""
+  (generated)
+  "out/report.dvi"
+  "out/report.log"

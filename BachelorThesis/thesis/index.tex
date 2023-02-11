@@ -13,11 +13,14 @@
 \usepackage{url}
 \usepackage{multirow}
 \usepackage{diagbox}
-\usepackage{amsmath,amssymb}
+\usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{wrapfig}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{amsmath}
+\usepackage{lipsum}
+\usepackage[jis2004]{otf}
 
 \title{深層強化学習に基づく
 \par
@@ -105,7 +108,6 @@ Q 学習を実際に実装する場合, 状態と行動をインデックスと�
 
  \begin{figure}[H]
   \begin{algorithm}[H]
-    \small
       \caption{
         deep Q-learning with experience replay
         }
@@ -154,31 +156,255 @@ Genetic Alogorithm (GA) とは, 生物の進化と進化の過程を模した最
 
 \subsection{Nondominated
 Sorting Genetic Algorithm II}
+Nondominated
+Sorting Genetic Algorithm II (NSGA-II) とは, 
 
 \clearpage
 \section{提案手法}
-本研究では, Magic : The Gathering \footnote[1]{https://magic.wizards.com} といったトレーディングカードゲーム (Trading Card Game : TCG) を参考にした. 
+本研究では, トレーディングカードゲーム環境を作成し環境におけるデッキ間の勝率を最適化した. 最適化の過程において深層強化学習と GA を組み合わせて, 調整するカードの枚数を最小化するような最適化手法を提案する.
+
+\subsection{トレーディングカードゲーム環境}
+本研究において構築した環境は, Magic : The Gathering \footnote[1]{https://magic.wizards.com} に代表されるトレーディングカードゲーム (Trading Card Game : TCG) を参考にした. TCG は 2 人のプレイヤーからなるゲームである. 囲碁や将棋のように, プレイヤーは先攻と後攻に分かれてターン制で進行していく. TCG の大きな特徴として, 囲碁や将棋のように各プレイヤーが同じユニット群を持つのではなく事前に各プレイヤーの選択による異なるユニットからなるデッキを構築することが挙げられる. また, TCG はゲームタイトルごとに細かいルールは異なるが, 一般的に相手プレイヤーのカードの 1 部分はプレイヤーから観測できない不完全情報ゲームである. 
+以下, 実装したカードゲームのルールと用語を説明する.
+\subsubsection{プレイヤー}
+一般的な TCG と同様に, ゲームは 2 人のプレイヤーからなり, プレイヤーは複数のカードからなるデッキを持つ. 
+プレイヤーは手札, 盤面と呼ばれるカードを保有する領域を持ち, ドローと呼ばれる操作でカードをデッキから手札に加える. また, プレイと呼ばれる操作でカードを手札から盤面に出す. また, デッキからカードが無くなった状態をデッキ切れと呼ぶ.  
+また, プレイヤー自身が HP, マナという 2 つの整数値パラメータを持つ.
+プレイヤー自身の HP が 0 となればゲーム敗北となり, 相手のカードからの攻撃などで減少していく.
+マナはカードをプレイする際, 後述するカードのコスト分減少する. プレイヤーは残りマナを超えるコストを持つカードをプレイすることができない. 
+今回の環境ではプレイヤーの HP の最大値は 20, マナの上限値は初期値が 1 で最大値を 5 と設定した.
+\subsubsection{カード}
+カードはそれぞれ攻撃力と HP とコストの 3 つの整数値パラメータを持つ.  盤面にあるカードは対戦相手の盤面にあるカード, あるいは相手プレイヤーに攻撃することができる. カードが攻撃する際には, 相手盤面に存在する攻撃対象のカードの HP, あるいは相手プレイヤーの HP へとカードの持つ攻撃力分ダメージを与える. またカードへと攻撃する際には攻撃対象のカードが持つ攻撃力分, 攻撃するカードもダメージを受ける.
+ただし, 攻撃が可能となるのはカードが盤面にプレイされたターンの次のターンからになる. 
+カードの HP が 0 になった, あるいは後述する手札と盤面の枚数制限を超えて盤面にプレイされた時はカードは破壊される. 破壊されたカードはゲームから取り除かれる. 
+また, カードによっては以下に示す特殊効果を持つものもある.
+
+\begin{description}
+  \item[召喚 :]  盤面に出したら (攻撃力 , HP) = (1 , 1) の
+  ユニットを追加で盤面に出す
+  \item[治癒 :]  盤面に出したら自プレイヤーの HP を 2 回復する
+  \item[攻撃 :]  盤面に出したら敵プレイヤーの HP を 2 減らす
+  \item[取得 :]  盤面に出したら自プレイヤーは 1 枚カードをドローする
+  \item[速攻 :]  盤面に出たターンに攻撃できる
+\end{description}
+
+\subsubsection{ゲームフロー}
+以下, ゲームの流れを説明する.
+\begin{enumerate}
+  \setlength{\itemsep}{0cm} % 項目間
+  \item ゲーム開始時に各プレイヤーは自身のデッキをシャッフル.
+  \item デッキから初期手札としてカードを 5 枚ドロー. 
+  \item 先攻プレイヤーは 1 ターン目のドローステップをスキップし行動.
+  \item 後攻プレイヤーはカードを 1 枚ドローして行動.
+  \item 2 ターン目以降は先攻プレイヤーもカードを 1 枚ドローしてから行動. 
+  \item 4 , 5 の繰り返し. なお, ターンプレイヤーは行動前にマナを上限値まで回復. このときマナの上限値が 5 でなければ上限値を 1 増やしてから回復.
+  \item プレイヤーがデッキ切れになっている状態でカードをドローしようとした, あるいはプレイヤー自身の HP が 0 となった場合はそのプレイヤーが敗北となりゲーム終了.
+\end{enumerate}
+\par
+本構築環境では一般的な TCG と同様にカードがプレイされた次のターンから行動可能となるため, 先攻プレイヤーがカードの行動が早くなり有利となる.そのため, 先攻の 1 ターン目のドローステップをスキップしている. 
+
 
 \subsection{関連研究}
-カードゲームにおけるバランス調整に関して, Fernando らは HearthStone \footnote[2]{https://hearthstone.blizzard.com} 環境内においてデッキ間の勝率が 50 \% となるように, 3 つのデッキの計 64 枚のカードにおける 180 個の調整可能なパラメータを 180 個の要素を持つ 1 次元配列として GA, NSGA-II を適用した\cite{EvolvingHearthStone}.
+\label{hearthstone}
+トレーディングカードゲーム環境におけるバランス調整に関して, Fernando らは HearthStone \footnote[2]{https://hearthstone.blizzard.com} 環境内においてデッキ間の勝率が 50 \% となるように, 3 つのデッキの計 64 枚のカードにおける 180 個の調整可能なパラメータを 180 個の要素を持つ 1 次元配列として GA, NSGA-II を適用した\cite{EvolvingHearthStone}.
 GA を用いた場合, デッキ間の勝率をほぼ 50 \% に近づけるという目標は達成したが, 180 個の調整可能パラメータの総変更量は 402 となり元のデッキの原型が無くなった. 
 NSGA-II において勝率とパラメータの総変更量の 2 つの目的関数を最適化するように設定した場合, 勝率は GA を用いた場合とほぼ変わらず, パラメータの総変更量は 402 から 154 へと減少した.
 \par
 しかし, NSGA-II を用いることで GA に比べてカードのパラメータの総変更量は減少したが, 変更を及ぼす領域は調整対象のカード全体に及んでいる.  
-本研究における提案手法は, 遺伝的アルゴリズムの解空間の次元を深層強化学習により削減することで, 調整を施すカードの数を減らすことを目的としている.
+本研究における提案手法は, 遺伝的アルゴリズムの解空間の次元を深層強化学習によるシミュレーションを参考に削減することで, 調整を施すカードの数を減らすことを目的としている.
 
-\subsection{深層強化学習によるデッキ内のカードパワーの測定}
+\subsection{提案手法 : 深層強化学習によるデッキ内のカードパワーの測定}
+TCG において, デッキ内の各カードのカードパワーを測る指標としてはそのカードがプレイされたときの勝率 (Win Rate when Play : WRP) などが考えられる. しかし, カードにコストが存在する場合においては低コストのカードと高コストのカードについてプレイされる回数に偏りが生じてしまう. このため, 得られる結果はカードのコストの影響が反映されてしまい意味のある結果とはいえない. \par
+本研究では, 同デッキ同戦略のプレイヤーを先攻後攻両方に配置してカードを 1 種類ずつデッキから除いた場合の勝率をデッキ内のすべてのカードについて計算することで戦略下におけるデッキ内のカードパワーを測定する手法を提案する. 
 
-
-\subsection{解空間の次元を削減した最適化}
+\subsection{提案手法 : GA における解空間の次元を削減した最適化}
+新たにデッキをトレーディングカードゲーム環境へと追加する際, デッキ間の勝率は $50 \pm 5 \%$ になることが環境として好ましい. \ref{hearthstone} 節で述べたようにトレーディングカードゲーム環境におけるデッキ間の勝率の最適化において GA の有用性が知られている. 本研究では, 深層強化学習を用いたシミュレーションによってデッキ内のカードにおいて調整するべきかどうか優先順位を定義し, 変更するカードを明確にしたまま GA の解空間を削減したトレーディングカードゲーム環境の最適化手法を提案する. 
 
 \clearpage
 \section{実験方法}
+\subsection{実験 1 : 深層強化学習によるエージェント構築}
+構築したトレーディングカードゲーム環境へ深層強化学習を適用する. 
+深層強化学習手法として DQN を用いて構築環境において後攻のプレイヤーとして学習し, 学習済のエージェントで 10000 回ゲームを実行して勝率を計算した. 
+また, 学習が進み具合を把握するため学習時の獲得報酬の推移を記録した.
+さらに学習済エージェントを用いて 50000 回の対戦を実行し,エージェントが選択した行動の総数, 各カードごとのプレイされた総数を記録し学習済エージェントがどのような戦略を構築したか, それが人間から見て合理的な戦略かどうか考察した.
+
+\subsubsection{対戦相手の行動ルーチンと対応するデッキ}
+学習時, また学習後の対戦は共通して同一の対戦相手を設定した. 
+対戦相手の戦略として, TCG における代表的な戦略として挙げられるアグロとコントロールの 2 種類を設定した. アグロとコントロールは様々な解釈がありデッキのカードの構成として定義されることもあるが, 本研究では以下のようにカードの攻撃の際の戦略として定義する. 詳細な疑似コードは, 
+
+\begin{description}
+  \item[アグロ :]  敵プレイヤーへの攻撃を優先しなるべく早くゲームエンドに持ち込む. 
+  \item[コントロール :]  相手の盤面のカードの処理を優先し, 長期戦に持ち込む.
+\end{description}
+
+\begin{figure}[ht]
+  \vspace{-0.3cm}
+  \begin{algorithm}[H]
+    \small
+      \caption{
+        対戦相手の行動ルーチン (アグロ)
+        }
+      \label{alg_aggro}
+      \begin{algorithmic}[1] 
+      \STATE 手札から盤面にカードを出せるだけプレイ (ドロー順が古い方から)
+      \FOR{自盤面のカード (プレイ順が古い方から)}
+      \IF{敵の盤面にカードが無い}
+      \STATE 敵プレイヤーを攻撃
+      \ELSE
+      \IF{自身の HP が 12 以上}
+      \STATE 敵プレイヤーを攻撃
+      \ELSE
+      \IF{敵盤面に破壊できるカードがある}
+      \STATE そのカードを攻撃
+      \ELSE
+      \STATE 敵プレイヤーを攻撃
+      \ENDIF
+      \ENDIF
+      \ENDIF
+      \ENDFOR
+      \STATE ターンを終了
+      \end{algorithmic}
+  \end{algorithm}
+  \caption{アグロの疑似コード}
+  \end{figure}
+
+  \begin{figure}[ht]
+    \vspace{-0.3cm}
+    \begin{algorithm}[H]
+      \small
+        \caption{
+          対戦相手の行動ルーチン (コントロール)
+          }
+        \label{alg_controll}
+        \begin{algorithmic}[1] 
+        \STATE 手札から盤面にカードを出せるだけプレイ (ドロー順が古い方から)
+        \FOR{自盤面のカード (プレイ順が古い方から)}
+        \IF{敵の盤面にカードが無い}
+        \STATE 敵プレイヤーを攻撃
+        \ELSE
+        \IF{自盤面の行動可能なカード全てで敵プレイヤーに攻撃すれば勝利}
+        \STATE 敵プレイヤーを攻撃
+        \ENDIF
+        \IF{(敵盤面カードの総攻撃力)$\:\times \:2.0 \:	\textgreater$ (自盤面カードの総 HP)}
+        \STATE 敵プレイヤーを攻撃
+        \ENDIF
+        \IF{敵盤面に HP が残したまま破壊できるカードがある}
+        \STATE そのカードを攻撃
+        \ENDIF
+        \IF{敵盤面に破壊できるカードがある}
+        \STATE そのカードを攻撃
+        \ELSE
+        \IF {敵盤面カードの総攻撃力$\: \textgreater \:$ 自分の HP}
+        \STATE 敵盤面の最も攻撃力が高いカードを攻撃
+        \ELSE
+        \STATE 敵盤面の最も HP の低いカードを攻撃
+        \ENDIF
+        \ENDIF
+        \ENDIF
+        \ENDFOR
+        \STATE ターンを終了
+        \end{algorithmic}
+    \end{algorithm}
+    \caption{コントロールの疑似コード}
+    \end{figure}
+
+
+\subsubsection{状態空間, 行動空間, 報酬の定義}
+強化学習では, エージェントの取りうる行動と観測できる状態の空間, 報酬を定義する必要がある. 
+TCG ではドローやプレイ, カードの攻撃による破壊といった行動で盤面や手札の枚数が変化する場合があり, 各ステップ時点でそれぞれプレイヤーの取りうる行動の総数が変化し得る. そのため, ステップごとに行動空間の次元数が変化し上手く学習できない問題が生じる. \par
+そのため本研究では図 \ref{fig:CardGameImage} に示すように予め手札と盤面の枚数の上限をそれぞれ 9 枚, 5 枚と定め, 手札と盤面に存在するカードに自盤面 1 というように番号をつけ, カードが存在しない場合は状態を 0 とすることで状態空間と行動空間を定義した. 表 \ref{table:state}, \ref{table:action} に状態空間, 行動空間の定義を示す.
+なお, ドローやプレイといった操作でカードを追加し枚数の上限を超える場合には追加しようとしたカードを破壊する.
+\par
+また, 報酬は以下のように設定した.\par
+\begin{itemize}
+  \vspace{-0.3cm}
+  \item 1 ステップ終了後 
+  \begin{equation*}
+   \mathrm{r} = 0.0  
+  \end{equation*}
+  \item 1 エピソード終了後
+  \begin{equation*}
+    \mathrm{r} = 
+    \left\{
+      \begin{aligned}
+          1.0 \quad & (\mathrm{学習プレイヤーの勝利}) \\
+          -1.0 \quad & (\mathrm{敵プレイヤーの勝利}) \\
+      \end{aligned}
+    \right.
+  \end{equation*} 
+\end{itemize}
+
+\vspace{-0.3cm}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=100mm]{assets/cardgameimage.eps}
+  \caption{深層強化学習における諸定義イメージ}
+  \label{fig:CardGameImage}
+\end{figure}
+
+\begin{table}[t]
+  \small
+  \centering
+  \caption{定義した状態空間}
+  \label{table:state}
+  \vspace{-0.3cm}
+  \scalebox{0.90}[0.90]{
+    \begin{tabular}{|c|c|c|c|}
+      \hline
+      状態説明                        & 次元数        & 最小値        & 最大値         \\ \hline \hline
+      各プレイヤーの HP & 2 & 0 & 20 \\ \hline
+      各プレイヤーの マナ & 2 & 0 & 5 \\ \hline
+      \begin{tabular}{c}
+        手札 1 $\sim$ 9 の\\HP , 攻撃力, コスト, 特殊効果
+        \end{tabular}      & 36         & 0          & 5          \\
+      \hline
+      \begin{tabular}{c}
+        自盤面 1 $\sim$ 5 の\\HP と攻撃力
+      \end{tabular}     & 10         & 0          & 5 \\
+      \hline
+      \begin{tabular}{c}
+        敵盤面 1 $\sim$ 5 の\\HP と攻撃力
+      \end{tabular}     & 10         & 0          & 5 \\
+      \hline
+      \begin{tabular}{c}
+        自盤面 1 $\sim$ 5 が\\攻撃可能かどうか
+      \end{tabular} & 5          & 0          & 1  \\
+      \hline
+      \begin{tabular}{c}
+        お互いのデッキの\\残り枚数
+      \end{tabular}     & 2 & 0 & 30 \\
+       \hline
+      \end{tabular}
+  }
+  \end{table}
+
+  \begin{table}[t]
+    \centering
+    \caption{定義した行動空間}
+    \vspace{-0.3cm}
+    \label{table:action}
+    \scalebox{0.90}[0.90]{
+      \begin{tabular}{|c|c|}
+        \hline
+        行動説明                          & 次元数        \\ \hline \hline
+        手札 1 $\sim$ 9 を自盤面に出す             & 9          \\ \hline
+        自盤面 1 が敵盤面 1 $\sim$ 5 に攻撃or敵プレイヤーに攻撃    & 6          \\ \hline
+        自盤面 2 が敵盤面 1 $\sim$ 5 に攻撃or敵プレイヤーに攻撃    & 6          \\ \hline
+        自盤面 3 が敵盤面 1 $\sim$ 5 に攻撃or敵プレイヤーに攻撃    & 6          \\ \hline
+        自盤面 4 が敵盤面 1 $\sim$ 5 に攻撃or敵プレイヤーに攻撃    & 6          \\ \hline
+        自盤面 5 が敵盤面 1 $\sim$ 5 に攻撃or敵プレイヤーに攻撃    & 6          \\ \hline
+        ターンエンド & 1 \\ \hline
+        \end{tabular}
+    }
+      \end{table}
+
+\subsubsection{DQN}
+
+\subsection{実験 2 : }
 
 \clearpage
 \section{結果と考察}
-\clearpage
-\section{まとめと今後の課題}
+
 
 
 \clearpage
