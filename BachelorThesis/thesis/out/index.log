@@ -1,4 +1,4 @@
-This is e-pTeX, Version 3.141592653-p4.0.0-220214-2.6 (utf8.sjis) (TeX Live 2022) (preloaded format=platex 2022.6.18)  7 FEB 2023 03:37
+This is e-pTeX, Version 3.141592653-p4.0.0-220214-2.6 (utf8.sjis) (TeX Live 2022) (preloaded format=platex 2022.6.18)  19 FEB 2023 18:41
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -194,6 +194,20 @@ Package: array 2022/03/10 v2.5f Tabular extension package (FMi)
 \diagbox@insepr=\dimen194
 \diagbox@outsepl=\dimen195
 \diagbox@outsepr=\dimen196
+) (c:/texlive/2022/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+(c:/texlive/2022/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\@emptytoks=\toks24
+\symAMSa=\mathgroup5
+\symAMSb=\mathgroup6
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+)) (c:/texlive/2022/texmf-dist/tex/latex/mathtools/mathtools.sty
+Package: mathtools 2022/02/07 v1.28a mathematical typesetting tools
+(c:/texlive/2022/texmf-dist/tex/latex/mathtools/mhsetup.sty
+Package: mhsetup 2021/03/18 v1.4 programming setup (MH)
 ) (c:/texlive/2022/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2022/04/08 v2.17n AMS math features
 \@mathmargin=\skip63
@@ -202,7 +216,7 @@ For additional information on amsmath, use the `?' option.
 Package: amstext 2021/08/26 v2.01 AMS text
 (c:/texlive/2022/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
-\@emptytoks=\toks24
+\@emptytoks=\toks25
 \ex@=\dimen197
 )) (c:/texlive/2022/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
@@ -240,36 +254,23 @@ LaTeX Info: Redefining \Relbar on input line 971.
 \dotsspace@=\muskip17
 \c@parentequation=\count285
 \dspbrk@lvl=\count286
-\tag@help=\toks25
+\tag@help=\toks26
 \row@=\count287
 \column@=\count288
 \maxfields@=\count289
-\andhelp@=\toks26
+\andhelp@=\toks27
 \eqnshift@=\dimen256
 \alignsep@=\dimen257
 \tagshift@=\dimen258
 \tagwidth@=\dimen259
 \totwidth@=\dimen260
 \lineht@=\dimen261
-\@envbody=\toks27
+\@envbody=\toks28
 \multlinegap=\skip64
 \multlinetaggap=\skip65
-\mathdisplay@stack=\toks28
+\mathdisplay@stack=\toks29
 LaTeX Info: Redefining \[ on input line 2953.
 LaTeX Info: Redefining \] on input line 2954.
-) (c:/texlive/2022/texmf-dist/tex/latex/amsfonts/amssymb.sty
-Package: amssymb 2013/01/14 v3.01 AMS font symbols
-(c:/texlive/2022/texmf-dist/tex/latex/amsfonts/amsfonts.sty
-Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
-\symAMSa=\mathgroup5
-\symAMSb=\mathgroup6
-LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
-LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
-(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
-)) (c:/texlive/2022/texmf-dist/tex/latex/mathtools/mathtools.sty
-Package: mathtools 2022/02/07 v1.28a mathematical typesetting tools
-(c:/texlive/2022/texmf-dist/tex/latex/mathtools/mhsetup.sty
-Package: mhsetup 2021/03/18 v1.4 programming setup (MH)
 )
 \g_MT_multlinerow_int=\count290
 \l_MT_multwidth_dim=\dimen262
@@ -287,9 +288,11 @@ Package: mhsetup 2021/03/18 v1.4 programming setup (MH)
 \WF@size=\dimen271
 \c@WF@wrappedlines=\count291
 \WF@box=\box78
-\WF@everypar=\toks29
+\WF@everypar=\toks30
 Package: wrapfig 2003/01/31  v 3.6
-) (c:/texlive/2022/texmf-dist/tex/latex/l3backend/l3backend-dvips.def
+) (c:/texlive/2022/texmf-dist/tex/latex/lipsum/lipsum.sty (c:/texlive/2022/texmf-dist/tex/latex/l3packages/l3keys2e/l3keys2e.sty (c:/texlive/2022/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2022-06-02 L3 programming layer (loader) 
+(c:/texlive/2022/texmf-dist/tex/latex/l3backend/l3backend-dvips.def
 File: l3backend-dvips.def 2022-04-20 L3 backend support: dvips
 \l__pdf_internal_box=\box79
 \g__pdf_backend_object_int=\count292
@@ -298,147 +301,285 @@ File: l3backend-dvips.def 2022-04-20 L3 backend support: dvips
 \g__pdf_backend_annotation_int=\count293
 \g__pdf_backend_link_int=\count294
 \g__pdf_backend_link_sf_int=\count295
-) (out/index.aux (out/./doc/introduction.aux) (out/./doc/conclusion.aux) (out/./doc/shaji.aux) (out/./doc/bibliography.aux))
+))
+Package: l3keys2e 2022-06-07 LaTeX2e option processing using LaTeX3 keys
+)
+Package: lipsum 2021-09-20 v2.7 150 paragraphs of Lorem Ipsum dummy text
+\g__lipsum_par_int=\count296
+\l__lipsum_a_int=\count297
+\l__lipsum_b_int=\count298
+(c:/texlive/2022/texmf-dist/tex/latex/lipsum/lipsum.ltd.tex)) (c:/texlive/2022/texmf-dist/tex/platex/japanese-otf/otf.sty
+Package: otf 2022/03/05 TeX JP org, v1.7b8 psitau, u0.27 ttk
+LaTeX Font Info:    Redeclaring symbol font `mincho' on input line 322.
+LaTeX Font Info:    Overwriting symbol font `mincho' in version `normal'
+(Font)                  JY1/mc/m/n --> JY1/hmc/m/n on input line 322.
+LaTeX Font Info:    Overwriting symbol font `mincho' in version `bold'
+(Font)                  JY1/gt/m/n --> JY1/hmc/m/n on input line 322.
+LaTeX Font Info:    Overwriting symbol font `mincho' in version `bold'
+(Font)                  JY1/hmc/m/n --> JY1/hmc/bx/n on input line 324.
+LaTeX Font Info:    Redeclaring math alphabet \mathgt on input line 325.
+LaTeX Font Info:    Overwriting math alphabet `\mathgt' in version `normal'
+(Font)                  JY1/gt/m/n --> JY1/hgt/m/n on input line 325.
+LaTeX Font Info:    Overwriting math alphabet `\mathgt' in version `bold'
+(Font)                  JY1/gt/m/n --> JY1/hgt/m/n on input line 325.
+LaTeX Font Info:    Overwriting math alphabet `\mathgt' in version `bold'
+(Font)                  JY1/hgt/m/n --> JY1/hgt/bx/n on input line 326.
+(c:/texlive/2022/texmf-dist/tex/platex/japanese-otf/ajmacros.sty
+Package: ajmacros 2019/04/01 21:00 iNOUE Koich! <inoue@ma.ns.musashi-tech.ac.jp>
+\@tempcntc=\count299
+\@tempcntd=\count300
+\@tempcnte=\count301
+\@tempcntf=\count302
+))
+LaTeX Font Info:    Font shape `JT1/hmc/m/n' will be
+(Font)              scaled to size 11.54663pt on input line 55.
+LaTeX Font Info:    Font shape `JY1/hmc/m/n' will be
+(Font)              scaled to size 11.54663pt on input line 55.
+(out/index.aux (out/./doc/introduction.aux) (out/./doc/conclusion.aux) (out/./doc/shaji.aux) (out/./doc/bibliography.aux))
 \openout1 = `index.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for JY1/mc/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for JT1/mc/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for JY1/mc/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for JT1/mc/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: wrapfig package is loaded.
 Package caption Info: End \AtBeginDocument code.
+LaTeX Font Info:    Font shape `JT1/hmc/m/n' will be
+(Font)              scaled to size 13.85594pt on input line 56.
+LaTeX Font Info:    Font shape `JY1/hmc/m/n' will be
+(Font)              scaled to size 13.85594pt on input line 56.
+LaTeX Font Info:    Font shape `JT1/hmc/m/n' will be
+(Font)              scaled to size 23.94002pt on input line 56.
+LaTeX Font Info:    Font shape `JY1/hmc/m/n' will be
+(Font)              scaled to size 23.94002pt on input line 56.
 
-Underfull \hbox (badness 10000) detected at line 53
-\JY1/mc/m/n/24.88 卒業研究報告書
+Underfull \hbox (badness 10000) detected at line 56
+\JY1/hmc/m/n/24.88 卒業研究報告書
  []
 
 
-Underfull \vbox (badness 10000) detected at line 53
+Underfull \vbox (badness 10000) detected at line 56
  []
 
 
-Underfull \vbox (badness 10000) detected at line 53
+Underfull \vbox (badness 10000) detected at line 56
  []
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 53.
+LaTeX Font Info:    Font shape `JT1/hmc/m/n' will be
+(Font)              scaled to size 16.62714pt on input line 56.
+LaTeX Font Info:    Font shape `JY1/hmc/m/n' will be
+(Font)              scaled to size 16.62714pt on input line 56.
+LaTeX Font Info:    Font shape `JY1/hmc/m/n' will be
+(Font)              scaled to size 9.6222pt on input line 56.
+LaTeX Font Info:    Font shape `JY1/hmc/m/n' will be
+(Font)              scaled to size 6.73553pt on input line 56.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 56.
 (c:/texlive/2022/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 53.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 56.
 (c:/texlive/2022/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Overfull \hbox (3.1333pt too wide) detected at line 53
+Overfull \hbox (3.1333pt too wide) detected at line 56
  []$[]$[]
  []
 
 
-Underfull \vbox (badness 10000) detected at line 53
+Overfull \vbox (0.62956pt too high) detected at line 56
  []
 
 
-Underfull \vbox (badness 10000) detected at line 53
+Overfull \vbox (0.62956pt too high) detected at line 56
  []
 
 
-Underfull \hbox (badness 10000) detected at line 53
-[] \OT1/cmr/m/n/14.4 4 \JY1/mc/m/n/14.4 年 （ \OT1/cmr/m/n/14.4 2022 \JY1/mc/m/n/14.4 年 ） []
+Underfull \hbox (badness 10000) detected at line 56
+[] \OT1/cmr/m/n/14.4 4 \JY1/hmc/m/n/14.4 年 （ \OT1/cmr/m/n/14.4 2022 \JY1/hmc/m/n/14.4 年 ） []
  []
 
 
-Underfull \vbox (badness 10000) detected at line 53
+Underfull \vbox (badness 10000) detected at line 56
  []
 
 
-Overfull \hbox (18.33798pt too wide) detected at line 53
-\JY1/mc/m/n/14.4 大阪府立大学工学域電気電子系学類情報工学課程
+Overfull \hbox (18.33899pt too wide) detected at line 56
+\JY1/hmc/m/n/14.4 大阪府立大学工学域電気電子系学類情報工学課程
  []
 
 
-Underfull \vbox (badness 10000) detected at line 53
+Underfull \vbox (badness 10000) detected at line 56
  []
 
 
-Overfull \vbox (54.664pt too high) detected at line 53
+Overfull \vbox (54.32721pt too high) detected at line 56
  []
 
 [1
 
 ]
-LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <17.28> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 56.
-LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <17.28> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 56.
+LaTeX Font Info:    Font shape `JT1/hmc/bx/n' in size <17.28> not available
+(Font)              Font shape `JT1/hgt/m/n' tried instead on input line 59.
+LaTeX Font Info:    Font shape `JT1/hgt/m/n' will be
+(Font)              scaled to size 16.62714pt on input line 59.
+LaTeX Font Info:    Font shape `JY1/hmc/bx/n' in size <17.28> not available
+(Font)              Font shape `JY1/hgt/m/n' tried instead on input line 59.
+LaTeX Font Info:    Font shape `JY1/hgt/m/n' will be
+(Font)              scaled to size 16.62714pt on input line 59.
 (out/index.toc
-LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <12> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 1.
-LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <12> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 1.
-)
+LaTeX Font Info:    Font shape `JT1/hmc/bx/n' in size <12> not available
+(Font)              Font shape `JT1/hgt/m/n' tried instead on input line 1.
+LaTeX Font Info:    Font shape `JT1/hgt/m/n' will be
+(Font)              scaled to size 11.54663pt on input line 1.
+LaTeX Font Info:    Font shape `JY1/hmc/bx/n' in size <12> not available
+(Font)              Font shape `JY1/hgt/m/n' tried instead on input line 1.
+LaTeX Font Info:    Font shape `JY1/hgt/m/n' will be
+(Font)              scaled to size 11.54663pt on input line 1.
+LaTeX Font Info:    Font shape `JY1/hmc/m/n' will be
+(Font)              scaled to size 7.69775pt on input line 3.
+LaTeX Font Info:    Font shape `JY1/hmc/m/n' will be
+(Font)              scaled to size 5.77332pt on input line 3.
+LaTeX Font Info:    Font shape `JT1/hmc/m/n' will be
+(Font)              scaled to size 8.65997pt on input line 28.
+LaTeX Font Info:    Font shape `JY1/hmc/m/n' will be
+(Font)              scaled to size 8.65997pt on input line 28.
+[1])
 \tf@toc=\write4
 \openout4 = `index.toc'.
 
-[1] (out/index.lof)
+[2] (out/index.lof)
 \tf@lof=\write5
 \openout5 = `index.lof'.
 
-[2] (out/index.lot)
+[3] (out/index.lot)
 \tf@lot=\write6
 \openout6 = `index.lot'.
 
-[3]
+[4]
 \openout2 = `./doc/introduction.aux'.
 
 (./doc/introduction.tex) [1
 
 ]
-LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <14.4> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 75.
-LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <14.4> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 75.
+LaTeX Font Info:    Font shape `JT1/hmc/bx/n' in size <14.4> not available
+(Font)              Font shape `JT1/hgt/m/n' tried instead on input line 78.
+LaTeX Font Info:    Font shape `JT1/hgt/m/n' will be
+(Font)              scaled to size 13.85594pt on input line 78.
+LaTeX Font Info:    Font shape `JY1/hmc/bx/n' in size <14.4> not available
+(Font)              Font shape `JY1/hgt/m/n' tried instead on input line 78.
+LaTeX Font Info:    Font shape `JY1/hgt/m/n' will be
+(Font)              scaled to size 13.85594pt on input line 78.
 File: assets/OpenAiGym.eps Graphic file (type eps)
 <assets/OpenAiGym.eps> [2
 
 
 
 ]
-LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <10.95> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 117.
-LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <10.95> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 117.
-[3] [4] [5] [6
+LaTeX Font Info:    Font shape `JT1/hmc/m/n' will be
+(Font)              scaled to size 9.6222pt on input line 119.
+LaTeX Font Info:    Font shape `JT1/hmc/m/n' will be
+(Font)              scaled to size 7.69775pt on input line 133.
+LaTeX Font Info:    Font shape `JT1/hmc/m/n' will be
+(Font)              scaled to size 5.77332pt on input line 133.
 
-] [7
+Overfull \hbox (31.32071pt too wide) in paragraph at lines 131--137
+ [] []\OT1/cmr/m/n/12 Set $\OML/cmm/m/it/12 y[] \OT1/cmr/m/n/12 =$ $[]$ 
+ []
 
-] [8
+[3] [4] [5] [6]
+LaTeX Font Info:    Font shape `JY1/hmc/m/n' will be
+(Font)              scaled to size 4.8111pt on input line 187.
+LaTeX Font Info:    Font shape `JT1/hmc/m/n' will be
+(Font)              scaled to size 6.73553pt on input line 187.
+File: assets/cardgamedemo.eps Graphic file (type eps)
+<assets/cardgamedemo.eps>
+Overfull \hbox (28.45276pt too wide) in paragraph at lines 195--197
+ [][] 
+ []
 
-] [9
+[7
+
+] [8] [9] [10] [11] [12
 
 ]
+LaTeX Font Info:    Font shape `JT1/hmc/m/n' will be
+(Font)              scaled to size 10.53629pt on input line 315.
+LaTeX Font Info:    Font shape `JY1/hmc/m/n' will be
+(Font)              scaled to size 10.53629pt on input line 315.
+LaTeX Font Info:    Font shape `JT1/hmc/bx/n' in size <10.95> not available
+(Font)              Font shape `JT1/hgt/m/n' tried instead on input line 322.
+LaTeX Font Info:    Font shape `JT1/hgt/m/n' will be
+(Font)              scaled to size 10.53629pt on input line 322.
+LaTeX Font Info:    Font shape `JY1/hmc/bx/n' in size <10.95> not available
+(Font)              Font shape `JY1/hgt/m/n' tried instead on input line 322.
+LaTeX Font Info:    Font shape `JY1/hgt/m/n' will be
+(Font)              scaled to size 10.53629pt on input line 322.
+
+LaTeX Warning: Command \textgreater invalid in math mode on input line 361.
+
+LaTeX Font Info:    Trying to load font information for OML+cmr on input line 361.
+(c:/texlive/2022/texmf-dist/tex/latex/base/omlcmr.fd
+File: omlcmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10.95> not available
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 361.
+
+LaTeX Warning: Command \textgreater invalid in math mode on input line 361.
+
+
+LaTeX Warning: Command \textgreater invalid in math mode on input line 370.
+
+
+LaTeX Warning: Command \textgreater invalid in math mode on input line 370.
+
+
+Overfull \hbox (2.61108pt too wide) in paragraph at lines 385--439
+[][]$[]$[] []$[]$[] 
+ []
+
+[13]
+File: assets/cardgameimage.eps Graphic file (type eps)
+<assets/cardgameimage.eps> [14] [15] [16] [17] [18] [19] [20]
+File: assets/jikken1reward.eps Graphic file (type eps)
+<assets/jikken1reward.eps> [21
+
+] [22] [23]
+Overfull \hbox (41.42996pt too wide) in paragraph at lines 793--794
+ [][] 
+ []
+
+
+Overfull \hbox (41.42996pt too wide) in paragraph at lines 822--823
+ [][] 
+ []
+
+[24] [25]
+File: assets/jikken3plot.eps Graphic file (type eps)
+<assets/jikken3plot.eps> [26] [27] [28] [29] [30]
 \openout2 = `./doc/conclusion.aux'.
 
-(./doc/conclusion.tex) [10
+(./doc/conclusion.tex) [31
 
 
 ]
 \openout2 = `./doc/shaji.aux'.
 
-(./doc/shaji.tex) [11
+(./doc/shaji.tex) [32
 
 
 
@@ -447,36 +588,47 @@ LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <10.95> not available
 \openout2 = `./doc/bibliography.aux'.
 
 (./doc/bibliography.tex (out/index.bbl
-LaTeX Font Info:    Kanji font shape `JY1/gt/m/it' undefined
+LaTeX Font Info:    Kanji font shape `JY1/hgt/m/it' undefined
 (Font)              No change on input line 10.
-LaTeX Font Info:    Kanji font shape `JY1/gt/m/it' undefined
+LaTeX Font Info:    Kanji font shape `JY1/hgt/m/it' undefined
 (Font)              No change on input line 15.
-LaTeX Font Info:    Kanji font shape `JY1/gt/m/it' undefined
+LaTeX Font Info:    Kanji font shape `JY1/hgt/m/it' undefined
 (Font)              No change on input line 21.
-LaTeX Font Info:    Kanji font shape `JY1/gt/m/it' undefined
-(Font)              No change on input line 29.
-LaTeX Font Info:    Kanji font shape `JY1/gt/m/it' undefined
-(Font)              No change on input line 39.
-LaTeX Font Info:    Kanji font shape `JY1/gt/m/it' undefined
-(Font)              No change on input line 47.
-[12
+LaTeX Font Info:    Kanji font shape `JY1/hgt/m/it' undefined
+(Font)              No change on input line 27.
+LaTeX Font Info:    Kanji font shape `JY1/hgt/m/it' undefined
+(Font)              No change on input line 35.
+LaTeX Font Info:    Kanji font shape `JY1/hgt/m/it' undefined
+(Font)              No change on input line 45.
+[33
 
 
 
 
 ]
-LaTeX Font Info:    Kanji font shape `JY1/gt/m/it' undefined
+LaTeX Font Info:    Kanji font shape `JY1/hgt/m/it' undefined
 (Font)              No change on input line 53.
-LaTeX Font Info:    Kanji font shape `JY1/gt/m/it' undefined
-(Font)              No change on input line 66.
-)) [13] (out/index.aux (out/./doc/introduction.aux) (out/./doc/conclusion.aux) (out/./doc/shaji.aux) (out/./doc/bibliography.aux)) ) 
+LaTeX Font Info:    Kanji font shape `JY1/hgt/m/it' undefined
+(Font)              No change on input line 59.
+LaTeX Font Info:    Kanji font shape `JY1/hgt/m/it' undefined
+(Font)              No change on input line 72.
+LaTeX Font Info:    Kanji font shape `JY1/hgt/m/it' undefined
+(Font)              No change on input line 78.
+LaTeX Font Info:    Kanji font shape `JY1/hgt/m/it' undefined
+(Font)              No change on input line 93.
+[34]
+LaTeX Font Info:    Kanji font shape `JY1/hgt/m/it' undefined
+(Font)              No change on input line 99.
+LaTeX Font Info:    Kanji font shape `JY1/hgt/m/it' undefined
+(Font)              No change on input line 109.
+)) [35] (out/index.aux (out/./doc/introduction.aux) (out/./doc/conclusion.aux) (out/./doc/shaji.aux) (out/./doc/bibliography.aux)) ) 
 Here is how much of TeX's memory you used:
- 5838 strings out of 478499
- 98484 string characters out of 5854382
- 410429 words of memory out of 5000000
- 24381 multiletter control sequences out of 15000+600000
- 489670 words of font info for 111 fonts, out of 8000000 for 9000
+ 8124 strings out of 478499
+ 132430 string characters out of 5854382
+ 573848 words of memory out of 5000000
+ 26639 multiletter control sequences out of 15000+600000
+ 488647 words of font info for 122 fonts, out of 8000000 for 9000
  929 hyphenation exceptions out of 8191
- 67i,14n,77p,664b,940s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 72i,17n,77p,877b,1045s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on out/index.dvi (17 pages, 29372 bytes).
+Output written on out/index.dvi (40 pages, 158544 bytes).

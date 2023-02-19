@@ -1,2 +1,9 @@
-\contentsline {figure}{\numberline {2.1}{\ignorespaces OpenAI Gym が提供している様々な環境\relax }}{2}{}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces OpenAI Gym が提供している様々な学習環境\relax }}{2}{}%
 \contentsline {figure}{\numberline {2.2}{\ignorespaces DQN のアルゴリズムの疑似コード \cite {DQN_algorithm}\relax }}{4}{}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces NSGA-II のアルゴリズムの概要 \cite {NSGA-2}\relax }}{6}{}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces ゲームエンジン Unity で作成した TCG 環境イメージ画像\relax }}{8}{}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces アグロの疑似コード\relax }}{14}{}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces コントロールの疑似コード\relax }}{19}{}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces 深層強化学習における諸定義の際の TCG 環境イメージ\relax }}{20}{}%
+\contentsline {figure}{\numberline {5.1}{\ignorespaces 実験 1 における学習中の平均獲得報酬の推移\relax }}{22}{}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces 提案手法により得られた解と関連研究の最終世代の良好な解\relax }}{28}{}%

@@ -1,10 +1,11 @@
 \relax 
 \citation{DQN_algorithm}
+\citation{NSGA-2}
 \@input{./doc/introduction.aux}
 \citation{OpenAIGym}
 \@writefile{toc}{\contentsline {section}{\numberline {2}要素技術}{2}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}OpenAI Gym}{2}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2.1}{\ignorespaces OpenAI Gym が提供している様々な環境\relax }}{2}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2.1}{\ignorespaces OpenAI Gym が提供している様々な学習環境\relax }}{2}{}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
 \newlabel{fig:OpenAIGymSample}{{2.1}{2}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Q 学習}{2}{}\protected@file@percent }
@@ -14,19 +15,106 @@
 \newlabel{updateQ}{{2.1}{3}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Deep Q Network}{3}{}\protected@file@percent }
 \@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces  deep Q-learning with experience replay \relax }}{4}{}\protected@file@percent }
-\newlabel{alg1}{{1}{4}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2.2}{\ignorespaces DQN のアルゴリズムの疑似コード \cite  {DQN_algorithm}\relax }}{4}{}\protected@file@percent }
+\newlabel{alg:DQN}{{2.2}{4}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Genetic Algorithm}{4}{}\protected@file@percent }
+\citation{NSGA-2}
+\citation{NSGA-2}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Nondominated Sorting Genetic Algorithm II}{5}{}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces  NSGA-II \relax }}{6}{}\protected@file@percent }
+\newlabel{alg:NSGA2}{{2}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.3}{\ignorespaces NSGA-II のアルゴリズムの概要 \cite  {NSGA-2}\relax }}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}提案手法}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}提案手法 1 : 数値実験用の TCG 環境}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.1}プレイヤー}{7}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces ゲームエンジン Unity で作成した TCG 環境イメージ画像\relax }}{8}{}\protected@file@percent }
+\newlabel{fig:CardGameDemo}{{3.1}{8}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.2}カード}{8}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.3}ゲームの流れ}{9}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}提案手法 2 : DQN によるデッキ内のカードパワーの定量的な評価方法}{9}{}\protected@file@percent }
 \citation{EvolvingHearthStone}
-\@writefile{toc}{\contentsline {section}{\numberline {3}提案手法}{6}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}関連研究}{6}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}深層強化学習によるデッキ内のカードパワーの測定}{6}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}解空間の次元を削減した最適化}{6}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4}実験方法}{7}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5}結果と考察}{8}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6}まとめと今後の課題}{9}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}提案手法3 : 調整するカード枚数を最小限に抑えた TCG 環境のゲームバランス最適化手法}{10}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.1}関連研究}{10}{}\protected@file@percent }
+\newlabel{hearthstone}{{3.3.1}{10}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.2}提案手法 3 の説明}{11}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}実験方法}{12}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}実験 1}{12}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces 学習側のプレイヤーのデッキ\relax }}{12}{}\protected@file@percent }
+\newlabel{table:OPdeck}{{4.1}{12}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.1}対戦相手}{13}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.2}状態空間, 行動空間, 報酬の定義}{13}{}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {3}{\ignorespaces  対戦相手の行動ルーチン (アグロ) \relax }}{14}{}\protected@file@percent }
+\newlabel{alg_aggro}{{3}{14}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces アグロの疑似コード\relax }}{14}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.3}DQN のパラメータ}{14}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.2}{\ignorespaces アグロのときのデッキ\relax }}{15}{}\protected@file@percent }
+\newlabel{table:agurodeck}{{4.2}{15}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.3}{\ignorespaces コントロールのときのデッキ\relax }}{15}{}\protected@file@percent }
+\newlabel{table:controlldeck}{{4.3}{15}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.4}{\ignorespaces 10000 回のゲーム実行における先攻の勝率\relax }}{15}{}\protected@file@percent }
+\newlabel{winrate_env}{{4.4}{15}}
+\newlabel{epsilon}{{4.1}{15}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}実験 2}{15}{}\protected@file@percent }
+\citation{EvolvingHearthStone}
+\@writefile{lot}{\contentsline {table}{\numberline {4.5}{\ignorespaces 定義した状態空間\relax }}{16}{}\protected@file@percent }
+\newlabel{table:state}{{4.5}{16}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.6}{\ignorespaces 定義した行動空間\relax }}{16}{}\protected@file@percent }
+\newlabel{table:action}{{4.6}{16}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}実験 3}{16}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.7}{\ignorespaces DQNのパラメータ\relax }}{17}{}\protected@file@percent }
+\newlabel{table:dqnparam}{{4.7}{17}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.8}{\ignorespaces 何も調整してない時の先攻の勝率\relax }}{17}{}\protected@file@percent }
+\newlabel{winrate_no}{{4.8}{17}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}GA のパラメータ}{17}{}\protected@file@percent }
+\newlabel{f_w}{{4.2}{17}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.9}{\ignorespaces GAのパラメータ\relax }}{18}{}\protected@file@percent }
+\newlabel{table:gaparam}{{4.9}{18}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.10}{\ignorespaces 実験 3 の問題設定における TCG 環境\relax }}{18}{}\protected@file@percent }
+\newlabel{jikken3env}{{4.10}{18}}
+\newlabel{f_p}{{4.3}{18}}
+\newlabel{f_c}{{4.4}{18}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {4}{\ignorespaces  対戦相手の行動ルーチン (コントロール) \relax }}{19}{}\protected@file@percent }
+\newlabel{alg_controll}{{4}{19}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces コントロールの疑似コード\relax }}{19}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces 深層強化学習における諸定義の際の TCG 環境イメージ\relax }}{20}{}\protected@file@percent }
+\newlabel{fig:CardGameImage}{{4.3}{20}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}結果と考察}{21}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}実験 1 : 結果と考察}{21}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces 後攻の戦略を変化させた場合の勝率比較\relax }}{21}{}\protected@file@percent }
+\newlabel{table:winratejikken1}{{5.1}{21}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces 実験 1 における学習中の平均獲得報酬の推移\relax }}{22}{}\protected@file@percent }
+\newlabel{fig:jikken1reward}{{5.1}{22}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.2}{\ignorespaces 選択された総数が多い行動上位 10 個\relax }}{23}{}\protected@file@percent }
+\newlabel{table:actioncount}{{5.2}{23}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}実験 2 : 結果と考察}{23}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.3}{\ignorespaces 各カードが盤面にプレイされた総数 (降順)\relax }}{24}{}\protected@file@percent }
+\newlabel{table:cardcount}{{5.3}{24}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.4}{\ignorespaces アグロ同士におけるカードを 1 種類ずつ除いたときの先攻の勝率\relax }}{25}{}\protected@file@percent }
+\newlabel{winrate_aguro}{{5.4}{25}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}実験 3 : 結果と考察}{25}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.5}{\ignorespaces 学習済みエージェント同士におけるカードを 1 種類ずつ除いたときの先攻の勝率\relax }}{26}{}\protected@file@percent }
+\newlabel{winrate_agent}{{5.5}{26}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.6}{\ignorespaces 戦略ごとに各カードが盤面にプレイされた総数 (降順)\relax }}{27}{}\protected@file@percent }
+\newlabel{table:jikken2cardrecord}{{5.6}{27}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.7}{\ignorespaces パラメータ変更するカードを増やしながら単目的 GA を適応した結果\relax }}{28}{}\protected@file@percent }
+\newlabel{jikken3result}{{5.7}{28}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.8}{\ignorespaces 各手法で得られた最も良好な解の適応度\relax }}{28}{}\protected@file@percent }
+\newlabel{res_3}{{5.8}{28}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.2}{\ignorespaces 提案手法により得られた解と関連研究の最終世代の良好な解\relax }}{28}{}\protected@file@percent }
+\newlabel{fig:jikken3plot}{{5.2}{28}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.9}{\ignorespaces 単目的 GA により得られたデッキ\relax }}{29}{}\protected@file@percent }
+\newlabel{table:monogadeck}{{5.9}{29}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.10}{\ignorespaces 多目的 GA によって得られたデッキ\relax }}{29}{}\protected@file@percent }
+\newlabel{table:multigadeck}{{5.10}{29}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.11}{\ignorespaces 提案手法において最も良好な解が表すデッキ\relax }}{30}{}\protected@file@percent }
+\newlabel{table:resultdeck}{{5.11}{30}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.12}{\ignorespaces 単目的 GA で調整した時の環境における先攻の勝率\relax }}{30}{}\protected@file@percent }
+\newlabel{winrate_ga}{{5.12}{30}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.13}{\ignorespaces 多目的 GA で調整した時の環境における先攻の勝率\relax }}{30}{}\protected@file@percent }
+\newlabel{winrate_nsga}{{5.13}{30}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.14}{\ignorespaces 提案手法で調整した時の環境における先攻の勝率\relax }}{30}{}\protected@file@percent }
+\newlabel{winrate_result}{{5.14}{30}}
 \@input{./doc/conclusion.aux}
 \@input{./doc/shaji.aux}
 \@input{./doc/bibliography.aux}
-\gdef \@abspage@last{17}
+\gdef \@abspage@last{40}

@@ -1,2 +1,93 @@
 1. 「不完全情報ゲームであるトレーディングカードゲーム環境への深層強化学習の適用と深層強化学習を用いたゲームバランス調整手法を提案し, 独自に構築したトレーディングカードゲーム環境を用いて数値実験することでその有効性を示す. 」　これは適用も提案手法みたいになる？
 「不完全情報ゲームであるトレーディングカードゲーム環境への深層強化学習を用いたゲームバランス調整手法を提案し, 独自に構築したトレーディングカードゲーム環境を用いて深層強化学習を適用し数値実験することでその有効性を示す.」の方がストーリー的にいい？
+
+
+\cite{Rainbow}, 囲碁や将棋などターン制完全情報ゲームで高い性能を残している AlphaZero \cite{AlphaZero}, 世界モデルベースの強化学習手法である DreamerV2 \cite{DreamerV2}, ゲームのルールに関する知識が不要といわれている MuZero \cite{MuZero}, 不完全情報ゲームに対する有効性が示された ReBeL \cite{ReBeL} など様々な高度な深層強化学習手法が考案されている. これらを用いることで DQN で構築したエージェントよりもより良い戦略を持つエージェントの構築が期待できる.
+
+@inproceedings{Rainbow,
+author = {Hessel, Matteo and Modayil, Joseph and van Hasselt, Hado and Schaul, Tom and Ostrovski, Georg and Dabney, Will and Horgan, Dan and Piot, Bilal and Azar, Mohammad and Silver, David},
+title = {Rainbow: Combining Improvements in Deep Reinforcement Learning},
+year = {2018},
+isbn = {978-1-57735-800-8},
+publisher = {AAAI Press},
+abstract = {The deep reinforcement learning community has made several independent improvements to the DQN algorithm. However, it is unclear which of these extensions are complementary and can be fruitfully combined. This paper examines six extensions to the DQN algorithm and empirically studies their combination. Our experiments show that the combination provides state-of-the-art performance on the Atari 2600 benchmark, both in terms of data efficiency and final performance. We also provide results from a detailed ablation study that shows the contribution of each component to overall performance.},
+booktitle = {Proceedings of the Thirty-Second AAAI Conference on Artificial Intelligence and Thirtieth Innovative Applications of Artificial Intelligence Conference and Eighth AAAI Symposium on Educational Advances in Artificial Intelligence},
+articleno = {393},
+numpages = {8},
+location = {New Orleans, Louisiana, USA},
+series = {AAAI'18/IAAI'18/EAAI'18}
+}
+
+@ARTICLE{2017arXiv171201815S,
+       author = {{Silver}, David and {Hubert}, Thomas and {Schrittwieser}, Julian and {Antonoglou}, Ioannis and {Lai}, Matthew and {Guez}, Arthur and {Lanctot}, Marc and {Sifre}, Laurent and {Kumaran}, Dharshan and {Graepel}, Thore and {Lillicrap}, Timothy and {Simonyan}, Karen and {Hassabis}, Demis},
+        title = "{Mastering Chess and Shogi by Self-Play with a General Reinforcement Learning Algorithm}",
+      journal = {arXiv e-prints},
+     keywords = {Computer Science - Artificial Intelligence, Computer Science - Machine Learning},
+         year = 2017,
+        month = dec,
+          eid = {arXiv:1712.01815},
+        pages = {arXiv:1712.01815},
+          doi = {10.48550/arXiv.1712.01815},
+archivePrefix = {arXiv},
+       eprint = {1712.01815},
+ primaryClass = {cs.AI},
+       adsurl = {https://ui.adsabs.harvard.edu/abs/2017arXiv171201815S},
+      adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+}
+
+@ARTICLE{ReBeL,
+       author = {{Brown}, Noam and {Bakhtin}, Anton and {Lerer}, Adam and {Gong}, Qucheng},
+        title = "{Combining Deep Reinforcement Learning and Search for Imperfect-Information Games}",
+      journal = {arXiv e-prints},
+     keywords = {Computer Science - Computer Science and Game Theory, Computer Science - Artificial Intelligence, Computer Science - Machine Learning},
+         year = 2020,
+        month = jul,
+          eid = {arXiv:2007.13544},
+        pages = {arXiv:2007.13544},
+archivePrefix = {arXiv},
+       eprint = {2007.13544},
+ primaryClass = {cs.GT},
+       adsurl = {https://ui.adsabs.harvard.edu/abs/2020arXiv200713544B},
+      adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+}
+@misc{DreamerV2,
+  doi = {10.48550/ARXIV.2010.02193},
+  
+  url = {https://arxiv.org/abs/2010.02193},
+  
+  author = {Hafner, Danijar and Lillicrap, Timothy and Norouzi, Mohammad and Ba, Jimmy},
+  
+  keywords = {Machine Learning (cs.LG), Artificial Intelligence (cs.AI), Machine Learning (stat.ML), FOS: Computer and information sciences, FOS: Computer and information sciences},
+  
+  title = {Mastering Atari with Discrete World Models},
+  
+  publisher = {arXiv},
+  
+  year = {2020},
+  
+  copyright = {arXiv.org perpetual, non-exclusive license}
+}
+@article{MuZero,
+  author    = {Julian Schrittwieser and
+               Ioannis Antonoglou and
+               Thomas Hubert and
+               Karen Simonyan and
+               Laurent Sifre and
+               Simon Schmitt and
+               Arthur Guez and
+               Edward Lockhart and
+               Demis Hassabis and
+               Thore Graepel and
+               Timothy P. Lillicrap and
+               David Silver},
+  title     = {Mastering Atari, Go, Chess and Shogi by Planning with a Learned Model},
+  journal   = {CoRR},
+  volume    = {abs/1911.08265},
+  year      = {2019},
+  url       = {http://arxiv.org/abs/1911.08265},
+  eprinttype = {arXiv},
+  eprint    = {1911.08265},
+  timestamp = {Mon, 02 Dec 2019 17:48:37 +0100},
+  biburl    = {https://dblp.org/rec/journals/corr/abs-1911-08265.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}

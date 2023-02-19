@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{DQN_algorithm}
 Volodymyr Mnih, Koray Kavukcuoglu, David Silver, Andrei~A. Rusu, Joel Veness,
@@ -8,6 +8,12 @@ Volodymyr Mnih, Koray Kavukcuoglu, David Silver, Andrei~A. Rusu, Joel Veness,
   Demis Hassabis.
 \newblock Human-level control through deep reinforcement learning.
 \newblock {\em Nature}, Vol. 518, No. 7540, pp. 529--533, February 2015.
+
+\bibitem{NSGA-2}
+K.~Deb, A.~Pratap, S.~Agarwal, and T.~Meyarivan.
+\newblock A fast and elitist multiobjective genetic algorithm: Nsga-ii.
+\newblock {\em IEEE Transactions on Evolutionary Computation}, Vol.~6, No.~2,
+  pp. 182--197, 2002.
 
 \bibitem{Vehicle}
 Andreas Folkers, Matthias Rick, and Christof B{\"{u}}skens.
@@ -64,5 +70,42 @@ Fernando de~Mesentier~Silva, Rodrigo Canaan, Scott Lee, Matthew~C. Fontaine,
   Julian Togelius, and Amy~K. Hoover.
 \newblock Evolving the hearthstone meta.
 \newblock {\em CoRR}, Vol. abs/1907.01623, , 2019.
+
+\bibitem{Rainbow}
+Matteo Hessel, Joseph Modayil, Hado van Hasselt, Tom Schaul, Georg Ostrovski,
+  Will Dabney, Dan Horgan, Bilal Piot, Mohammad Azar, and David Silver.
+\newblock Rainbow: Combining improvements in deep reinforcement learning.
+\newblock In {\em Proceedings of the Thirty-Second AAAI Conference on
+  Artificial Intelligence and Thirtieth Innovative Applications of Artificial
+  Intelligence Conference and Eighth AAAI Symposium on Educational Advances in
+  Artificial Intelligence}, AAAI'18/IAAI'18/EAAI'18. AAAI Press, 2018.
+
+\bibitem{DreamerV2}
+Danijar Hafner, Timothy Lillicrap, Mohammad Norouzi, and Jimmy Ba.
+\newblock Mastering atari with discrete world models, 2020.
+
+\bibitem{MuZero}
+Julian Schrittwieser, Ioannis Antonoglou, Thomas Hubert, Karen Simonyan,
+  Laurent Sifre, Simon Schmitt, Arthur Guez, Edward Lockhart, Demis Hassabis,
+  Thore Graepel, Timothy~P. Lillicrap, and David Silver.
+\newblock Mastering atari, go, chess and shogi by planning with a learned
+  model.
+\newblock {\em CoRR}, Vol. abs/1911.08265, , 2019.
+
+\bibitem{ReBeL}
+Noam {Brown}, Anton {Bakhtin}, Adam {Lerer}, and Qucheng {Gong}.
+\newblock {Combining Deep Reinforcement Learning and Search for
+  Imperfect-Information Games}.
+\newblock {\em arXiv e-prints}, p. arXiv:2007.13544, July 2020.
+
+\bibitem{TDGA}
+森直樹, 薮本靖之, 喜多一, 西川緯一.
+\newblock 熱力学的遺伝アルゴリズムによる多目的最適化.
+\newblock システム制御情報学会論文誌, Vol.~11, No.~3, pp. 103--111, 1998.
+
+\bibitem{Optuna}
+Takuya Akiba, Shotaro Sano, Toshihiko Yanase, Takeru Ohta, and Masanori Koyama.
+\newblock Optuna: {A} next-generation hyperparameter optimization framework.
+\newblock {\em CoRR}, Vol. abs/1907.10902, , 2019.
 
 \end{thebibliography}
