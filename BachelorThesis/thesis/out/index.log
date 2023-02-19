@@ -1,4 +1,4 @@
-This is e-pTeX, Version 3.14159265-p3.8.2-190908-2.6 (utf8.euc) (TeX Live 2019/Debian) (preloaded format=platex 2022.10.4)  19 FEB 2023 18:59
+This is e-pTeX, Version 3.14159265-p3.8.2-190908-2.6 (utf8.euc) (TeX Live 2019/Debian) (preloaded format=platex 2022.10.4)  19 FEB 2023 19:49
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1036,14 +1036,13 @@ Overfull \hbox (2.61108pt too wide) in paragraph at lines 385--439
 LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
 (Font)              using `JY1/hmc/bx/n' instead on input line 459.
 
-[13]
+[13] [14]
 File: assets/cardgameimage.eps Graphic file (type eps)
 <assets/cardgameimage.eps>
 
 LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
 (Font)              using `JY1/hmc/bx/n' instead on input line 549.
 
-[14]
 
 LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
 (Font)              using `JY1/hmc/bx/n' instead on input line 580.
@@ -1056,20 +1055,20 @@ LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
 [16]
 
 LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
-(Font)              using `JY1/hmc/bx/n' instead on input line 603.
+(Font)              using `JY1/hmc/bx/n' instead on input line 604.
 
 [17] [18] [19] [20]
 
 LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
-(Font)              using `JY1/hmc/bx/n' instead on input line 666.
+(Font)              using `JY1/hmc/bx/n' instead on input line 667.
 
 
 LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
-(Font)              using `JY1/hmc/bx/n' instead on input line 669.
+(Font)              using `JY1/hmc/bx/n' instead on input line 670.
 
 
 LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
-(Font)              using `JY1/hmc/bx/n' instead on input line 678.
+(Font)              using `JY1/hmc/bx/n' instead on input line 679.
 
 File: assets/jikken1reward.eps Graphic file (type eps)
 <assets/jikken1reward.eps> [21
@@ -1077,55 +1076,55 @@ File: assets/jikken1reward.eps Graphic file (type eps)
 ] [22]
 
 LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
-(Font)              using `JY1/hmc/bx/n' instead on input line 752.
+(Font)              using `JY1/hmc/bx/n' instead on input line 755.
 
-[23]
-
-LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
-(Font)              using `JY1/hmc/bx/n' instead on input line 793.
-
+[23] [24]
 
 LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
-(Font)              using `JY1/hmc/bx/n' instead on input line 793.
+(Font)              using `JY1/hmc/bx/n' instead on input line 794.
 
 
-Overfull \hbox (41.42996pt too wide) in paragraph at lines 793--794
+LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
+(Font)              using `JY1/hmc/bx/n' instead on input line 794.
+
+
+Overfull \hbox (41.42996pt too wide) in paragraph at lines 794--795
  [][] 
  []
 
 
 LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
-(Font)              using `JY1/hmc/bx/n' instead on input line 822.
+(Font)              using `JY1/hmc/bx/n' instead on input line 823.
 
 
 LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
-(Font)              using `JY1/hmc/bx/n' instead on input line 822.
+(Font)              using `JY1/hmc/bx/n' instead on input line 823.
 
 
-Overfull \hbox (41.42996pt too wide) in paragraph at lines 822--823
+Overfull \hbox (41.42996pt too wide) in paragraph at lines 823--824
  [][] 
  []
 
 
 LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
-(Font)              using `JY1/hmc/bx/n' instead on input line 856.
+(Font)              using `JY1/hmc/bx/n' instead on input line 857.
 
-[24] [25]
+[25] [26]
 File: assets/jikken3plot.eps Graphic file (type eps)
 <assets/jikken3plot.eps>
 
 LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
-(Font)              using `JY1/hmc/bx/n' instead on input line 923.
+(Font)              using `JY1/hmc/bx/n' instead on input line 925.
 
 
 LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
-(Font)              using `JY1/hmc/bx/n' instead on input line 923.
+(Font)              using `JY1/hmc/bx/n' instead on input line 925.
 
 
 LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
-(Font)              using `JY1/hmc/bx/n' instead on input line 923.
+(Font)              using `JY1/hmc/bx/n' instead on input line 925.
 
-[26] [27] [28] [29] [30]
+[27] [28] [29] [30]
 \openout2 = `./doc/conclusion.aux'.
 
 (./doc/conclusion.tex
@@ -1180,10 +1179,10 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 Here is how much of TeX's memory you used:
  7955 strings out of 481768
  117143 string characters out of 5933620
- 590361 words of memory out of 5000000
+ 584361 words of memory out of 5000000
  23188 multiletter control sequences out of 15000+600000
  551726 words of font info for 118 fonts, out of 8000000 for 9000
  929 hyphenation exceptions out of 8191
- 48i,16n,46p,877b,985s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 48i,16n,46p,776b,985s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on out/index.dvi (40 pages, 157576 bytes).
+Output written on out/index.dvi (40 pages, 158176 bytes).

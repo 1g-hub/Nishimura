@@ -1,20 +1,20 @@
-\contentsline {table}{\numberline {4.1}{\ignorespaces 学習側のプレイヤーのデッキ\relax }}{12}%
-\contentsline {table}{\numberline {4.2}{\ignorespaces アグロのときのデッキ\relax }}{15}%
-\contentsline {table}{\numberline {4.3}{\ignorespaces コントロールのときのデッキ\relax }}{15}%
-\contentsline {table}{\numberline {4.4}{\ignorespaces 10000 回のゲーム実行における先攻の勝率\relax }}{15}%
-\contentsline {table}{\numberline {4.5}{\ignorespaces 定義した状態空間\relax }}{16}%
+\contentsline {table}{\numberline {4.1}{\ignorespaces 強いカード, 弱いカードを 1 種類ずつ恣意的に加えたデッキ\relax }}{12}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces アグロの対戦相手のデッキ\relax }}{13}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces コントロールの対戦相手のデッキ\relax }}{13}%
+\contentsline {table}{\numberline {4.4}{\ignorespaces 勝率調整済みの環境における 10000 回のゲーム実行後の先攻の勝率\relax }}{15}%
+\contentsline {table}{\numberline {4.5}{\ignorespaces 定義した状態空間\relax }}{15}%
 \contentsline {table}{\numberline {4.6}{\ignorespaces 定義した行動空間\relax }}{16}%
-\contentsline {table}{\numberline {4.7}{\ignorespaces DQNのパラメータ\relax }}{17}%
-\contentsline {table}{\numberline {4.8}{\ignorespaces 何も調整してない時の先攻の勝率\relax }}{17}%
-\contentsline {table}{\numberline {4.9}{\ignorespaces GAのパラメータ\relax }}{18}%
+\contentsline {table}{\numberline {4.7}{\ignorespaces DQNのパラメータ\relax }}{16}%
+\contentsline {table}{\numberline {4.8}{\ignorespaces 実験3 の問題設定における未調整の際のデッキ間の先攻の勝率\relax }}{17}%
+\contentsline {table}{\numberline {4.9}{\ignorespaces GAのパラメータ\relax }}{17}%
 \contentsline {table}{\numberline {4.10}{\ignorespaces 実験 3 の問題設定における TCG 環境\relax }}{18}%
 \contentsline {table}{\numberline {5.1}{\ignorespaces 後攻の戦略を変化させた場合の勝率比較\relax }}{21}%
 \contentsline {table}{\numberline {5.2}{\ignorespaces 選択された総数が多い行動上位 10 個\relax }}{23}%
 \contentsline {table}{\numberline {5.3}{\ignorespaces 各カードが盤面にプレイされた総数 (降順)\relax }}{24}%
 \contentsline {table}{\numberline {5.4}{\ignorespaces アグロ同士におけるカードを 1 種類ずつ除いたときの先攻の勝率\relax }}{25}%
 \contentsline {table}{\numberline {5.5}{\ignorespaces 学習済みエージェント同士におけるカードを 1 種類ずつ除いたときの先攻の勝率\relax }}{26}%
-\contentsline {table}{\numberline {5.6}{\ignorespaces 戦略ごとに各カードが盤面にプレイされた総数 (降順)\relax }}{27}%
-\contentsline {table}{\numberline {5.7}{\ignorespaces パラメータ変更するカードを増やしながら単目的 GA を適応した結果\relax }}{28}%
+\contentsline {table}{\numberline {5.6}{\ignorespaces 同戦略同士の対戦において先攻側の各カードが盤面にプレイされた総数 (降順)\relax }}{27}%
+\contentsline {table}{\numberline {5.7}{\ignorespaces 調整されるカード種類数を増やしながら単目的 GA を適応した結果\relax }}{28}%
 \contentsline {table}{\numberline {5.8}{\ignorespaces 各手法で得られた最も良好な解の適応度\relax }}{28}%
 \contentsline {table}{\numberline {5.9}{\ignorespaces 単目的 GA により得られたデッキ\relax }}{29}%
 \contentsline {table}{\numberline {5.10}{\ignorespaces 多目的 GA によって得られたデッキ\relax }}{29}%
