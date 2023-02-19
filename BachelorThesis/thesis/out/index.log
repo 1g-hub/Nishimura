@@ -1,4 +1,4 @@
-This is e-pTeX, Version 3.14159265-p3.8.2-190908-2.6 (utf8.euc) (TeX Live 2019/Debian) (preloaded format=platex 2022.10.4)  19 FEB 2023 18:49
+This is e-pTeX, Version 3.14159265-p3.8.2-190908-2.6 (utf8.euc) (TeX Live 2019/Debian) (preloaded format=platex 2022.10.4)  19 FEB 2023 18:53
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -651,6 +651,7 @@ LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
 LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
 (Font)              using `JY1/hmc/bx/n' instead on input line 158.
 
+[5]
 
 LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
 (Font)              using `JY1/hmc/bx/n' instead on input line 168.
@@ -667,7 +668,7 @@ LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
 LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
 (Font)              using `JY1/hmc/bx/n' instead on input line 168.
 
-[5] [6]
+[6]
 
 LaTeX Font Warning: Font shape `JY1/hmc/b/n' undefined
 (Font)              using `JY1/hmc/bx/n' instead on input line 183.
@@ -1185,4 +1186,4 @@ Here is how much of TeX's memory you used:
  929 hyphenation exceptions out of 8191
  48i,16n,46p,877b,985s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on out/index.dvi (40 pages, 158140 bytes).
+Output written on out/index.dvi (40 pages, 158060 bytes).
