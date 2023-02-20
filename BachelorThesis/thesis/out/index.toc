@@ -17,15 +17,15 @@
 \contentsline {section}{\numberline {4}実験方法}{12}%
 \contentsline {subsection}{\numberline {4.1}実験 1}{12}%
 \contentsline {subsubsection}{\numberline {4.1.1}対戦相手}{13}%
-\contentsline {subsubsection}{\numberline {4.1.2}状態空間, 行動空間, 報酬の定義}{14}%
-\contentsline {subsubsection}{\numberline {4.1.3}DQN のパラメータ}{15}%
-\contentsline {subsection}{\numberline {4.2}実験 2}{16}%
+\contentsline {subsubsection}{\numberline {4.1.2}状態空間, 行動空間, 報酬の定義}{13}%
+\contentsline {subsubsection}{\numberline {4.1.3}DQN のパラメータ}{14}%
+\contentsline {subsection}{\numberline {4.2}実験 2}{15}%
 \contentsline {subsection}{\numberline {4.3}実験 3}{16}%
 \contentsline {subsubsection}{\numberline {4.3.1}GA のパラメータ}{17}%
 \contentsline {section}{\numberline {5}結果と考察}{21}%
 \contentsline {subsection}{\numberline {5.1}実験 1 : 結果と考察}{21}%
 \contentsline {subsection}{\numberline {5.2}実験 2 : 結果と考察}{23}%
 \contentsline {subsection}{\numberline {5.3}実験 3 : 結果と考察}{25}%
-\contentsline {section}{\numberline {6}まとめと今後の課題}{31}%
-\contentsline {section}{謝辞}{32}%
-\contentsline {section}{参考文献}{33}%
+\contentsline {section}{\numberline {6}まとめと今後の課題}{32}%
+\contentsline {section}{謝辞}{33}%
+\contentsline {section}{参考文献}{34}%
