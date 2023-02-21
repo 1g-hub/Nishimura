@@ -1,0 +1,146 @@
+This is e-pTeX, Version 3.14159265-p3.8.2-190908-2.6 (utf8.euc) (TeX Live 2019/Debian) (preloaded format=platex 2022.10.4)  21 FEB 2023 15:48
+entering extended mode
+ restricted \write18 enabled.
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
+**/home/nishimura/document/Nishimura/JSAI/data.tex
+(/home/nishimura/document/Nishimura/JSAI/data.tex
+pLaTeX2e <2020-02-02>+2 (based on LaTeX2e <2020-02-02> patch level 2)
+L3 programming layer <2020-02-14> (/usr/share/texlive/texmf-dist/tex/platex/base/jarticle.cls
+Document Class: jarticle 2020/01/03 v1.8e Standard pLaTeX class
+\c@@paper=\count166
+(/usr/share/texlive/texmf-dist/tex/platex/base/jsize10.clo
+File: jsize10.clo 2020/01/03 v1.8e Standard pLaTeX file (size option)
+)
+\c@part=\count167
+\c@section=\count168
+\c@subsection=\count169
+\c@subsubsection=\count170
+\c@paragraph=\count171
+\c@subparagraph=\count172
+\c@figure=\count173
+\c@table=\count174
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\symmincho=\mathgroup4
+LaTeX Font Info:    Overwriting symbol font `mincho' in version `bold'
+(Font)                  JY1/mc/m/n --> JY1/gt/m/n on input line 615.
+\toclineskip=\dimen150
+\@lnumwidth=\dimen151
+\bibindent=\dimen152
+\heisei=\count175
+) (/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
+Package: color 2019/11/23 v1.2a Standard LaTeX Color (DPC)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package color Info: Driver file: dvips.def on input line 147.
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/dvips.def
+File: dvips.def 2017/06/20 v3.1d Graphics/color driver for dvips
+) (/usr/share/texlive/texmf-dist/tex/latex/graphics/dvipsnam.def
+File: dvipsnam.def 2016/06/17 v3.0m Driver-dependent file (DPC,SPQR)
+)) (./jsaiac.sty
+Document Class(Style) `j(-)article' Option Style: `jsaiac version 1.02 ' [March 6, 2003 (kita)]
+\@abstractbox=\box61
+\@tempcnta=\count176
+)
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <9> on input line 41.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 41.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 41.
+(/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-dvips.def
+File: l3backend-dvips.def 2020-02-03 L3 backend support: dvips
+\l__pdf_internal_box=\box62
+\g__pdf_backend_object_int=\count177
+\l__pdf_backend_content_box=\box63
+\l__pdf_backend_model_box=\box64
+\g__pdf_backend_annotation_int=\count178
+\g__pdf_backend_link_int=\count179
+\g__pdf_backend_link_sf_int=\count180
+) (out/data.aux)
+\openout1 = `data.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for JY1/mc/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for JT1/mc/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <17.28> on input line 54.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 54.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 54.
+
+Overfull \hbox (12.00002pt too wide) in paragraph at lines 54--54
+ [][][][] 
+ []
+
+LaTeX Font Info:    Font shape `JT1/mc/b/n' in size <12> not available
+(Font)              Font shape `JT1/mc/bx/n' tried instead on input line 56.
+LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <12> not available
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 56.
+LaTeX Font Info:    Font shape `JY1/mc/b/n' in size <12> not available
+(Font)              Font shape `JY1/mc/bx/n' tried instead on input line 56.
+LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <12> not available
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 56.
+LaTeX Font Info:    Font shape `JT1/mc/b/n' in size <10> not available
+(Font)              Font shape `JT1/mc/bx/n' tried instead on input line 61.
+LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <10> not available
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 61.
+LaTeX Font Info:    Font shape `JY1/mc/b/n' in size <10> not available
+(Font)              Font shape `JY1/mc/bx/n' tried instead on input line 61.
+LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <10> not available
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 61.
+LaTeX Font Info:    Font shape `JT1/mc/b/n' in size <8> not available
+(Font)              Font shape `JT1/mc/bx/n' tried instead on input line 81.
+LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <8> not available
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 81.
+LaTeX Font Info:    Font shape `JY1/mc/b/n' in size <8> not available
+(Font)              Font shape `JY1/mc/bx/n' tried instead on input line 81.
+LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <8> not available
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 81.
+[1
+
+
+]
+
+LaTeX Font Warning: Font shape `JT1/mc/m/sc' undefined
+(Font)              using `JT1/mc/m/n' instead on input line 269.
+
+
+LaTeX Font Warning: Font shape `JY1/mc/m/sc' undefined
+(Font)              using `JY1/mc/m/n' instead on input line 269.
+
+[2] [3
+
+] (out/data.aux)
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 800 strings out of 481768
+ 11449 string characters out of 5933620
+ 258546 words of memory out of 5000000
+ 16257 multiletter control sequences out of 15000+600000
+ 544648 words of font info for 71 fonts, out of 8000000 for 9000
+ 929 hyphenation exceptions out of 8191
+ 25i,13n,24p,255b,477s stack positions out of 5000i,500n,10000p,200000b,80000s
+
+Output written on out/data.dvi (3 pages, 16468 bytes).
