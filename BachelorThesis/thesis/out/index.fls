@@ -209,11 +209,11 @@ INPUT ./doc/introduction.tex
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/japanese-otf/nmlgothrn-v.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/japanese-otf/nmlgothrn-h.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/japanese-otf/nmlminrn-v.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/japanese-otf/nmlminrn-v.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/japanese-otf/nmlminrn-v.tfm
 INPUT assets/OpenAiGym.eps
 INPUT assets/OpenAiGym.eps
-INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/japanese-otf/nmlminrn-v.tfm
-INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/japanese-otf/nmlminrn-v.tfm
-INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/japanese-otf/nmlminrn-v.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/japanese-otf/nmlminrn-h.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5.tfm
@@ -241,10 +241,11 @@ INPUT assets/jikken1reward.eps
 INPUT assets/jikken1reward.eps
 INPUT assets/jikken3plot.eps
 INPUT assets/jikken3plot.eps
+INPUT assets/jikken4.eps
+INPUT assets/jikken4.eps
 OUTPUT out/./doc/conclusion.aux
 INPUT ./doc/conclusion.tex
 INPUT ./doc/conclusion.tex
-INPUT /usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/tcrm1095.tfm
 OUTPUT out/./doc/shaji.aux
 INPUT ./doc/shaji.tex
 INPUT ./doc/shaji.tex

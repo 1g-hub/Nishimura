@@ -52,12 +52,6 @@ David Silver, Thomas Hubert, Julian Schrittwieser, Ioannis Antonoglou, Matthew
   and go through self-play.
 \newblock {\em Science}, Vol. 362, No. 6419, pp. 1140--1144, 2018.
 
-\bibitem{OpenAIGym}
-Greg {Brockman}, Vicki {Cheung}, Ludwig {Pettersson}, Jonas {Schneider}, John
-  {Schulman}, Jie {Tang}, and Wojciech {Zaremba}.
-\newblock {OpenAI Gym}.
-\newblock {\em arXiv e-prints}, p. arXiv:1606.01540, June 2016.
-
 \bibitem{DQN}
 Volodymyr Mnih, Koray Kavukcuoglu, David Silver, Alex Graves, Ioannis
   Antonoglou, Daan Wierstra, and Martin Riedmiller.
@@ -70,6 +64,12 @@ Volodymyr Mnih, Koray Kavukcuoglu, David Silver, Alex Graves, Ioannis
 \newblock 分散ネットワークゲーム環境における戦略の進化.
 \newblock Master's thesis,
   大阪府立大学大学院工学研究科電気・情報系専攻知能情報工学分野, 2001.
+
+\bibitem{OpenAIGym}
+Greg {Brockman}, Vicki {Cheung}, Ludwig {Pettersson}, Jonas {Schneider}, John
+  {Schulman}, Jie {Tang}, and Wojciech {Zaremba}.
+\newblock {OpenAI Gym}.
+\newblock {\em arXiv e-prints}, p. arXiv:1606.01540, June 2016.
 
 \bibitem{EvolvingHearthStone}
 Fernando de~Mesentier~Silva, Rodrigo Canaan, Scott Lee, Matthew~C. Fontaine,

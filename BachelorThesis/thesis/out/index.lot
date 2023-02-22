@@ -1,4 +1,4 @@
-\contentsline {table}{\numberline {4.1}{\ignorespaces 強いカード, 弱いカードを 1 種類ずつ恣意的に加えたデッキ\relax }}{12}%
+\contentsline {table}{\numberline {4.1}{\ignorespaces 強いカード, 弱いカードを 1 種類ずつ恣意的に加えたデッキ\relax }}{13}%
 \contentsline {table}{\numberline {4.2}{\ignorespaces アグロの対戦相手のデッキ\relax }}{15}%
 \contentsline {table}{\numberline {4.3}{\ignorespaces コントロールの対戦相手のデッキ\relax }}{15}%
 \contentsline {table}{\numberline {4.4}{\ignorespaces 勝率調整済みの環境における 10000 回のゲーム実行後の先攻の勝率\relax }}{15}%
@@ -17,8 +17,8 @@
 \contentsline {table}{\numberline {5.7}{\ignorespaces 調整されるカード種類数を増やしながら単目的 GA を適応した結果\relax }}{28}%
 \contentsline {table}{\numberline {5.8}{\ignorespaces 各手法で得られた最も良好な解の適応度\relax }}{28}%
 \contentsline {table}{\numberline {5.9}{\ignorespaces 単目的 GA における最も良好な解が表すデッキ\relax }}{30}%
-\contentsline {table}{\numberline {5.10}{\ignorespaces 多目的 GA における最も良好な解が表すデッキ\relax }}{30}%
+\contentsline {table}{\numberline {5.10}{\ignorespaces 多目的 GA における最も良好な解が表すデッキ\relax }}{31}%
 \contentsline {table}{\numberline {5.11}{\ignorespaces 提案手法における最も良好な解が表すデッキ\relax }}{31}%
-\contentsline {table}{\numberline {5.12}{\ignorespaces 単目的 GA で調整した時の TCG 環境における先攻の勝率\relax }}{31}%
-\contentsline {table}{\numberline {5.13}{\ignorespaces 多目的 GA で調整した時の TCG 環境における先攻の勝率\relax }}{31}%
-\contentsline {table}{\numberline {5.14}{\ignorespaces 提案手法で調整した時の TCG 環境における先攻の勝率\relax }}{31}%
+\contentsline {table}{\numberline {5.12}{\ignorespaces 単目的 GA で調整した時の TCG 環境における先攻の勝率\relax }}{32}%
+\contentsline {table}{\numberline {5.13}{\ignorespaces 多目的 GA で調整した時の TCG 環境における先攻の勝率\relax }}{32}%
+\contentsline {table}{\numberline {5.14}{\ignorespaces 提案手法で調整した時の TCG 環境における先攻の勝率\relax }}{32}%
