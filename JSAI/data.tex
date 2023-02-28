@@ -1,35 +1,48 @@
 \documentclass[twocolumn]{jarticle}   
 \usepackage{color}
 \usepackage{jsaiac}
+\usepackage{ccaption}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{subcaption}
+\usepackage{enumerate}
+\usepackage{comment}
+\usepackage{url}
+\usepackage{multirow}
+\usepackage{diagbox}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{wrapfig}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{lipsum}
 
 %%
 \title{
-\jtitle{20XX年度人工知能学会全国大会・\LaTeX{}スタイルファイル}
-\etitle{\LaTeX{} Style file for manuscripts of JSAI 20XX}
+\jtitle{深層強化学習に基づくトレーディングカードゲーム環境の構築}
+\etitle{Traiding Card Game Environments based on deep reinforcement learning}
 }
 %%英文は以下を使用
 %\title{Style file for manuscripts of JSAI 20XX}
 
-\jaddress{氏名，所属，住所，電話番号，Fax番号，電子メールアドレスなど}
+\jaddress{seb01100@st.osakafu-u.ac.jp}
 
 \author{%
-\jname{第XX回全国大会プログラム委員会\first}
-\ename{The Program Committee of the XXth annual conference of JSAI}
+\jname{西村 昭賢\first}
+\ename{Shouken Nishimura}
 \and
-\jname{第2筆者氏名\second}
-\ename{Second Author's Name}
-%\and
+\jname{森 直樹\first}
+\ename{Naoki Mori}
+\and
+\jname{岡田 真\first}
+\ename{Makoto Okada}
 %Given-name Surname\third{}%%英文は左を使用
 }
 
 \affiliate{
-\jname{\first{}人工知能学会}
-\ename{The Japanese Society for Artificial Intelligence}
-\and
-\jname{\second{}所属和文2}
-\ename{Affiliation \#2 in English}
-\and
-\third{}Affiliation \#3 in English%%英文は左を使用
+\jname{\first{}大阪公立大学}
+\ename{Osaka Metropolitan University}
 }
 
 %%
@@ -37,9 +50,9 @@
 %\session{0A0-00}%% <-- 講演ID（必須)
 
 \begin{abstract}
-Here is an abstract of up to 150 words \textcolor{red}{in English}. 
-This document describes the format guidelines for Japanese manuscripts in \LaTeX{} of the annual conference of JSAI. 
-This is also a sample of a formatted manuscripts (see 2.4 for writing the abstract).
+   Recently, the application of deep reinforcement learning to game environments has attracted attention. In particular, game with imperfect information has been paid attention to in this field, such as mahjong and poker.
+   In this research, we focus on the trading card game (TCG). TCG is more difficult to be played with artificial intelligence than other games because the performance and types of available cards can be changed. This nature also makes it difficult to adjust the game balance, and it is common for the game to be modified after its release, and terms such as "buff" to change the card performance upward and "nerf" to change it downward are used. 
+   Based on the above background, we propose game balance optimization methods for TCG environments using deep reinforcement learning and evolutionary computation and demonstrate the effectiveness of the proposed methods through numerical experiments using our own TCG environment.
 \end{abstract}
 
 %\setcounter{page}{1}
@@ -54,237 +67,418 @@ This is also a sample of a formatted manuscripts (see 2.4 for writing the abstra
 \maketitle
 
 \section{はじめに}
+近年, ゲーム環境への深層強化学習の応用が注目されている．特に，プレイヤーに与えられる情報が部分的である不完全情報ゲームへの応用が注目されている.
+本研究では不完全情報ゲームであるトレーディングカードゲーム (TCG) に着目した. TCG は使用可能なカードの性能や種類を変更可能という点で, 他のゲームよりも人工知能による攻略が困難である. また, この性質のためゲームバランスの調整が難しく, 公開後に修正が入ることが一般的であり, カードの性能を上方修正するバフや下方修正するナーフなどの用語が用いられる. 上記の背景から, 筆者らは深層強化学習とそれに基づく進化型計算を用いた TCG 環境のゲームバランス最適化手法を提案し, 独自の TCG 環境を用いて数値実験により提案手法の有効性を示す．
 
+\section{要素技術}
+\subsection{Deep Q Network}
+Deep Q Network (DQN) は価値ベースの強化学習手法の Q 学習と深層学習を組み合わせた代表的な深層強化学習手法である \cite{DQN}.
+Experience Replay などの工夫により安定した学習を可能としている.
+\subsection{Genetic Algorithm}
+Genetic Alogorithm (GA) とは, 生物の進化とその過程を模した最適化手法であり, 主に組合せ最適化問題に対して適用される. GA では 解を個体として表現し,個体群を用いて解空間の多点を同時に探索する. 各個体は良好さの指標として適応度を持つ. GA では, 個体群に対して選択, 交叉, 突然変異の 3 種類の遺伝演算子を適用し世代と呼ばれる探索を進めていく.
 
-\section{全般的事項}
+\section{提案手法}
+\subsection{提案手法 1 : 数値実験用の TCG 環境}
+Magic : The Gathering \footnote[2]{https://magic.wizards.com} に代表される一般的な TCG と同様に, ゲームは 2 人のプレイヤーからなり, プレイヤーは複数のカードからなるデッキを持つ. 
+プレイヤーは手札, 盤面と呼ばれるカードを保有する領域を持ち, ドローと呼ばれる操作でカードをデッキから手札に加える. また, プレイと呼ばれる操作でカードを手札から盤面に出す. また, デッキからカードが無くなった状態をデッキ切れと呼ぶ.  
+また, プレイヤー自身が HP, マナという 2 つの整数値パラメータを持つ.
+今回の環境ではプレイヤーの HP の最大値は 20, マナの上限値は初期値が 1 で最大値を 5 と設定した.
+\par
+また TCG では, カードは場に残るユニットと使い切りのスペルの 2 種類のカードに分けられる. 本研究ではユニットのみを考慮した.
+カードはそれぞれ攻撃力と HP とコストの 3 つの整数値パラメータを持つ. カードがプレイされる際, プレイヤーはカードのコスト分マナを減少させる. またマナが負の値になる場合はプレイすることができない.
+また, 盤面にあるカードは対戦相手の盤面にあるカード, あるいは相手プレイヤーに攻撃することができる. カードが攻撃する際には, 攻撃対象の HP へとカードの持つ攻撃力分ダメージを与える. またカードへと攻撃する際には攻撃対象のカードが持つ攻撃力分, 攻撃するカードもダメージを受ける.
+カードが攻撃が可能となるのはプレイされたターンの次のターンからとなる. 
+カードの HP が 0 になった, あるいは後述する手札と盤面の枚数制限を超えて手札にドロー, 盤面にプレイされた時はカードは破壊される. 破壊されたカードはゲームから取り除かれる. 
+また, カードによっては以下に示す特殊効果を持つものもある.
 
-\subsection{ファイル形式・サイズ}
+\begin{description}
+   \vspace{-0.15cm}
+   \setlength{\itemsep}{0cm}
+   \small
+  \item[召喚 :]  プレイ時 (攻撃力 , HP) = (1 , 1) の
+  ユニットを追加でプレイ
+  \item[治癒 :]  プレイ時自プレイヤーの HP を 2 回復する
+  \item[攻撃 :]  プレイ時敵プレイヤーの HP を 2 減らす
+  \item[取得 :]  プレイ時自プレイヤーは 1 枚カードをドローする
+  \item[速攻 :]  プレイされたターンに攻撃できる
+\end{description}
+\vspace{-0.3cm}
+また, ゲームの流れは以下のようになっている.
+\begin{enumerate}
+  \small
+  \vspace{-0.15cm}
+  \setlength{\itemsep}{0cm} % 項目間
+  \item ゲーム開始時に各プレイヤーは自身のデッキをシャッフル.
+  \item デッキから初期手札としてカードを 5 枚ドロー. 
+  \item 先攻プレイヤーは 1 ターン目のドローステップをスキップし行動.
+  \item 後攻プレイヤーはカードを 1 枚ドローして行動.
+  \item 2 ターン目以降は先攻プレイヤーもカードを 1 枚ドローしてから行動. 
+  \item 4 , 5 の繰り返し. なお, ターンプレイヤーは行動前にマナを上限値まで回復. このときマナの上限値が 5 でなければ上限値を 1 増やしてから回復.
+  \item プレイヤーがデッキ切れになっている状態でカードをドローしようとした, あるいはプレイヤー自身の HP が 0 となった場合はそのプレイヤーが敗北となりゲーム終了.
+\end{enumerate}
+\vspace{-0.15cm}
+\par
+本構築環境では一般的な TCG と同様にカードがプレイされた次のターンから行動可能となるため, 先攻プレイヤーがカードの行動が早くなり有利となる.そのため, 先攻の 1 ターン目のドローステップをスキップしている. 
 
+\subsection{提案手法 2 : DQN によるデッキ内のカードパワーの定量的な評価方法}
+\label{manaratio}
+TCG においてデッキ内の各カードのカードパワーを測る指標として一般的なものはカードの HP を $h$, 攻撃力を $a$, コストを $c$ とすると $\frac{(h + a)}{2c} $ として数値化されるマナレシオがある. 
+しかし, マナレシオはカードの特殊効果といった要素を考慮していないためあくまで目安にしかならない. \par
+本研究では, TCG 環境において DQN を用いた定量的なカードパワー評価指標を提案する.
+具体的には, DQN を用いてカードパワーを測定したいデッキにおける妥当な戦略を持つエージェントを構築する. 
+そしてそのエージェント同士を先攻後攻両方に配置し, 先攻後攻ごとにそれぞれ 1 種類ずつカードを除いて勝率を計算する. これによりデッキ内のカードの種類数 $n_{\mathrm{card}}$ について, $n_{\mathrm{card}}^2$ 個の勝率の値を得ることができ, これらの値から定量的に構築戦略下のカードパワーを評価する. 
 
-\subsection{ヘッダー部分}
-2015年大会から講演番号およびヘッダの会議名は，原稿提出後に運営側で挿入しますので，著者が作成する原稿には記入しないでください．
+\subsection{提案手法3 : 調整するカード枚数を最小限に抑えた TCG 環境のゲームバランス最適化手法}
+\label{hearthstone}
+前提として, 本研究では TCG 環境においてデッキ間の勝率が $50\%$ に近いことが TCG 環境におけるゲームバランスとして好ましい状態と定義する.
+\par
+Fernando らは HearthStone \footnote[1]{https://hearthstone.blizzard.com} の TCG 環境内においてデッキ間の勝率が 50 \% となるように, GA を用いてデッキ内のすべてのカードのパラメータを対象としてパラメータを調整した \cite{Hearthstone}.
+結果として, バランス調整の際の変更が多いと開発者やユーザーに対する影響が多いため好ましくないという考えのもと, 多目的 GA を用いることでパラメータの変更量を減らしながらデッキ間の勝率を最適化していた.
+しかし, 関連研究の手法ではデッキ内のすべてのカードを対象としているためどのカードにも調整が起こりえる.
+\par
+そこで本研究では, TCG 環境のゲームバランス最適化の過程においてパラメータの変更量ではなく調整されるカードの枚数を抑えた方が, ゲームの開発者やユーザーにとって好ましいと考え, 調整されるカードの三数を最小限にするような TCG 環境のゲームバランス最適化手法を提案する.
+具体的には, 提案手法 2 によって得られたカードパワーの評価からデッキにおいて調整されるカードを限定し GA の解空間の次元を削減することで, 直接的に調整されるカードの数を減らす.
 
-\subsection{タイトルと著者名}
-原稿におけるタイトル・筆者名等は，発表申し込み時に入力したものに一致させてください．\textcolor{red}{原稿のタイトルや著者名が発表申し込み時と異ならないように十分注意してください．}
-
-\subsection{アブストラクト}
-概要（Abstract）には  (1)目的と (2)結果の概要あるいは結論を含めてください．必要に応じ方法を記載してください．
-\textcolor{red}{(1)(2)の記述のない場合は不採択となることがあります．}
-
-\subsection{原稿枚数}
-下記指定フォーマットでA4用紙2ページです．希望によりさらに2ページまで無料で追加できます．
-
-\subsection{国際セッション}
-\textcolor{red}{国際セッションについては英語のみとなります．}国際セッション論文は，会議時には大会ホームページに掲載されますが，その後に選ばれた論文はPost Proceedingsでの刊行が計画されています．
-
-
-\section{\LaTeX{}原稿のスタイル}
-論文のスタイルを統一するために，原稿はできるだけ以下のスタイルファイル
-を使ってください．基本的には2000年度までの全国大会論文集用に配布されて
-いた原稿用紙と同じ形に仕上がるようになっています．スタイルファイル自体
-は昨年度用のものと同一です．
-
-スタイルファイルは以下のように指定してください．
-
-ASCII版\LaTeX{}2.09なら
-\begin{verbatim}
-\documentstyle[twocolumn,jsaiac]{jarticle}
-\end{verbatim}
-
-NTT版\LaTeX{}2.09なら
-\begin{verbatim}
-\documentstyle[twocolumn,jsaiac]{j-article}
-\end{verbatim}
-
-ASCII版\LaTeXe{}なら
-\begin{verbatim}
-\documentclass[twocolumn]{jarticle}
-\usepackage{jsaiac}
-\end{verbatim}
-
-欧文使用の\LaTeX{}2.09なら
-\begin{verbatim}
-\documentstyle[twocolumn,jsaiac]{article}
-\end{verbatim}
-
-欧文使用の\LaTeXe{}なら
-\begin{verbatim}
-\documentclass[twocolumn]{article}
-\usepackage{jsaiac}
-\end{verbatim}
-
-\Style{}は以上のように，標準で配布されるパッケージである
-jarticle.sty，j-article.sty，jarticle.cls
-（欧文論文の場合はarticle.sty，article.cls）を主のスタイルファイルとして，
-それにオプションという形で使うように設定されています．
-\Style{}はタイトル部分，文字組の調整，一部脚注の
-調整以外は行っていませんが，
-共通版にする関係から，オプションのtwocolumnの指定が必須です．
-以上のことから，
-\Style{}を使う場合は，上記の指定方法を必ず守るようお願いいたします．
-
-\Style{}は以上の3つの\LaTeX{}のバージョンに対応しています．
-NTT版の\LaTeXe{}は動作確認を行っていません．
-
-\subsection{\Style{}を使うことで指定が不要なもの}
-
-\Style{}を使えば，次の指定は必要ありません．
-
+\section{実験方法}
+独自の TCG 環境下において以下の 3 種類の数値実験をして提案手法の有効性を確かめた.
+\subsection{実験 1}
+学習側のデッキに \ref{manaratio} 節で述べたマナコストの観点において強いカードを 1 種類, 弱いカードを恣意的に 1 種類ずつ入れ, 提案する TCG 環境において DQN を適用した. 後攻プレイヤーの行動のみを学習し, 学習後 10000 回対戦を実行した. 学習中, 学習後の対戦において先攻プレイヤーには筆者らが実装したアグロ, コントロールと呼ばれる戦略を持つエージェントを配置している. アグロは相手プレイヤーへの攻撃を優先する戦略で, コントロールは相手盤面のカードの処理を優先する戦略である. また, 先攻プレイヤーは 1 エピソードごとに等確率で戦略を変化させ, 戦略に応じて事前に戦略間の勝率が $50 \pm 5\%$ となるよう調整されたデッキを持つ. 実験から学習済エージェントの勝率を記録し, ベースラインと比較し DQN の妥当性を確かめた. また対戦した記録から選択した行動, 各カードのプレイされた回数を計測し学習序盤のエージェントと比較することで学習済みエージェントの行動を分析した.
+\begin{table}[t]
+   \centering
+   \caption{学習側プレイヤーのデッキ}
+   \label{table:OPdeck}
+   \vspace{-0.3cm}
+   \scalebox{0.70}[0.70]{
+     \begin{tabular}{|c|c|c|c|c|c|}
+       \hline
+       ID & 攻撃力 & HP & コスト & 特殊効果 & 枚数 \\ \hline
+       0 & 4 & 4 & 1 & 無し & 2 \\ \hline
+       1 & 2 & 2 & 2 & 無し & 2 \\ \hline
+       2 & 3 & 3 & 3 & 無し & 2 \\ \hline
+       3 & 4 & 3 & 4 & 無し & 2 \\ \hline
+       4 & 5 & 4 & 5 & 無し & 2 \\ \hline
+       5 & 2 & 2 & 2 & 召喚 & 2 \\ \hline
+       6 & 2 & 3 & 3 & 召喚 & 2 \\ \hline
+       7 & 1 & 1 & 1 & 取得 & 2 \\ \hline
+       8 & 1 & 3 & 2 & 取得 & 2 \\ \hline
+       9 & 2 & 1 & 2 & 速攻 & 2 \\ \hline
+       10 & 3 & 1 & 3 & 速攻 & 2 \\ \hline
+       11 & 1 & 2 & 2 & 攻撃 & 2 \\ \hline
+       12 & 2 & 3 & 3 & 攻撃 & 2 \\ \hline
+       13 & 1 & 1 & 1 & 治癒 & 2 \\ \hline
+       14 & 1 & 1 & 5 & 治癒 & 2 \\ \hline
+       \end{tabular}
+   }
+   
+   \end{table}
+また, DQN におけるエージェントの状態空間, 行動空間は, 手札と盤面にそれぞれ 5, 9 枚の枚数上限を設けて定義した. 表 \ref{table:state}, \ref{table:action} に本研究における状態空間と行動空間の定義を示す. \par
+また, 報酬 $r$ は以下のように設定した.\par
 \begin{itemize}
-\item ページ番号の書式
-\item マージン等の位置
-\item 用紙（A4）用紙
-\item 本文（2段組）
+\small
+  \vspace{-0.3cm}
+  \item 1 ステップ終了後 
+  \begin{equation*}
+   \small
+   r = 0.0  
+  \end{equation*}
+  \item 1 エピソード終了後
+  \begin{equation*}
+   \small
+    r = 
+    \left\{
+      \begin{aligned}
+          1.0 \quad & (\mathrm{学習プレイヤーの勝利}) \\
+          -1.0 \quad & (\mathrm{敵プレイヤーの勝利}) \\
+      \end{aligned}
+    \right.
+  \end{equation*} 
 \end{itemize}
 
-\subsection{\Style{}を使うことで指定が必要なもの}
+\begin{table}[t]
+   \small
+   \centering
+   \caption{定義した状態空間}
+   \label{table:state}
+   \vspace{-0.3cm}
+   \scalebox{0.80}[0.80]{
+     \begin{tabular}{|c|c|c|c|}
+       \hline
+       状態説明                        & 次元数        & 最小値        & 最大値         \\ \hline \hline
+       各プレイヤーの HP & 2 & 0 & 20 \\ \hline
+       各プレイヤーの マナ & 2 & 0 & 5 \\ \hline
+       \begin{tabular}{c}
+         手札 1 $\sim$ 9 の\\HP , 攻撃力, コスト, 特殊効果
+         \end{tabular}      & 36         & 0          & 5          \\
+       \hline
+       \begin{tabular}{c}
+         自盤面 1 $\sim$ 5 の\\HP と攻撃力
+       \end{tabular}     & 10         & 0          & 5 \\
+       \hline
+       \begin{tabular}{c}
+         敵盤面 1 $\sim$ 5 の\\HP と攻撃力
+       \end{tabular}     & 10         & 0          & 5 \\
+       \hline
+       \begin{tabular}{c}
+         自盤面 1 $\sim$ 5 が\\攻撃可能かどうか
+       \end{tabular} & 5          & 0          & 1  \\
+       \hline
+       \begin{tabular}{c}
+         お互いのデッキの\\残り枚数
+       \end{tabular}     & 2 & 0 & 30 \\
+        \hline
+       \end{tabular}
+   }
+   \end{table}
+ 
+   \begin{table}[t]
+     \centering
+     \caption{定義した行動空間}
+     \vspace{-0.3cm}
+     \label{table:action}
+     \scalebox{0.80}[0.80]{
+       \begin{tabular}{|c|c|}
+         \hline
+         行動説明                          & 次元数        \\ \hline \hline
+         手札 1 $\sim$ 9 を自盤面にプレイ             & 9          \\ \hline
+         自盤面 1 で敵盤面 1 $\sim$ 5 に攻撃or敵プレイヤーに攻撃    & 6          \\ \hline
+         自盤面 2 で敵盤面 1 $\sim$ 5 に攻撃or敵プレイヤーに攻撃    & 6          \\ \hline
+         自盤面 3 で敵盤面 1 $\sim$ 5 に攻撃or敵プレイヤーに攻撃    & 6          \\ \hline
+         自盤面 4 で敵盤面 1 $\sim$ 5 に攻撃or敵プレイヤーに攻撃    & 6          \\ \hline
+         自盤面 5 で敵盤面 1 $\sim$ 5 に攻撃or敵プレイヤーに攻撃    & 6          \\ \hline
+         ターンエンド & 1 \\ \hline
+         \end{tabular}
+     }
+       \end{table}
+       また, 表 \ref{table:dqnparam} に実験 1 で用いた DQN のパラメータを示す.
+       今回の実験において, $\mathrm{\epsilon\textrm{-}greedy}$ における $\epsilon$ は (\ref{epsilon}) 式に従って, $\mathrm{\epsilon_{max}}$ から $\mathrm{\epsilon_{min}}$ へと指数関数的に減少する. 
+       \begin{equation}
+         \vspace{-0.3cm}
+         \label{epsilon}
+         \epsilon = \mathrm{max}(\mathrm{\epsilon_{min}} \: , \: \mathrm{\epsilon_{min}} + (\mathrm{\epsilon_{max} - \epsilon_{min}}) \exp(- \frac{n_{\mathrm{step}}}{\mathrm{\epsilon_{decay}}}))
+       \end{equation}
+       ここで ${n_\mathrm{step}}$ は学習時の累積ステップ数を表す. 本実験では $\mathrm{\epsilon_{max}} = 1.0, \mathrm{\epsilon_{min}} = 0.1, \mathrm{\epsilon_{decay}} = 50000$ とした.
+       \begin{table}[t]
+         \centering
+         \caption{DQNのパラメータ}
+         \vspace{-0.3cm}
+         \label{table:dqnparam}
+         \scalebox{0.70}[0.70]{
+           \begin{tabular}{|c|c|}
+             \hline
+             パラメータ名 & 値 \\ \hline \hline
+             割引率 $\gamma$ & 0.99 \\ \hline     
+             全結合層の活性化関数             & ReLU     \\ \hline
+             全結合層の次元                & 64       \\ \hline
+             最適化アルゴリズム              & Adam     \\ \hline
+             方策                 & $\epsilon$-greedy \\ \hline
+             Target Network 更新重み              & 0.5     \\ \hline
+             Exprience Memory 開始ステップ数 & $1.0 \times 10^5$ \\ \hline
+             学習ステップ数 &  $1.0 \times 10^6$ \\ \hline
+             \end{tabular}
+         }
+         \end{table}
+\subsection{実験 2}
+実験 2 では実験 1 で構築した学習済エージェントをそのまま利用する. 
+エージェントを先攻後攻両方に配置し, 表 \ref{table:OPdeck} のデッキを両方に持たせる. それぞれデッキからカードを 1 種類ずつ除いて 10000 回対戦を実行し先攻側の勝率を記録する. また, 比較対象として構築したエージェントだけでなく筆者が作成したアグロの戦略を持つプレイヤーにおいても表 \ref{table:OPdeck} のデッキを持たせて先攻後攻両方に配置し, 同様にカードを 1 種類ずつ除いた際の勝率を記録する.
 
-\def\Label{\vskip.5\baselineskip\noindent$\circ$\hskip3pt{}}
+\subsection{実験 3}
+TCG 環境に表 \ref{table:OPdeck} のデッキをアグロ用のデッキとして追加し, デッキ間の勝率を 50 \% に近づけるようにゲームバランスを調整するという問題を設定する. この問題設定下でカードの調整枚数を限定してデッキ間の勝率を最適化する単目的 GA を適用した. また, 比較手法として \ref{hearthstone} 節で述べた関連研究で用いられていた表 \ref{table:OPdeck} の 15 種類のカードすべてを対象とした, 勝率を最適化する単目的 GA および勝率とパラメータの変更量の 2 つを最適化する多目的 GA を適用した.
+ゲームバランスの調整において GA で調整するパラメータは表 \ref{table:OPdeck} の 15 種類のカードの HP, 攻撃力, コストとした.
+\begin{table}[t]
+   \centering
+   \caption{実験 3 の問題設定における TCG 環境}
+   \label{jikken3env}
+   \vspace{-0.3cm}
+   \scalebox{0.75}[0.75]{
+     \begin{tabular}{|c|c|c|c|}
+       \hline
+       \diagbox[]{先攻}{後攻} &  新追加デッキ (アグロ)    & アグロ    & コントロール \\ \hline
+       新追加デッキ(アグロ) & $r_{0}$ & $r_{1}$ & $r_{2}$ \\ \hline
+       アグロ &   $r_{3}$  & 0.5255 & 0.5424 \\ \hline
+       コントロール& $r_{4}$ & 0.5121 & 0.5053 \\ \hline
+       \end{tabular}
+   }
+   \end{table} 
+   \begin{table}[t]
+     \centering
+     \caption{GAのパラメータ}
+     \vspace{-0.3cm}
+     \label{table:gaparam}
+     \scalebox{0.70}[0.70]{
+       \begin{tabular}{|c|c|}
+         \hline
+         パラメータ名 & 値 \\ \hline \hline
+         世代数 & 50 \\ \hline     
+         個体数 & 50     \\ \hline
+         遺伝子長 & 調整するカードの種類数 $\times$ 3       \\ \hline
+         交叉率 & 0.4 \\ \hline
+         交叉の種類 & 2 点交叉 \\ \hline
+         個体ごとの突然変異率 & 0.2 \\ \hline
+         選択 & 1 個体だけエリート保存, その他はトーナメント方式 \\ \hline
+         トーナメントサイズ &  3 \\ \hline
+         多目的 GA のアルゴリズム & NSGA-II \\ \hline
+         \end{tabular}
+     }
+\end{table}
+   
+また, 単目的 GA における適応度, 多目的 GA における目的関数として各解においてデッキ間の勝率に関する適応度 $f_\mathrm{w}$,  パラメータの変更量に関する適応度 $f_\mathrm{p}$, 調整されたカード種類数 $f_\mathrm{c}$ の 3 つの適応度を定義した.
+まず, $f_\mathrm{w}$ については, 表 \ref{jikken3env} に示される問題設定において, $f_\mathrm{w} = \exp(-\sum_{\mathrm{i}=0}^4 \sqrt{(0.50 - r_\mathrm{i})^2})$ と計算する.
+また, $f_\mathrm{p}$, $f_\mathrm{c}$ に関しては, 表 \ref{table:OPdeck} のデッキと GA の個体が表す各カードのパラメータを比較してパラメータの変更量 $p$, 調整されたカードの種類数 $c$ を計算し, それぞれ $f_\mathrm{p} = \exp(-\frac{p}{200})$, $f_\mathrm{c} = \exp(-\frac{c}{15})$ と計算する.
+表 \ref{table:gaparam} に本研究における GA のパラメータを示す.
 
-\Label タイトル領域：　\Style{}の書き方のきまりは次のようになります．
-\begin{itemize}
-\item タイトル：　
-\begin{verbatim}
-\title{
-   \jtitle{和文タイトル}
-   \etitle{欧文タイトル}
-}
-\end{verbatim}
-なお，欧文論文の場合は，単に
-\begin{verbatim}
-\title{欧文タイトル}
-\end{verbatim}
-としてください．
-\item 筆者名（同一所属の場合）：　
+     \section{結果と考察}
+     以下, 各実験の結果とその考察を示す.
+     
+     \subsection{実験 1 : 結果と考察}
+     表 \ref{table:winratejikken1} に学習後 10000 回対戦を実行し勝率を計算した結果を示す. この時, ベースラインとして,後攻に筆者らが実装した戦略 2 種類を基に行動するプレイヤー, 表 \ref{table:action} に沿ってランダムに行動するプレイヤーを配置し表 \ref{table:OPdeck} のデッキを持たせて 10000 回ゲームを実行した際の勝率も示している. 
+     \begin{table}[t]
+       \centering
+       \caption{後攻の戦略を変化させた場合の勝率比較}
+       \vspace{-0.3cm}
+       \label{table:winratejikken1}
+       \scalebox{0.7}[0.7]{
+         \begin{tabular}{|c|c|}
+            \hline
+            後攻の戦略        & 勝率     \\ \hline \hline
+            学習済エージェント    & \textbf{0.7182} \\ \hline
+            アグロ          & 0.6914 \\ \hline
+            コントロール       & 0.6291 \\ \hline
+            表 \ref{table:action} の行動空間に沿ってランダム & 0.2336       \\ \hline
+            \end{tabular}
+       }
+       \end{table}
+       これらのベースラインと比べ, 学習済みエージェントは高い勝率を得ていることがわかる. 深層強化学習を用いることで自動的にルールベースで作成した戦略よりも適した戦略を持つエージェントが構築できた.
+       さらに学習済エージェントで 50000 回対戦を実行し, エージェントが構築した戦略を分析した.
+       比較対象として, 本研究において $\epsilon$ は $\mathrm{\epsilon_{max}} = 1.0$ から指数関数的に減少するため, 表 \ref{table:winratejikken1} でベースラインとして用いた表 \ref{table:action} の行動空間に沿ってランダムに行動するエージェントを学習最序盤のエージェントとして選んだ.\par 
+       表 \ref{table:actioncount}に 50000 回の対戦において表 \ref{table:action} の行動空間における各行動でエージェントが選択した総数を示す. 大きな違いとしてランダムの場合はターンエンドが圧倒的に多く選ばれており, 学習済の場合は 2 番目に多い行動とほぼ同数になっていた. 表 \ref{table:action} の行動空間の定義ではエージェントが盤面の状況関係なく任意にターンエンドを選択できるようになっているが, 学習を進めていくにつれて無駄なターンエンドが減っていったと分かる.
+       また. 学習済エージェントの行動に着目すると, 盤面のカードで相手プレイヤーに直接攻撃するアグロ寄りの戦略を構築していることがわかる. この理由としては, 表 \ref{table:OPdeck} の学習側に持たせるデッキにおいて強いカードとして恣意的に入れた ID 0 のカードは低コストで高い攻撃力を持つためと考えられる. \par
+       また. 表 \ref{table:cardcount} に 50000 回の対戦において各エージェントが表 \ref{table:OPdeck} 内の各カードをプレイした回数を示す. 表 \ref{table:OPdeck} から, 両エージェント共にコストが小さいカードほど多くプレイされていることがわかる. ここで, 恣意的にカードを追加した ID 0, 13, 7 のコスト 1 帯のカードと, ID 14, 4 のコスト 5 帯のカードに注目すると, ランダムに行動するエージェントでは同コスト帯のカードの中でそこまで顕著な差は現れていない一方で, 学習済エージェントではコスト 1 帯のカードの中で ID 0 のプレイ回数が明らかに多くなっており, コスト 5 帯のカードの中でID 14 のカードは明らかに少なくなっていた. このことから学習の結果構築戦略下におけるカードの強弱も学習していると考えられ, 恣意的に入れたカードの強弱が結果に反映されており合理的であるといえる. 
+       \begin{table}[t]
+         \centering
+         \caption{選択された総数が多い行動上位 5 個}
+         \vspace{-0.3cm}
+         \label{table:actioncount}
+         \scalebox{0.7}[0.7]{
+           \begin{tabular}{|cc|cc|}
+             \hline
+             \multicolumn{2}{|c|}{ランダム}      & \multicolumn{2}{c|}{学習済}       \\ \hline
+             \multicolumn{1}{|c|}{行動説明} & 総数 & \multicolumn{1}{c|}{行動説明} & 総数 \\ \hline \hline
+             \multicolumn{1}{|c|}{ターンエンド}    & 401838  & \multicolumn{1}{c|}{ターンエンド}    & 245646  \\ \hline
+             \multicolumn{1}{|c|}{手札 4 を自盤面にプレイ}    &  92053  & \multicolumn{1}{c|}{手札 1 を自盤面にプレイ}    & 213804  \\ \hline
+             \multicolumn{1}{|c|}{手札 1 を自盤面にプレイ}    & 63841  & \multicolumn{1}{c|}{自盤面 1 で相手プレイヤーに攻撃}    & 197221  \\ \hline
+             \multicolumn{1}{|c|}{自盤面 1 で相手プレイヤーに攻撃}    & 63458  & \multicolumn{1}{c|}{自盤面 2 で相手プレイヤーに攻撃}    & 103490  \\ \hline
+             \multicolumn{1}{|c|}{手札 2 を自盤面にプレイ}    & 61304  & \multicolumn{1}{c|}{手札 2 を自盤面にプレイ}    & 68018  \\ \hline
+             \end{tabular}
+         }
+       \end{table}
 
-\begin{verbatim}
-\author{%
-   \jname{筆者氏名}
-   \ename{Given-name Surname}
-\and
-   \jname{筆者氏名}
-   \ename{Given-name Surname}
-\and
-   Given-name Surname
-}
-\end{verbatim}
+       \begin{table}[t]
+         \begin{minipage}{0.50\hsize}
+           \centering
+           \caption{各カードが盤面にプレイされた総数 (降順)}
+            \vspace{-0.3cm}
+            \label{table:cardcount}
+           \scalebox{0.70}[0.70]{
+           \begin{tabular}{|cc|cc|}
+             \hline
+             \multicolumn{2}{|c|}{ランダム}       & \multicolumn{2}{c|}{学習済}       \\ \hline
+             \multicolumn{1}{|c|}{ID} & 総数    & \multicolumn{1}{c|}{ID} & 総数   \\ \hline \hline
+             \multicolumn{1}{|c|}{13}  & 35173 & \multicolumn{1}{c|}{0}  & 32965 \\ \hline
+             \multicolumn{1}{|c|}{0}  & 35163 & \multicolumn{1}{c|}{13} & 31845 \\ \hline
+             \multicolumn{1}{|c|}{7}  & 35068 & \multicolumn{1}{c|}{7}  & 31581 \\ \hline
+             \multicolumn{1}{|c|}{11} & 31134 & \multicolumn{1}{c|}{1}  & 26215 \\ \hline
+             \multicolumn{1}{|c|}{9} & 30956 & \multicolumn{1}{c|}{11} & 26184 \\ \hline
+             \multicolumn{1}{|c|}{1}  & 30672 & \multicolumn{1}{c|}{5}  & 25990 \\ \hline
+             \multicolumn{1}{|c|}{5}  & 30401 & \multicolumn{1}{c|}{8}  & 25986 \\ \hline
+             \multicolumn{1}{|c|}{8}  & 30386 & \multicolumn{1}{c|}{9}  & 25697 \\ \hline
+             \multicolumn{1}{|c|}{12} & 26558 & \multicolumn{1}{c|}{12}  & 21763 \\ \hline
+             \multicolumn{1}{|c|}{10} & 26521 & \multicolumn{1}{c|}{2}  & 21560 \\ \hline
+             \multicolumn{1}{|c|}{6}  & 25866 & \multicolumn{1}{c|}{6} & 21393 \\ \hline
+             \multicolumn{1}{|c|}{2}  & 25700 & \multicolumn{1}{c|}{10}  & 21367 \\ \hline
+             \multicolumn{1}{|c|}{3} & 21301 & \multicolumn{1}{c|}{3}  & 19382 \\ \hline
+             \multicolumn{1}{|c|}{14}  & 18751 & \multicolumn{1}{c|}{4} & 17639 \\ \hline
+             \multicolumn{1}{|c|}{4}  & 18610 & \multicolumn{1}{c|}{14} & 16807 \\ \hline
+             \end{tabular}
+         }
+         \end{minipage}%
+         \begin{minipage}{0.50\hsize}
+           \centering
+           \caption{調整されるカード種類数を増やしながら単目的 GA を適応した結果}
+            \label{jikken3result}
+            \vspace{-0.3cm}
+           \scalebox{0.70}[0.70]{
+                   \begin{tabular}{|c|c|c|c|}
+                     \hline
+                     種類数     & $f_\mathrm{p}$ & $f_\mathrm{w}$ & $f_\mathrm{c}$\\ \hline \hline
+                     1              & 0.9048         & 0.4805 & 0.9355  \\ \hline
+                     2           & 0.8607         & 0.5893 & 0.8752 \\ \hline
+                     3        & 0.8607         & 0.6131 & 0.8187  \\ \hline
+                     4    & 0.7945         & 0.6339 & 0.7659 \\ \hline
+                     5 & 0.7334         & 0.6395  & 0.7165 \\ \hline
+                     6 & 0.6977      & 0.6729  & 0.6703 \\ \hline
+                     7& 0.6637   & 0.7044  & 0.6271 \\ \hline
+                     8 & 0.7047 & 0.6837 & 0.5866 \\ \hline
+                     9 & 0.6505 & 0.7686 & 0.5488\\ \hline
+                     10 & 0.6250 & 0.7728  & 0.5134\\ \hline
+                     11 & 0.5169 & 0.7627 & 0.4803\\ \hline
+                     12 & 0.5326 & 0.8078 & 0.4493\\ \hline
+                     13 & 0.6005 & 0.8103 & 0.4204\\ \hline
+                     14 &  0.5220 &  0.8261 & 0.3932\\ \hline
+                     \end{tabular}
+                 }
+         \end{minipage}
+       \end{table}
+     
+         \subsection{実験 2 : 結果と考察}
+         実験 2 では, 同戦略同士が表 \ref{table:OPdeck} を用いてカードをそれぞれ 1 種類ずつ除いた際の先攻側の勝率を計算した. よって, 計 $15^2 = 225$ 個の勝率の値が結果として得られる. この 225 個の勝率の値の中で最大値, 最小値に着目すると戦略下における最もカードパワーが強いカード, 弱いカードを判断できる.
+         \par
+         アグロ同士の対戦において最小値は先攻から ID 0 を除いて後攻から ID 14 を除いた際の先攻の勝率の値となった. このためアグロの戦略下においては, デッキにおいて ID 0 のカードが最も強いカード, ID 14 のカードが最も弱いカードと判断できる. 最大値は先攻から ID 14 を除いて後攻から ID 0 を除いた場合の先攻の勝率の値であったことから同様に判断できる.
+         \par
+         同様に,  学習済エージェント同士の対戦から得られた結果と比較すると, どちらの戦略同士の対戦においても ID 0 のカードが最も強いカードと判断された一方で, 最も弱いカードに関しては学習済エージェント同士の対戦結果では ID 8, アグロ同士の対戦結果では ID 14 となり, 戦略によって異なる結果となった.\par
+         これは実験 1 の事前学習の効果により, 学習済エージェント同士の対戦において恣意的に弱く設定したカードは登場回数が少なく勝率計算に及ぼす影響が小さかったためであると考えられる. 
+         このことから, DQN を用いて, より人間のプレイに近い戦略下におけるカードパワーを評価できることが分かった. また, 学習済エージェント同士の対戦から得られた結果のように, 本提案手法ではマナレシオだけでは一見判断しづらい戦略下における真に弱いカードを発見することができる可能性があるといえる.
+      
+               \subsection{実験 3 : 結果と考察}
+               提案手法 3 の数値実験の際にはパラメータを調整するカードの優先度を決定する必要がある.
+               本研究では, 以下の手順で調整すべきカードの優先順位を決定した. 
+               \begin{enumerate}
+                  \small
+                  \setlength{\itemsep}{0cm} % 項目間
+                 \item 得られた勝率の値の最大値,最小値を見て, 最も強いカード, 最も弱いカードを確かめる
+                 \item その 2 枚において先攻後攻そのカードを除いた時の勝率を見て, カードを除いていない時の勝率と比較し, 差の絶対値が大きいカードを変更する優先度が最高のカードとする
+                 \item 先攻で そのカードを除いた状態で後攻で何も除いていない場合の勝率を計算する.
+                 \item 先攻が優先度最高のカードを除いた場合において, 3 で計算した勝率と差の絶対値を取る. 
+                 \item 値が大きいほど変更する優先度を高く設定する.
+               \end{enumerate}
+               このように決定した優先順位は表 \ref{table:OPdeck} におけるカード ID で表すと, 
+               $0 > 8 > 6 > 10 > 4 > 1 > 3 > 14 > 2 > 11 > 13 > 9 > 7 > 12 > 5$ となった. \par
+               表 \ref{jikken3result} に, この優先順位に沿って調整するカードの種類数を増やしていった場合の結果を示す.
+               調整するカードの種類, すなわち GA の解空間の次元が増えるほど $f_\mathrm{w}$ に関して良い値を持つ解が得られていた. また, 調整するカード種類数が少ない個体に比べて $f_\mathrm{w}$ の値が小さい個体があったが, これは GA の初期収束のためと考えられる. ここで, $f_\mathrm{w}$ に関しては計算過程において試行ごとにばらつきがあり同一の個体で異なる値を持つ可能性がある. そのため, 適応度が小さい個体においても偶然良い $f_\mathrm{w}$ の値を得ていた可能性があることに留意する必要がある. \par
+                 \begin{table}[t]
+                  \centering
+                  \caption{各手法で得られた最も良好な解の適応度}
+                  \label{res_3}
+                  \vspace{-0.3cm}
+                  
+                  \scalebox{0.70}[0.70]{
+                    \begin{tabular}{|c|c|c|c|}
+                      \hline
+                      手法        & $f_\mathrm{p}$ & $f_\mathrm{w}$ & $f_\mathrm{c}$ \\ \hline \hline
+                      単目的 GA      & 0.44933         & \textbf{0.85146}   & 0.36788          \\ \hline
+                      多目的 GA  & \textbf{0.66365}         & 0.79097   & 0.42035          \\ \hline
+                      提案手法   & 0.53259              &  0.80783     & \textbf{0.44933}  \\ \hline
+                      \end{tabular}
+                  }
+                  \vspace{-0.3cm}
+                  \end{table}
+   比較手法として用いたデッキ内のすべてのカードを対象とした単目的 GA, 多目的 GA に関してそれぞれ最も良好な解を最終世代の適応度が最も大きい解, 最終世代のパレートフロント上で目的関数 $f_\mathrm{w}$ の値が最も大きい解とすると, 表 \ref{jikken3result} 内の解で $f_\mathrm{w}$ に関して 2 つの比較手法の最も良好な解と中間的な解が複数得られた. その解の中で $f_\mathrm{c}$ の値が最も大きい解を提案手法において最も良好な解とした.\par
+   表 \ref{res_3} に各手法で得られた最も良好な解の適応度を示す.
+各手法において, それぞれの適応度に関して優越した解が得られていた. また, 提案手法における最も良好な解は$f_\mathrm{w}$ に関して多目的 GA により得られた解に優越しており, $f_\mathrm{c}$ に関しては他の手法により得られた解に関して優越していた. よって調整されるカードの枚数を最小限にする TCG 環境のゲームバランス調整という提案手法 3 の有効性が確かめられた. 
 
-なお，欧文論文の場合は，単に
-\begin{verbatim}
-\author{%
-   Given-name Surname
-\and
-   Given-name Surname
-}
-\end{verbatim}
-としてください．\verb|\jname{ }|や\verb|\ename{ }| は指定しません．
-\item 筆者名（所属が異なる場合）：　
-\begin{verbatim}
-\author{%
-   \jname{第1筆者氏名\first{}}
-   \ename{Given-name Surname}
-\and
-   \jname{第2筆者氏名\second{}}
-   \ename{Given-name Surname}
-\and
-   Given-name Surname\third{}
-}
-\end{verbatim}
-所属が異なる場合，違いを識別するため，
-\begin{verbatim}
-\first   \second    \third .... 
-\end{verbatim}
-の指定を加えてください．これは
-同一の所属は同一のコマンドを与えます．
-さらに所属の方にも，該当する \verb|\first|，\linebreak
-\verb|\second|，
-\verb|\third|$\cdots$ の指定を加えますが，その順序は自由です．
-具体的な出力は，\verb|\first| と指定すると，``$^{\ast 1}$''が
-筆者名の右上（所属は左上）に表示されます．
-これは単純なコマンドです．全部で9つ用意してあります．
-以下がその内訳です．
-\begin{verbatim}
-\def\first{\hbox{$\m@th^{\ast 1}$\hss}}
-\def\second{\hbox{$\m@th^{\ast 2}$\hss}}
-\def\third{\hbox{$\m@th^{\ast 3}$\hss}}
-\def\fourth{\hbox{$\m@th^{\ast 4}$\hss}}
-\def\fifth{\hbox{$\m@th^{\ast 5}$\hss}}
-\def\sixth{\hbox{$\m@th^{\ast 6}$\hss}}
-\def\seventh{\hbox{$\m@th^{\ast 7}$\hss}}
-\def\eighth{\hbox{$\m@th^{\ast 8}$\hss}}
-\def\ninth{\hbox{$\m@th^{\ast 9}$\hss}}
-\end{verbatim}
+\section{まとめと今後の課題}
+本研究では, 深層強化学習を用いた TCG 環境の最適化手法を提案し, 数値実験により有効性を示した. 今後の課題として, デッキ間の相性を考慮したメタゲームの概念を取り入れた TCG 環境のゲームバランス最適化の検討などが挙げられる. 
 
-\item 所属：　\verb|\jname{ }|や\verb|\ename{ }| の指定は筆者名の場合と
-同じです．次のように指定します．
-\begin{verbatim}
-\affiliate{
-   \jname{\first{}所属和文1}
-   \ename{Affiliation #1 in English}
-\and
-   \jname{\second{}所属和文2}
-   \ename{Affiliation #2 in English}
-\and
-   \third{}Affiliation #3 in English
-}
-\end{verbatim}
-なお，欧文論文の場合は，単に
-\begin{verbatim}
-\affiliate{
-   \first{}Affiliation #1 in English
-\and
-   \second{}Affiliation #2 in English
-\and
-   \third{}Affiliation #3 in English
-}
-\end{verbatim}
-とします．\verb|\jname{ }|や\verb|\ename{ }| は指定しません．
-ただし，和欧文とも所属が同一の場合は，\verb|\first| の指定は不要です。
-
-\item 連絡先：　代表者の氏名，所属，所在地，電話番号，Fax番号, 
-e-mail アドレスなどをお書き下さい．
-\begin{verbatim}
-\jaddress{氏名，所属，住所，電話番号，Fax番号，電子メールアドレスなど}
-\end{verbatim}
-とすれば，脚注の位置に``連絡先:~''という形で出力されます．
-なお，欧文論文の場合は，
-\begin{verbatim}
-\address{name, affiliation, address,
-phone number, Fax number,
-e-mail address}
-\end{verbatim}
-とすれば，脚注の位置に``Contact:~''という形で出力されます．
-\end{itemize}
-
-\Label その他
-\begin{itemize}
-\item 脚注：　脚注は，下にある例のように\footnote{この例が脚注です．}
-通常の\LaTeX{}\linebreak
-（\cite{latexブック}）の
-書き方である\verb|\footnote{  }| を使って書きます．
-\item 参考文献：　j(-)article.cls(sty)（欧文論文の場合は
-article.sty(cls)）が用意しているものを使うことになります．
-著者名，文献名，ジャーナル（出版社），発行年など，イニシャル，
-略語のスタイル，記載順などは論文誌の規則に従ってください．
-\JBibTeX{}を使う場合は論文誌用の\LaTeX{}スタイルファイルと
-同時に配布されている``jsai.bst''を使うことをお勧めします．
-参照ラベルの \verb|\cite{ }| も使えます．
-最後の部分に参考文献のサンプルが添付してあります．
-\item 他のコマンド　通常の\LaTeX{}の組版と変わりありません．
-j(-)article.cls{sty}（欧文論文の場合はarticle.sty(cls)）で
-扱えるものはすべて使うことができます．
-\end{itemize}
-
-\begin{thebibliography}{99}
-\bibitem[Knuth 84]{texbook}
- Knuth,~D.~E.: The \TeX{}book, Addison-Wesley (1984),
-  (邦訳~: \TeX{}ブック, 斎藤 信男 監修, 鷺谷 好輝 訳,
-  アスキー出版局 (1992)).
-\bibitem[Lamport 86]{latexブック}
-Leslie,~L: \LaTeX{}: {A} Document Preparation System (Updated for
-  \LaTeX{}2$\varepsilon$), Addison-Wesley, 2nd edition (1998)
-  (邦訳~: 文書処理システム \LaTeX{}2$\varepsilon$,
-  阿瀬 はる美 訳, ピアソン・エデュケーション, (1999)).
-\end{thebibliography}
+\bibliographystyle{jsai}
+\bibliography{index}
 %%
 \end{document}

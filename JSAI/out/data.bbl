@@ -1,0 +1,13 @@
+\begin{thebibliography}{}
+
+\bibitem[Mesentier~Silva 19]{Hearthstone}
+Mesentier~Silva,~F.~d., Canaan,~R., Lee,~S., Fontaine,~M.~C., Togelius,~J., and
+  Hoover,~A.~K.: Evolving the Hearthstone Meta, in {\em 2019 IEEE Conference on
+  Games (CoG)}, p. 1^^e2^^80^^938, IEEE Press (2019)
+
+\bibitem[Mnih 13]{DQN}
+Mnih,~V., Kavukcuoglu,~K., Silver,~D., Graves,~A., Antonoglou,~I.,
+  Wierstra,~D., and Riedmiller,~M.~A.: Playing Atari with Deep Reinforcement
+  Learning, {\em CoRR}, Vol. abs/1312.5602,  (2013)
+
+\end{thebibliography}
