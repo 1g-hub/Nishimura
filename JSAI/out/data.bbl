@@ -1,5 +1,16 @@
 \begin{thebibliography}{}
 
+\bibitem[Brown 20]{ReBeL}
+Brown,~N., Bakhtin,~A., Lerer,~A., and Gong,~Q.: Combining Deep Reinforcement
+  Learning and Search for Imperfect-Information Games, in {\em Proceedings of
+  the 34th International Conference on Neural Information Processing Systems},
+  NIPS'20, Red Hook, NY, USA (2020), Curran Associates Inc.
+
+\bibitem[Deb 02]{NSGA-2}
+Deb,~K., Pratap,~A., Agarwal,~S., and Meyarivan,~T.: A fast and elitist
+  multiobjective genetic algorithm: NSGA-II, {\em IEEE Transactions on
+  Evolutionary Computation}, Vol.~6, No.~2, pp. 182--197 (2002)
+
 \bibitem[Mesentier~Silva 19]{Hearthstone}
 Mesentier~Silva,~F.~d., Canaan,~R., Lee,~S., Fontaine,~M.~C., Togelius,~J., and
   Hoover,~A.~K.: Evolving the Hearthstone Meta, in {\em 2019 IEEE Conference on

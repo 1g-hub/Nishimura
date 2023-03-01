@@ -1,19 +1,18 @@
 # Fdb version 3
-["bibtex out/data"] 1677627993 "out/data.aux" "out/data.bbl" "out/data" 1677628203
+["bibtex out/data"] 1677711770 "out/data.aux" "out/data.bbl" "out/data" 1677711871
   "./jsai.bst" 1677500272 31279 5cd4ff98643f02e461fd444904e6f405 ""
-  "index.bib" 1677625354 2285 4c75e0a436266c492f01c06cb3b2e438 ""
-  "out/data.aux" 1677628199 4409 1d1936345131fbf7d6c5fbb832f33d3a "latex"
+  "index.bib" 1677709605 3975 52f2b5635c3bf60fb73a05d1271beba4 ""
+  "out/data.aux" 1677711868 4495 df6528e8931d3d9965784578aed91929 "latex"
   (generated)
   "out/data.bbl"
   "out/data.blg"
-["dvipdf"] 1677628201 "out/data.dvi" "out/data.pdf" "out/data" 1677628203
-  "out/data.dvi" 1677628199 58352 4bd67ff10df96d2abd7315c57202f17e "latex"
+["dvipdf"] 1677711869 "out/data.dvi" "out/data.pdf" "out/data" 1677711871
+  "out/data.dvi" 1677711868 57660 9bd735620dd80c484c14e8622c7b56c3 "latex"
   (generated)
   "out/data.pdf"
-["latex"] 1677628198 "c:/Users/User/Documents/Nishimura/JSAI/data.tex" "out/data.dvi" "data" 1677628203
-  "c:/Users/User/Documents/Nishimura/JSAI/data.tex" 1677628195 37951 4d49285cf8e0021e6e0d72fa6c77758c ""
+["latex"] 1677711867 "c:/Users/User/Documents/Nishimura/JSAI/data.tex" "out/data.dvi" "data" 1677711871
+  "c:/Users/User/Documents/Nishimura/JSAI/data.tex" 1677711865 36842 38f9a2bdf78217848840dae7dffd3129 ""
   "c:/texlive/2022/texmf-dist/fonts/map/fontname/texfonts.map" 1655542484 3524 cb3e574dea2d1052e39280babc910dc8 ""
-  "c:/texlive/2022/texmf-dist/fonts/tfm/jknappen/ec/tcrm0800.tfm" 1655541740 1536 05df9db6aeccc4eea94fec15c9024f79 ""
   "c:/texlive/2022/texmf-dist/fonts/tfm/ptex-fonts/standard/goth8.tfm" 1655546826 1196 f76ab7ae43ed1dfe29b9e6ec2933fdb4 ""
   "c:/texlive/2022/texmf-dist/fonts/tfm/ptex-fonts/standard/goth9.tfm" 1655546826 1196 b274fc006918dea9e5263e2117f4bddb ""
   "c:/texlive/2022/texmf-dist/fonts/tfm/ptex-fonts/standard/min10.tfm" 1655546826 1196 1be730212205a270378fba11a44765dc ""
@@ -104,10 +103,10 @@
   "c:/texlive/2022/texmf-dist/web2c/texmf.cnf" 1655538964 40171 cdab547de63d26590bebb3baff566530 ""
   "c:/texlive/2022/texmf-var/web2c/eptex/platex.fmt" 1655549839 2862872 247f7419b12e5050a345c090d8261b87 ""
   "c:/texlive/2022/texmf.cnf" 1655549568 892 31fb889ec8f9065bdc96174a5a20c8ed ""
-  "data.tex" 1677628195 37951 4d49285cf8e0021e6e0d72fa6c77758c ""
+  "data.tex" 1677711865 36842 38f9a2bdf78217848840dae7dffd3129 ""
   "jsaiac.sty" 1677500272 13610 62c36d0b8a1813979b5b2221bdb00edb ""
-  "out/data.aux" 1677628199 4409 1d1936345131fbf7d6c5fbb832f33d3a "latex"
-  "out/data.bbl" 1677627993 525 d5708ace43746be326ebe97c5d24a27b "bibtex out/data"
+  "out/data.aux" 1677711868 4495 df6528e8931d3d9965784578aed91929 "latex"
+  "out/data.bbl" 1677711770 1080 290f47cdf881b349d68a7e15ad45c2cf "bibtex out/data"
   (generated)
   "out/data.aux"
   "out/data.dvi"
