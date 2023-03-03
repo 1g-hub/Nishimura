@@ -1,4 +1,4 @@
-This is e-pTeX, Version 3.141592653-p4.0.0-220214-2.6 (utf8.sjis) (TeX Live 2022) (preloaded format=platex 2022.6.18)  2 MAR 2023 08:04
+This is e-pTeX, Version 3.141592653-p4.0.0-220214-2.6 (utf8.sjis) (TeX Live 2022) (preloaded format=platex 2022.6.18)  3 MAR 2023 09:04
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -339,31 +339,31 @@ LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <12> not available
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <12> not available
 (Font)              Font shape `JY1/gt/m/n' tried instead on input line 69.
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <10> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 74.
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 75.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <10> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 74.
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 75.
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <8> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 98.
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 99.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <8> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 98.
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 99.
 [1
 
 
 ]
 
-LaTeX Font Warning: Command \small invalid in math mode on input line 127.
+LaTeX Font Warning: Command \small invalid in math mode on input line 128.
 
 [2]
-Overfull \hbox (1.9632pt too wide) in paragraph at lines 307--308
+Overfull \hbox (1.9632pt too wide) in paragraph at lines 308--309
  [][] 
  []
 
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <9> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 334.
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 335.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <9> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 334.
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 335.
 
-Overfull \hbox (25.42786pt too wide) in paragraph at lines 358--359
+Overfull \hbox (25.42786pt too wide) in paragraph at lines 359--360
  [][] 
  []
 
@@ -390,10 +390,10 @@ Underfull \hbox (badness 10000) in paragraph at lines 20--23
 Here is how much of TeX's memory you used:
  6144 strings out of 478499
  105317 string characters out of 5854382
- 532784 words of memory out of 5000000
+ 531765 words of memory out of 5000000
  24699 multiletter control sequences out of 15000+600000
  486274 words of font info for 97 fonts, out of 8000000 for 9000
  929 hyphenation exceptions out of 8191
  72i,18n,77p,825b,433s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on out/data.dvi (4 pages, 57660 bytes).
+Output written on out/data.dvi (4 pages, 57444 bytes).
