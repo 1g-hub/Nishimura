@@ -7,7 +7,7 @@ from nsga2_individual import Individual
 class NSGA2Utils:
 
     def __init__(self, problem, num_of_individuals=50,
-                 num_of_tour_particips=2, tournament_prob=0.9, crossover_param=2, mutation_param=5):
+                 num_of_tour_particips=3, tournament_prob=1.0, crossover_param=3, mutation_param=5, crossover_prop = 0.6,  mutataion_prop = 1 / 45):
 
         self.problem = problem
         self.num_of_individuals = num_of_individuals
@@ -15,9 +15,12 @@ class NSGA2Utils:
         self.tournament_prob = tournament_prob
         self.crossover_param = crossover_param
         self.mutation_param = mutation_param
+        self.crossover_prop = crossover_prop
+        self.mutataion_prop = mutataion_prop
 
     def create_initial_population(self):
         population = Population()
+
         #1 つだけ元デッキ追加
         INITIAL_DECK = [
             4,4,1,#0
@@ -38,16 +41,17 @@ class NSGA2Utils:
             ]
         individual = Individual()
         individual.features = INITIAL_DECK
-        #print(individual.features)
+        print(individual.features)
         self.problem.calculate_objectives(individual)
         population.append(individual)
         # その他ランダム
         for _ in range(self.num_of_individuals - 1):
             individual = self.problem.generate_individual()
             self.problem.calculate_objectives(individual)
-            #print(individual.features)
+            print(individual.features)
             population.append(individual)
             #print(individual.features)
+
         return population
 
     #Non-dominated Sorting: the population is sorted and partitioned into fronts (F1, F2, etc.), where F1 (first front) indicates the approximated Pareto front.
@@ -151,13 +155,14 @@ class NSGA2Utils:
         num_of_features = len(child1.features)
         tmp1 = individual1.features.copy()
         tmp2 = individual2.features.copy()
-        cxpoint1 = np.random.randint(1, num_of_features)
-        cxpoint2 = np.random.randint(1, num_of_features - 1)
-        if cxpoint2 >= cxpoint1:
-            cxpoint2 += 1
-        else:
-            cxpoint1, cxpoint2 = cxpoint2, cxpoint1
-        tmp1[cxpoint1:cxpoint2], tmp2[cxpoint1:cxpoint2] = tmp2[cxpoint1:cxpoint2].copy(), tmp1[cxpoint1:cxpoint2].copy()
+        if self.crossover_prop < random.random():
+            cxpoint1 = np.random.randint(1, num_of_features)
+            cxpoint2 = np.random.randint(1, num_of_features - 1)
+            if cxpoint2 >= cxpoint1:
+                cxpoint2 += 1
+            else:
+                cxpoint1, cxpoint2 = cxpoint2, cxpoint1
+            tmp1[cxpoint1:cxpoint2], tmp2[cxpoint1:cxpoint2] = tmp2[cxpoint1:cxpoint2].copy(), tmp1[cxpoint1:cxpoint2].copy()
         child1.features = tmp1
         child2.features = tmp2
         return child1, child2
@@ -185,7 +190,16 @@ class NSGA2Utils:
     def __mutate(self, child):
         num_of_features = len(child.features)
         index = np.random.randint(0, num_of_features)
-        child.features[index] = np.random.randint(self.problem.variables_range[0][0], self.problem.variables_range[0][1] + 1)
+
+        for index in range(num_of_features):
+            if random.random() < self.mutataion_prop:
+                # 今の遺伝子座と違う値を入れる
+                tmp = child.features[index]
+                random_num = np.random.randint(self.problem.variables_range[0][0], self.problem.variables_range[0][1] + 1)
+                while tmp == random_num:
+                    random_num = np.random.randint(self.problem.variables_range[0][0], self.problem.variables_range[0][1] + 1)
+                
+                child.features[index] = random_num
 
 
     def __tournament(self, population):

@@ -5,12 +5,13 @@ from tqdm import tqdm
 
 class Evolution:
 
-    def __init__(self, problem, num_of_generations=50, num_of_individuals=50, num_of_tour_particips=2, #An integer, default = 2, representing the number of participants in tournament selection operator.
-                 tournament_prob=0.9, crossover_param=2,#representing the parameter used in simulated binary crossover.
-                 mutation_param=5#representing the paramenter used in polynomial mutation.
+    def __init__(self, problem, num_of_generations=50, num_of_individuals=50, num_of_tour_particips=3, #An integer, default = 2, representing the number of participants in tournament selection operator.
+                 tournament_prob=1.0, crossover_param=2,#representing the parameter used in simulated binary crossover.
+                 mutation_param=5,
+                 crossover_prop = 0.6,  mutataion_prop = 1 / 45#representing the paramenter used in polynomial mutation.
                 ):
         self.utils = NSGA2Utils(problem, num_of_individuals, num_of_tour_particips, tournament_prob, crossover_param,
-                                mutation_param)
+                                mutation_param, crossover_prop, mutataion_prop)
         self.population = None
         self.num_of_generations = num_of_generations
         self.on_generation_finished = []

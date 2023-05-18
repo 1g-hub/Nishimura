@@ -44,7 +44,7 @@ episode_logger = EpisodeLogger()
 env = CardGameEnv2()
 
 #モデルを読み込み
-model = load_model('0131EnemyRandom.h5')
+model = load_model('0step.h5')
 
 # エージェントの設定
 memory = SequentialMemory(limit=100000, window_length=1)
@@ -57,15 +57,13 @@ dqn.training = False
 #param
 NB_EPISODES = 10000
 
-
+'''
 win_cnt = 0
 lose_cnt = 0
 for episode in tqdm(range(NB_EPISODES)):
     observation = env.reset()
     #print("Initial State")
     #print(observation)
-    #env.player.showDeck()
-    #env.player.enemy.showDeck()
     episode_reward = 0.0
     turn_num = 1
     while 1:
@@ -141,7 +139,7 @@ print(lose_cnt)
 print("win_rate")
 print(win_cnt / NB_EPISODES)
 '''
-'''
+
 
 '''
 winratelist = []
@@ -154,7 +152,7 @@ print(winratelist)
 history = dqn.test(env, nb_episodes=3, visualize=False,nb_max_episode_steps=200, callbacks = [episode_logger])
 print(history.history["episode_reward"])
 '''
-'''
+
 # 評価(10000×5回勝率計算)
 win_rate_list = []
 for i in range(1):
@@ -189,4 +187,3 @@ e = math.sqrt(tmp/5.0)
 print("e " + str(e))
 
 #dqn.test(env, nb_episodes=50000, visualize=False,nb_max_episode_steps=500, callbacks = [episode_logger])
-'''

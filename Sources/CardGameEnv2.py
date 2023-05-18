@@ -12,7 +12,7 @@ class CardGameEnv2:
         self.curr_step = -1
         self.previous_action = 100
         #first or second
-        self.isfirstAttack = True
+        self.isfirstAttack = False
         #手札を自盤面に出す・・・0~8
         #手札1が敵カード12345攻撃or敵・・・9~14
         #手札2・・・15~20
@@ -158,13 +158,9 @@ class CardGameEnv2:
         
 
 
-        run.initdecks(self.player, card_arr=card_values, is_elimenated=False, elim_num_pla = 0, elim_num_ene= 0)
+        run.initdecks(self.player, card_arr=card_values)
         p1policy = player.enemy.policydecision
-        player.enemy.deck = deck.generateDeck(player.enemy, card_values)
-        player.enemy.shuffle()
         #print(p1policy)
-
-        '''
         if p1policy > 0.5:
             #aguro用デッキ
             card_aguro = [1, 1, 3, 1, 1, 5, 3, 2, 4, 2, 2, 4, 1, 2, 5, 1, 2, 4, 1, 2, 4, 1, 1, 4, 2, 5, 1, 4, 4, 1, 1, 1, 4, 1, 2, 3, 1, 3, 5, 1, 4, 1, 1, 2, 3]
@@ -179,7 +175,6 @@ class CardGameEnv2:
             player.enemy.deck = deck.generateDeck(player.enemy, card_controll)
             #デッキのシャッフル
             player.enemy.shuffle()
-        '''
         player.generate_dict_draw()
 
         #print(p1policy)
@@ -389,8 +384,8 @@ class CardGameEnv2:
                 self.action_record_total[i] += self.action_record[i]
             
             action_record_total = sorted(self.action_record_total.items(), key=lambda x:x[1], reverse=True)
-            #print("action_record_total")
-            #print(action_record_total)
+            print("action_record_total")
+            print(action_record_total)
 
 
         if done and reward == 1.0:
@@ -406,8 +401,8 @@ class CardGameEnv2:
                 self.card_record_total[i] += self.card_record_tmp[i]
             
             card_record_total = sorted(self.card_record_total.items(), key=lambda x:x[1], reverse=True)
-            print("card_record_total")
-            print(card_record_total)
+            #print("card_record_total")
+            #print(card_record_total)
 
         if done and reward == 1.0:
             for i in range(15):
@@ -437,8 +432,8 @@ class CardGameEnv2:
                 for i in range(15):
                     win_rate_when_draw[i] = self.draw_count_win[i] / self.draw_count_total[i]
                 sorted_wrd = sorted(win_rate_when_draw.items(), key=lambda x:x[1], reverse=True)
-                #print("WinRatewhenDraw sorted")
-                #print(sorted_wrd)
+                print("WinRatewhenDraw sorted")
+                print(sorted_wrd)
         
         #win rate when play
         if done:
@@ -459,8 +454,8 @@ class CardGameEnv2:
                 for i in range(15):
                     win_rate_when_play[i] = self.play_count_win[i] / self.play_count_total[i]
                 sorted_wrp = sorted(win_rate_when_play.items(), key=lambda x:x[1], reverse=True)
-                #print("WinRatewhenPlay sorted")
-                #print(sorted_wrp)
+                print("WinRatewhenPlay sorted")
+                print(sorted_wrp)
         #50000 おける各カードのプレイ率, ドロー率
         if done:
             play_rate = {i : 0 for i in range(15)}

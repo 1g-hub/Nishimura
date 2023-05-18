@@ -94,8 +94,7 @@ model.add(Activation('linear'))
 # エージェントの設定
 memory = SequentialMemory(limit=100000, window_length=1)
 policy = CustomAnnealedPolicy(EpsGreedyQPolicy(), attr='eps',
-                                    value_max=1.0, value_min=0.1, value_decay = step_count/20.0,value_test=1.0)
-
+                                    value_max=1.0, value_min=0.1, value_decay = step_count/20.0,value_test=0.0)
 dqn = DQNAgent(model=model, nb_actions=nb_actions, memory=memory, gamma=0.99, nb_steps_warmup=10000,target_model_update=0.5, policy=policy)
 dqn.compile(Adam(lr=1e-3), metrics=['mae'])
 

@@ -4,6 +4,8 @@ import deck
 import card
 import sys
 from tqdm import tqdm
+import math
+import csv
 
 #デッキの初期化
 def initdecks(player,card_arr,is_elimenated, elim_num_pla,elim_num_ene):
@@ -12,7 +14,7 @@ def initdecks(player,card_arr,is_elimenated, elim_num_pla,elim_num_ene):
     #デッキのシャッフル
     player.shuffle()
     #特定 ID カード取り除く
-    if is_elimenated:
+    if is_elimenated and elim_num_pla != -1:
         index_list = []
         for i in range(len(player.deck)):
             #print(player.deck[i].id) 
@@ -32,7 +34,7 @@ def initdecks(player,card_arr,is_elimenated, elim_num_pla,elim_num_ene):
     player.enemy.deck = deck.generateDeckEnemy(player.enemy, card_arr)
     player.enemy.shuffle()
     #特定 ID カード取り除く
-    if is_elimenated:
+    if is_elimenated and elim_num_ene != -1:
         index_list_enemy = []
         for i in range(len(player.enemy.deck)):
             #print(player.deck[i].id) 
@@ -138,8 +140,6 @@ def play(isFirst, card_values, p1policy, p2policy,is_elim, elim_num_player, elim
     #player.enemy.showDeck()
     
     player.generate_dict_draw()
-    #card_record 作成
-    player.generate_dict()
 
     inithands(player)
 
@@ -170,16 +170,85 @@ def play(isFirst, card_values, p1policy, p2policy,is_elim, elim_num_player, elim
         if player.is_dead == True or player.is_deckend == True:
             #print(player.enemy.name + "Win!!")
             #sys.exit(player.enemy.name + "Win!!")
-            return [-1, player.get_record()]
+            return -1
         #自分の勝利条件
         elif player.enemy.is_dead == True or player.enemy.is_deckend == True:
             #print(player.name + "Win!!")
             #sys.exit(player.name + "Win!!")
-            return [1, player.get_record()]
+            return 1
+
+# カードのパラメータを変更してミラーで勝率を計算する
+# NOTE:カードが15枚である前提
+def CalculateWinRateChangeCardParam(changeCardNum):
+
+    print(changeCardNum)
+    #csv 出力用のデータ
+    data_list = []
+
+    for attack in tqdm(range(5)):
+        for hp in range(5):
+            for cost in range(5):
+                original_deck = [
+                    4,4,1,#0
+                    2,2,2,#1
+                    3,3,3,#2
+                    4,3,4,#3
+                    5,4,5,#4
+                    2,2,2,#5
+                    2,3,3,#6
+                    1,1,1,#7
+                    1,3,2,#8
+                    2,1,2,#9
+                    3,1,3,#10
+                    1,2,2,#11
+                    2,3,3,#12
+                    1,1,1,#13
+                    1,1,5 #14
+                ]
+                # csv 各列のデータ格納用リスト
+                data = []
+
+                #各数値は０〜４のため1足す
+                original_deck[changeCardNum*3] = attack+1
+                original_deck[changeCardNum*3+1] = hp+1
+                original_deck[changeCardNum*3+2] = cost+1
+
+                print(original_deck)
+                data.append(attack+1)
+                data.append(hp + 1)
+                data.append(cost+1)
+
+                print("(attack , hp, cost) = (" + str(attack+1) + " , " + str(hp+1) + " , " + str(cost+1) + ")")
+
+                TEST_COUNT = 10000
+                win_sum = 0
+                for _ in range(TEST_COUNT):
+                        #res = randomrun.play(isFirst=False, card_arr=self.genom)
+                        # if res[0] == 1:
+                    if play(isFirst=True, card_values=original_deck, p1policy=1.0, p2policy=1.0, is_elim=False, elim_num_player=14, elim_num_enemy=-1, issamedeck=True) == 1:
+                        win_sum += 1
+                win_rate = win_sum / TEST_COUNT
+                print(win_rate)
+                data.append(win_rate)
+
+                print(data)
+
+                #dataList に data追加
+                data_list.append(data)
+    
+    with open(str(changeCardNum)+".csv", "a", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerows(data_list)
+
+        
+
 
 if __name__ == '__main__':
     #print ("")
     #print ("-----------------------")
+    for i in range(15):
+        CalculateWinRateChangeCardParam(i)
+
     '''
     card_values = [
             1,1,1,#0
@@ -199,7 +268,7 @@ if __name__ == '__main__':
             1,2,3 #14
         ]
         '''
-    
+    '''
     card_values = [
             4,4,1,#0
             2,2,2,#1
@@ -217,28 +286,101 @@ if __name__ == '__main__':
             1,1,1,#13
             1,1,5 #14
         ]
-    card_record = {i: 0 for i in range(15)}
-
-    
+    '''
+    '''
+    x = [
+            4,4,1,#0
+            2,2,2,#1
+            3,3,3,#2
+            4,3,4,#3
+            5,4,5,#4
+            2,2,2,#5
+            2,3,3,#6
+            1,1,1,#7
+            1,3,2,#8
+            2,1,2,#9
+            3,1,3,#10
+            1,2,2,#11
+            2,3,3,#12
+            1,1,1,#13
+            1,1,5 #14
+        ]
+    '''
+    #print(x)
+    '''
     win_sum = 0
     lose_sum = 0
     for _ in range(10000):
-        res = play(isFirst = True, card_values=card_values, p1policy= 1.0, p2policy= 1.0, is_elim = False, elim_num_player= 0, elim_num_enemy=0, issamedeck= True)
-        if res[0] == 1:
+        if play(isFirst = False, card_values=card_values, p1policy= 0.0, p2policy= 1.0, is_elim = False, elim_num_player= 0, elim_num_enemy=0, issamedeck= False) == 1:
             win_sum += 1
-        elif res[0] == -1:
+        else:
             lose_sum += 1
-        for i in range(15):
-            card_record[i] += res[1][i]
-            #print(res[1][i])
     print("win_sum " + str(win_sum))
     print("lose_sum " + str(lose_sum))
     print("win_rate " + str(win_sum / 10000))
-    print("card_record")
-    print(res[1])
-    print(card_record)
-    print(sorted(card_record.items(), key=lambda x:x[1], reverse=True))
-    
+    '''
+    '''
+    TEST_COUNT = 10000
+    DESIRE_WIN_RATE = 0.50
+    total_fitness = 0
+    win_sum = 0
+    for _ in range(TEST_COUNT):
+            #res = randomrun.play(isFirst=False, card_arr=self.genom)
+            # if res[0] == 1:
+        if play(isFirst=True, card_values=x, p1policy=1.0, p2policy=1.0, is_elim=False, elim_num_player=14, elim_num_enemy=-1, issamedeck=True) == 1:
+            win_sum += 1
+    win_rate = win_sum / TEST_COUNT
+    print(win_rate)
+    #total_fitness += math.sqrt((DESIRE_WIN_RATE - win_rate)
+    #                               * (DESIRE_WIN_RATE - win_rate))
+'''
+    '''
+    win_sum = 0
+    for _ in range(TEST_COUNT):
+            #res = randomrun.play(isFirst=False, card_arr=self.genom)
+            # if res[0] == 1:
+        if play(isFirst=False, card_values=x, p1policy=1.0, p2policy=1.0, is_elim=False, elim_num_player=0, elim_num_enemy=0, issamedeck=False) == 1:
+            win_sum += 1
+    win_rate = win_sum / TEST_COUNT
+    print(win_rate)
+    total_fitness += math.sqrt((DESIRE_WIN_RATE - win_rate)
+                                   * (DESIRE_WIN_RATE - win_rate))
+
+    win_sum = 0
+    for _ in range(TEST_COUNT):
+            #res = randomrun.play(isFirst=False, card_arr=self.genom)
+            # if res[0] == 1:
+        if play(isFirst=True, card_values=x, p1policy=1.0, p2policy=1.0, is_elim=False, elim_num_player=0, elim_num_enemy=0, issamedeck=False) == 1:
+            win_sum += 1
+    win_rate = win_sum / TEST_COUNT
+    print(win_rate)
+    total_fitness += math.sqrt((DESIRE_WIN_RATE - win_rate)
+                                   * (DESIRE_WIN_RATE - win_rate))
+
+    win_sum = 0
+    for _ in range(TEST_COUNT):
+            #res = randomrun.play(isFirst=False, card_arr=self.genom)
+            # if res[0] == 1:
+        if play(isFirst=False, card_values=x, p1policy=0.0, p2policy=1.0, is_elim=False, elim_num_player=0, elim_num_enemy=0, issamedeck=False) == 1:
+            win_sum += 1
+    win_rate = win_sum / TEST_COUNT
+    print(win_rate)
+    total_fitness += math.sqrt((DESIRE_WIN_RATE - win_rate)
+                                   * (DESIRE_WIN_RATE - win_rate))
+
+    win_sum = 0
+    for _ in range(TEST_COUNT):
+            #res = randomrun.play(isFirst=False, card_arr=self.genom)
+            # if res[0] == 1:
+        if play(isFirst=True, card_values=x, p1policy=0.0, p2policy=1.0, is_elim=False, elim_num_player=0, elim_num_enemy=0, issamedeck=False) == 1:
+           win_sum += 1
+    win_rate = win_sum / TEST_COUNT
+    print(win_rate)
+    total_fitness += math.sqrt((DESIRE_WIN_RATE - win_rate)
+                                   * (DESIRE_WIN_RATE - win_rate))
+
+    print(total_fitness)
+    '''
     '''
     win_sum = 0
     lose_sum = 0

@@ -29,7 +29,6 @@ class Player2:
         self.is_dead = False
         #戦略変えるしきい値(乱数) 0.5 以上ならアグロ, それ以下ならコントロール
         self.policydecision = 1.0
-        
 
         #デッキシャッフル
     def shuffle(self):
@@ -106,9 +105,6 @@ class Player2:
                     #コスト減少
                     self.cost -= play_card.cost
                     #print(self.name + "は" + play_card + "を場に出した")
-                    #print(play_card.id)
-                    #dict_記録
-                    self.play_count_dict[play_card.id] += 1
                     #盤面の枚数制限超えてたら最後に追加したカード削除
                     if len(self.is_played) > self.is_played_maxnum:
                         eliminated_card = self.is_played.pop(-1)
@@ -271,11 +267,3 @@ class Player2:
     def get_draw_record(self):
         self.draw_count_dict = sorted(self.draw_count_dict.items())
         return self.draw_count_dict
-
-    def generate_dict(self):
-        self.play_count_dict = {card.id: 0 for card in self.deck}
-        # print(self.play_count_dict)
-
-    def get_record(self):
-        #self.play_count_dict = sorted(self.play_count_dict.items())
-        return self.play_count_dict

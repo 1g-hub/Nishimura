@@ -6,6 +6,7 @@ from tqdm import tqdm
 import math
 import random
 
+
 class Individual:
     # 各個体のクラス
     def __init__(self, genom):
@@ -15,12 +16,14 @@ class Individual:
 
     # 個体に対する評価関数の値をfitnessに格納
     def set_fitness(self):
+        x = fill_deck(self.genom,[0])
+        #print(x)
         total_fitness = 0
         win_sum = 0
         for _ in range(TEST_COUNT):
             #res = randomrun.play(isFirst=False, card_arr=self.genom)
             # if res[0] == 1:
-            if run.play(isFirst=False, card_values=self.genom, p1policy=1.0, p2policy=1.0, is_elim=False, elim_num_player=0, elim_num_enemy=0, issamedeck=True) == 1:
+            if run.play(isFirst=False, card_values=x, p1policy=1.0, p2policy=1.0, is_elim=False, elim_num_player=0, elim_num_enemy=0, issamedeck=True) == 1:
                 win_sum += 1
         win_rate = win_sum / TEST_COUNT
         total_fitness += math.sqrt((DESIRE_WIN_RATE - win_rate)
@@ -30,7 +33,7 @@ class Individual:
         for _ in range(TEST_COUNT):
             #res = randomrun.play(isFirst=False, card_arr=self.genom)
             # if res[0] == 1:
-            if run.play(isFirst=False, card_values=self.genom, p1policy=1.0, p2policy=1.0, is_elim=False, elim_num_player=0, elim_num_enemy=0, issamedeck=False) == 1:
+            if run.play(isFirst=False, card_values=x, p1policy=1.0, p2policy=1.0, is_elim=False, elim_num_player=0, elim_num_enemy=0, issamedeck=False) == 1:
                 win_sum += 1
         win_rate = win_sum / TEST_COUNT
         total_fitness += math.sqrt((DESIRE_WIN_RATE - win_rate)
@@ -40,7 +43,7 @@ class Individual:
         for _ in range(TEST_COUNT):
             #res = randomrun.play(isFirst=False, card_arr=self.genom)
             # if res[0] == 1:
-            if run.play(isFirst=True, card_values=self.genom, p1policy=1.0, p2policy=1.0, is_elim=False, elim_num_player=0, elim_num_enemy=0, issamedeck=False) == 1:
+            if run.play(isFirst=True, card_values=x, p1policy=1.0, p2policy=1.0, is_elim=False, elim_num_player=0, elim_num_enemy=0, issamedeck=False) == 1:
                 win_sum += 1
         win_rate = win_sum / TEST_COUNT
         total_fitness += math.sqrt((DESIRE_WIN_RATE - win_rate)
@@ -50,7 +53,7 @@ class Individual:
         for _ in range(TEST_COUNT):
             #res = randomrun.play(isFirst=False, card_arr=self.genom)
             # if res[0] == 1:
-            if run.play(isFirst=False, card_values=self.genom, p1policy=0.0, p2policy=1.0, is_elim=False, elim_num_player=0, elim_num_enemy=0, issamedeck=False) == 1:
+            if run.play(isFirst=False, card_values=x, p1policy=0.0, p2policy=1.0, is_elim=False, elim_num_player=0, elim_num_enemy=0, issamedeck=False) == 1:
                 win_sum += 1
         win_rate = win_sum / TEST_COUNT
         total_fitness += math.sqrt((DESIRE_WIN_RATE - win_rate)
@@ -60,7 +63,7 @@ class Individual:
         for _ in range(TEST_COUNT):
             #res = randomrun.play(isFirst=False, card_arr=self.genom)
             # if res[0] == 1:
-            if run.play(isFirst=True, card_values=self.genom, p1policy=0.0, p2policy=1.0, is_elim=False, elim_num_player=0, elim_num_enemy=0, issamedeck=False) == 1:
+            if run.play(isFirst=True, card_values=x, p1policy=0.0, p2policy=1.0, is_elim=False, elim_num_player=0, elim_num_enemy=0, issamedeck=False) == 1:
                 win_sum += 1
         win_rate = win_sum / TEST_COUNT
         total_fitness += math.sqrt((DESIRE_WIN_RATE - win_rate)
@@ -75,10 +78,48 @@ class Individual:
     # 遺伝子の突然変異
     def mutate(self):
         tmp = self.genom.copy()
-        i = np.random.randint(0, len(self.genom) - 1)
-        tmp[i] = np.random.randint(1,  6)
+        for index in range(len(tmp)):
+            if random.random() < MUTATION_PB:
+                # 今の遺伝子座と違う値を入れる
+                tmp_pos = tmp[index]
+                random_num = np.random.randint(1, 6)
+                while tmp_pos == random_num:
+                    random_num = np.random.randint(1, 6)
+                tmp[index] = random_num
         self.genom = tmp
         self.set_fitness()
+
+# 指定したカードカード数枚からデッキ作る
+
+
+def fill_deck(x, lost_nums):
+    original = [
+        4, 4, 1,  # 0
+        2, 2, 2,  # 1
+        3, 3, 3,  # 2
+        4, 3, 4,  # 3
+        5, 4, 5,  # 4
+        2, 2, 2,  # 5
+        2, 3, 3,  # 6
+        1, 1, 1,  # 7
+        1, 3, 2,  # 8
+        2, 1, 2,  # 9
+        3, 1, 3,  # 10
+        1, 2, 2,  # 11
+        2, 3, 3,  # 12
+        1, 1, 1,  # 13
+        1, 1, 5  # 14
+    ]
+    cnt = 0
+    num = 0
+    for i in range(len(x)):
+        original[(lost_nums[num])*3 + cnt] = x[i]
+        cnt += 1
+        if cnt % 3 == 0:
+            num += 1
+            cnt = 0
+
+    return original
 
 # ルーレット方式
 
@@ -96,7 +137,9 @@ def select_roulette(generation):
 
 def select_tournament(generation):
     selected = []
-    for i in range(len(generation)):
+    min_genom = min(generation, key=Individual.get_fitness).genom.copy()
+    selected.append(Individual(min_genom))
+    for i in range(len(generation) - 1):
         tournament = np.random.choice(generation, 3, replace=False)
         min_genom = min(tournament, key=Individual.get_fitness).genom.copy()
         selected.append(Individual(min_genom))
@@ -141,8 +184,7 @@ def cross_two_point_copy(child1, child2):
 
 def mutate(children):
     for child in children:
-        if np.random.rand() < MUTATION_PB:
-            child.mutate()
+        child.mutate()
     return children
 
 # 初期世代の作成
@@ -150,15 +192,12 @@ def mutate(children):
 
 def create_generation(POPURATIONS, GENOMS):
     print("create generation")
-    #1 つ元デッキ入れる
     generation = []
     generation.append(Individual(INITAIL_DECK))
-    #その他ランダム
     for i in range(POPURATIONS - 1):
         deck = []
         for _ in range(GENOM_SIZE):
             deck.append(np.random.randint(1, 6))
-        print(deck)    
         generation.append(Individual(deck))
     return generation
 
@@ -179,6 +218,7 @@ def ga_solve(generation):
         print("Generation: " + str(i)
               + ": Best fitness: " + str(best_ind.fitness)
                 + ". Worst fitness: " + str(worst_ind.fitness))
+        print(best_ind.genom)
         # --- Step2. Selection (Roulette)
         # selected = select_roulette(generation)
         selected = select_tournament(generation)
@@ -197,29 +237,16 @@ def ga_solve(generation):
 
 
 # ハイパーパラメータ
-POPURATIONS = 50  # 1 世代あたりの個体数
-GENOM_SIZE = 45  # 遺伝子のサイズ今回は 3 × 15 で
-GENERATIONS = 50  # 世代数
-CROSSOVER_PB = 0.40
-MUTATION_PB = 0.20
 INITAIL_DECK = [
     4, 4, 1,  # 0
-    2, 2, 2,  # 1
-    3, 3, 3,  # 2
-    4, 3, 4,  # 3
-    5, 4, 5,  # 4
-    2, 2, 2,  # 5
-    2, 3, 3,  # 6
-    1, 1, 1,  # 7
-    1, 3, 2,  # 8
-    2, 1, 2,  # 9
-    3, 1, 3,  # 10
-    1, 2, 2,  # 11
-    2, 3, 3,  # 12
-    1, 1, 1,  # 13
-    1, 1, 5   # 14
 ]
-TEST_COUNT = 10000
+POPURATIONS = 50  # 1 世代あたりの個体数
+GENOM_SIZE = len(INITAIL_DECK)  # 遺伝子のサイズ今回は 3 × 15 で
+GENERATIONS = 100  # 世代数
+CROSSOVER_PB = 0.60
+MUTATION_PB = 1 / GENOM_SIZE
+
+TEST_COUNT = 2000
 DESIRE_WIN_RATE = 0.50
 
 

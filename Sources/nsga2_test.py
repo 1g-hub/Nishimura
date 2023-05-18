@@ -11,6 +11,8 @@ def f2(x):
     return (x - 2) ** 2
 
 
+
+
 problem = Problem(num_of_variables=1, objectives=[f1, f2], variables_range=[(-55, 55)])
 evo = Evolution(problem)
 evol = evo.evolve()
