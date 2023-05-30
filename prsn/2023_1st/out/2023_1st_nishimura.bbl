@@ -1,0 +1,30 @@
+\begin{thebibliography}{1}
+
+\bibitem{DQN}
+Volodymyr Mnih, Koray Kavukcuoglu, David Silver, Alex Graves, Ioannis
+  Antonoglou, Daan Wierstra, and Martin~A. Riedmiller.
+\newblock Playing atari with deep reinforcement learning.
+\newblock {\em CoRR}, Vol. abs/1312.5602, , 2013.
+
+\bibitem{NSGA-2}
+K.~Deb, A.~Pratap, S.~Agarwal, and T.~Meyarivan.
+\newblock A fast and elitist multiobjective genetic algorithm: Nsga-ii.
+\newblock {\em IEEE Transactions on Evolutionary Computation}, Vol.~6, No.~2,
+  pp. 182--197, 2002.
+
+\bibitem{Hearthstone}
+Fernando~de Mesentier~Silva, Rodrigo Canaan, Scott Lee, Matthew~C. Fontaine,
+  Julian Togelius, and Amy~K. Hoover.
+\newblock Evolving the hearthstone meta.
+\newblock In {\em 2019 IEEE Conference on Games (CoG)}, p. 1^^e2^^80^^938. IEEE
+  Press, 2019.
+
+\bibitem{ReBeL}
+Noam Brown, Anton Bakhtin, Adam Lerer, and Qucheng Gong.
+\newblock Combining deep reinforcement learning and search for
+  imperfect-information games.
+\newblock In {\em Proceedings of the 34th International Conference on Neural
+  Information Processing Systems}, NIPS'20, Red Hook, NY, USA, 2020. Curran
+  Associates Inc.
+
+\end{thebibliography}
