@@ -1,0 +1,8 @@
+\begin{thebibliography}{1}
+
+\bibitem{self}
+Training in competitive multi-agent environments with self-play.
+\newblock
+  \url{https://github.com/Unity-Technologies/ml-agents/blob/develop/docs/ML-Agents-Overview.md#training-in-competitive-multi-agent-environments-with-self-play}.
+
+\end{thebibliography}
