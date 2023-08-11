@@ -1,0 +1,172 @@
+%\documentstyle[epsf,twocolumn]{jarticle}       %LaTeX2.09仕様
+%\documentclass[twocolumn]{jarticle}     %pLaTeX2e仕様
+\documentclass{jarticle}     %pLaTeX2e仕様
+
+%一枚組だったら[twocolumn]関係のとこ消す
+
+\setlength{\topmargin}{-45pt}
+%\setlength{\oddsidemargin}{0cm} 
+\setlength{\oddsidemargin}{-7.5mm}
+%\setlength{\evensidemargin}{0cm} 
+\setlength{\textheight}{24.1cm}
+%setlength{\textheight}{25cm} 
+\setlength{\textwidth}{17.4cm}
+%\setlength{\textwidth}{172mm} 
+\setlength{\columnsep}{11mm}
+
+\kanjiskip=.07zw plus.5pt minus.5pt
+
+\usepackage[dvipdfm]{graphicx}
+\usepackage{ccaption}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{subcaption}
+\usepackage{enumerate}
+\usepackage{comment}
+\usepackage{url}
+\usepackage{multirow}
+\usepackage{diagbox}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{wrapfig}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{lipsum}
+
+
+\begin{document}
+  \noindent
+  \hspace{1em}
+
+  \today Creation班 ゼミ
+  \hfill
+  \ \  西村昭賢 
+
+  \vspace{2mm}
+  \hrule
+  \begin{center}
+  {\Large \bf 進捗報告}
+  \end{center}
+  \hrule 
+  \vspace{3mm}
+
+
+\section{スペルカードを含んだ場合の学習の検討}
+スペルカードを含んだ状態での学習は今まで検討していなかったため, スペルカードの存在を考慮した状態空間を定義してルールベースの対戦相手に対して学習した.
+ルールベースの対戦相手が先攻で, 学習側のプレイヤーが後攻として 1000000 ステップ学習をして, 学習後 10000 回同条件で対戦し勝率を計算した.
+
+\subsection{以前の状態空間}
+表 \ref{table:state} に以前までの実験で用いていた状態空間を示す. このときスペルカードには攻撃力と HP が存在しないため「手札 1 $\sim$ 9 の\\HP , 攻撃力, コスト, 特殊効果」の部分に関してスペルカードの攻撃力と HP は 0 で埋め合わせている.
+
+\begin{table}[ht]
+  \small
+  \centering
+  \caption{以前の実験から用いていた状態空間}
+  \label{table:state}
+  \vspace{-0.3cm}
+  \scalebox{0.80}[0.80]{
+    \begin{tabular}{|c|c|c|c|}
+      \hline
+      状態説明                        & 次元数        & 最小値        & 最大値         \\ \hline \hline
+      各プレイヤーの HP & 2 & 0 & 20 \\ \hline
+      各プレイヤーの マナ & 2 & 0 & 5 \\ \hline
+      \begin{tabular}{c}
+        手札 1 $\sim$ 9 の\\HP , 攻撃力, コスト, 特殊効果
+        \end{tabular}      & 36         & 0          & 13          \\
+      \hline
+      \begin{tabular}{c}
+        自盤面 1 $\sim$ 5 の\\HP と攻撃力
+      \end{tabular}     & 10         & 0          & 5 \\
+      \hline
+      \begin{tabular}{c}
+        敵盤面 1 $\sim$ 5 の\\HP と攻撃力
+      \end{tabular}     & 10         & 0          & 5 \\
+      \hline
+      \begin{tabular}{c}
+        自盤面 1 $\sim$ 5 が\\攻撃可能かどうか
+      \end{tabular} & 5          & 0          & 1  \\
+      \hline
+      \begin{tabular}{c}
+        お互いのデッキの\\残り枚数
+      \end{tabular}     & 2 & 0 & 30 \\
+       \hline
+      \end{tabular}
+  }
+  \end{table}
+\subsection{今回の実験で試した状態空間}
+単純だが, スペルカードであるかどうかのフラグを追加してみた.
+表 \ref{table:newstate} に新しく定義した状態空間を示す.
+
+\begin{table}[ht]
+  \small
+  \centering
+  \caption{新しく定義した状態空間}
+  \label{table:newstate}
+  \vspace{-0.3cm}
+  \scalebox{0.80}[0.80]{
+    \begin{tabular}{|c|c|c|c|}
+      \hline
+      状態説明                        & 次元数        & 最小値        & 最大値         \\ \hline \hline
+      各プレイヤーの HP & 2 & 0 & 20 \\ \hline
+      各プレイヤーの マナ & 2 & 0 & 5 \\ \hline
+      \begin{tabular}{c}
+        手札 1 $\sim$ 9 の\\HP , 攻撃力, コスト, 特殊効果
+        \end{tabular}      & 36         & 0          & 13          \\
+      \hline
+      \begin{tabular}{c}
+        \textbf{手札 1 $\sim$ 9 がスペルカードかどうか}
+        \end{tabular}      & 9         & 0          & 1          \\
+      \hline
+      \begin{tabular}{c}
+        自盤面 1 $\sim$ 5 の\\HP と攻撃力
+      \end{tabular}     & 10         & 0          & 5 \\
+      \hline
+      \begin{tabular}{c}
+        敵盤面 1 $\sim$ 5 の\\HP と攻撃力
+      \end{tabular}     & 10         & 0          & 5 \\
+      \hline
+      \begin{tabular}{c}
+        自盤面 1 $\sim$ 5 が\\攻撃可能かどうか
+      \end{tabular} & 5          & 0          & 1  \\
+      \hline
+      \begin{tabular}{c}
+        お互いのデッキの\\残り枚数
+      \end{tabular}     & 2 & 0 & 30 \\
+       \hline
+      \end{tabular}
+  }
+\end{table}
+
+\subsection{結果}
+結果を表 \ref{table:result} に示す.
+\begin{table}[ht]
+  \centering
+  \caption{各エージェントごとの勝率}
+  \vspace{-0.3cm}
+  \label{table:result}
+  \scalebox{1.0}[1.0]{
+    \begin{tabular}{|c|c|}
+      \hline
+      エージェント  & 勝率 \\ \hline
+      以前の状態空間で学習したエージェント & 0.5475 \\ \hline
+      新しく定義した状態空間で学習したエージェント & 0.1190 \\ \hline
+      ルールベース & 0.4315 \\ \hline
+      \end{tabular}
+  }
+  \end{table}
+
+直感に反してスペルカードかどうかのフラグを追加した場合には, 勝率が大きく低下するけっかとなった. 具体的なカードの統計は取れていないが, 数ゲームほどのログを見た感じでは新しく定義した状態空間で学習したエージェントではスペルカードをあまり使用していない傾向を感じた. 
+
+\section{今後やること}
+他の役職のカードと, 先週示したバグの改善に取り組む予定です.
+
+
+
+
+%index.bibはtexファイルと同階層に置く
+%ちゃんと\citeしないと表示されない(1敗)
+\bibliography{index.bib}
+\bibliographystyle{junsrt}
+
+\end{document}
