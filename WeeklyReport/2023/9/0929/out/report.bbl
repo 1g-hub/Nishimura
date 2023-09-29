@@ -1,0 +1,32 @@
+\begin{thebibliography}{1}
+
+\bibitem{sozai}
+ダ鳥獣戯画.
+\newblock \url{https://chojugiga.com/}.
+
+\bibitem{poole2022dreamfusion}
+Ben Poole, Ajay Jain, Jonathan~T. Barron, and Ben Mildenhall.
+\newblock Dreamfusion: Text-to-3d using 2d diffusion, 2022.
+
+\bibitem{NeRF}
+Ben Mildenhall, Pratul~P. Srinivasan, Matthew Tancik, Jonathan~T. Barron, Ravi
+  Ramamoorthi, and Ren Ng.
+\newblock Nerf: Representing scenes as neural radiance fields for view
+  synthesis.
+\newblock {\em CoRR}, Vol. abs/2003.08934, , 2020.
+
+\bibitem{Imagen}
+Chitwan Saharia, William Chan, Saurabh Saxena, Lala Li, Jay Whang, Emily
+  Denton, Seyed Kamyar~Seyed Ghasemipour, Burcu~Karagol Ayan, S.~Sara Mahdavi,
+  Rapha~Gontijo Lopes, Tim Salimans, Jonathan Ho, David~J Fleet, and Mohammad
+  Norouzi.
+\newblock Photorealistic text-to-image diffusion models with deep language
+  understanding, 2022.
+
+\bibitem{TextInversion}
+Rinon Gal, Yuval Alaluf, Yuval Atzmon, Or~Patashnik, Amit~H. Bermano, Gal
+  Chechik, and Daniel Cohen-Or.
+\newblock An image is worth one word: Personalizing text-to-image generation
+  using textual inversion, 2022.
+
+\end{thebibliography}
