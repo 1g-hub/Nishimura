@@ -1,0 +1,110 @@
+%\documentstyle[epsf,twocolumn]{jarticle}       %LaTeX2.09仕様
+%\documentclass[twocolumn]{jarticle}     %pLaTeX2e仕様
+\documentclass{jarticle}     %pLaTeX2e仕様
+
+%一枚組だったら[twocolumn]関係のとこ消す
+
+\setlength{\topmargin}{-45pt}
+%\setlength{\oddsidemargin}{0cm} 
+\setlength{\oddsidemargin}{-7.5mm}
+%\setlength{\evensidemargin}{0cm} 
+\setlength{\textheight}{24.1cm}
+%setlength{\textheight}{25cm} 
+\setlength{\textwidth}{17.4cm}
+%\setlength{\textwidth}{172mm} 
+\setlength{\columnsep}{11mm}
+
+\kanjiskip=.07zw plus.5pt minus.5pt
+
+\usepackage[dvipdfm]{graphicx}
+\usepackage{ccaption}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{subcaption}
+\usepackage{enumerate}
+\usepackage{comment}
+\usepackage{url}
+\usepackage{multirow}
+\usepackage{diagbox}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{wrapfig}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{lipsum}
+\usepackage{tikz}
+\usepackage{ascmac}
+
+
+\begin{document}
+  \noindent
+  \hspace{1em}
+
+  \today Creation班 ゼミ
+  \hfill
+  \ \  西村昭賢 
+
+  \vspace{2mm}
+  \hrule
+  \begin{center}
+  {\Large \bf 進捗報告}
+  \end{center}
+  \hrule
+  \vspace{3mm}
+
+
+\section{プレイスタイルの指定}
+Suspicion-Agent のプロンプトに, プレイヤーにプレイスタイルをもたせるように以下の加筆をしてエージェントの行動の決定にプレイスタイルが反映されるか考慮されるかどうか確かめた. \par
+\begin{itembox}[l]{変更前}
+  You are the player behind a NPC character called {agent\_name}, and you are playing the board game {game\_name} with {recipient\_name}. ...
+\end{itembox}
+
+\begin{itembox}[l]{変更後}
+  You are the player behind a NPC character called {agent\_name}. \textbf{This NPC character has an {agent\_personality} playstyle.} you are playing the board game {game\_name} with {recipient\_name}. ... 
+\end{itembox}
+
+結果として, 
+\begin{itembox}[l]{Aggressive なプレイヤーが Play フェーズで出すカードを決める時}
+  Plan Making:
+\\
+    Given the current situation and the aggressive playstyle of Player_LLM_1(ag), the following plans can be made:
+\\
+\\Plan 1: Play the Emperor card (Action '0')
+\\Plan 2: Play the first Citizen card (Action '1')
+\\Plan 3: Play the second Citizen card (Action '2')
+\\Plan 4: Play the third Citizen card (Action '3')
+\\Plan 5: Play the fourth Citizen card (Action '4')
+\\
+\\Potential Actions of Player_LLM_2(co):
+\\
+\\Given the current situation, Player_LLM_2(co) might suspect that Player_LLM_1(ag) will play the Emperor card due to their aggressive playstyle and desperate situation. Therefore, they might play the Slave card to win the round. However, they might also suspect a bluff and decide to play a Citizen card instead. 
+\\
+\\Estimate Winning/Lose Rate for Each Plan:
+\\
+\\Without knowing the exact pattern of Player_LLM_2(co), we can only estimate the probabilities based on the current situation and the game rules. 
+\\
+\\Plan 1: If Player_LLM_2(co) plays a Citizen card, Player_LLM_1(ag) wins. If Player_LLM_2(co) plays the Slave card, Player_LLM_1(ag) loses. Let's assume a 50/50 chance for each scenario. So, the winning rate is 50\% and the losing rate is 50%.
+\\
+\\Plan 2-5: If Player_LLM_2(co) plays a Citizen card, the round continues. If Player_LLM_2(co) plays the Slave card, Player_LLM_1(ag) wins. Again, assuming a 50/50 chance for each scenario, the winning rate is 50\% and the losing rate is 50%.
+\\
+\\Number of Payoffs for Each Plan:
+\\
+\\Plan 1: If Player_LLM_1(ag) wins, they gain 21 chips. If they lose, they lose 21 chips and the game.
+\\Plan 2-5: If Player_LLM_1(ag) wins, they gain 21 chips. If they lose, the round continues.
+\\
+\\Estimate Expected Chips Gain for Each Plan:
+\\
+\\Plan 1: (0.5 * 21) - (0.5 * 21) = 0
+\\Plan 2-5: (0.5 * 21) - (0.5 * 0) = 10.5
+\\
+\\Plan Selection:
+\\
+\\Based on the expected chips gain, Plan 2-5 are the most effective strategies. However, considering the aggressive playstyle of Player_LLM_1(ag) and the desperate situation, Plan 1 might be the most suitable choice. This is a high-risk, high-reward strategy that fits the aggressive playstyle and could potentially turn the game around.
+\end{itembox}
+%index.bibはtexファイルと同階層に置く
+%ちゃんと\citeしないと表示されない(1敗)
+\bibliography{index.bib}
+\bibliographystyle{junsrt}
+
+\end{document}
